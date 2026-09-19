@@ -29,9 +29,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .topbar {
   height: 64px;
@@ -60,9 +58,7 @@ body {
   font-weight: 700;
 }
 
-/* =========================
-   MAIN LAYOUT
-========================= */
+/* LAYOUT */
 
 .app {
   max-width: 1450px;
@@ -74,9 +70,7 @@ body {
   align-items: start;
 }
 
-/* =========================
-   PANELS
-========================= */
+/* PANELS */
 
 .panel {
   background: white;
@@ -95,9 +89,7 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* =========================
-   AVATARS
-========================= */
+/* AVATARS */
 
 .avatar {
   width: 42px;
@@ -125,9 +117,7 @@ body {
   object-fit: cover;
 }
 
-/* =========================
-   INPUTS
-========================= */
+/* INPUTS */
 
 input,
 textarea,
@@ -161,9 +151,7 @@ label {
   margin: 10px 0 5px;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 
 button {
   font: inherit;
@@ -196,23 +184,12 @@ button {
   color: #a64040;
 }
 
-.btn-danger:hover {
-  background: #edcaca;
-}
-
 .btn-full {
   width: 100%;
   margin-top: 9px;
 }
 
-.btn-small {
-  padding: 6px 9px;
-  font-size: 12px;
-}
-
-/* =========================
-   PROFILE MINI
-========================= */
+/* PROFILE MINI */
 
 .profile-mini {
   display: flex;
@@ -231,16 +208,7 @@ button {
   margin-top: 2px;
 }
 
-.profile-bio {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
-  margin-top: 12px;
-}
-
-/* =========================
-   DMS
-========================= */
+/* DMS */
 
 .dm-list {
   height: 280px;
@@ -285,9 +253,7 @@ button {
   min-width: 0;
 }
 
-/* =========================
-   FEED
-========================= */
+/* FEED */
 
 .feed {
   min-width: 0;
@@ -314,13 +280,6 @@ button {
 .story .avatar {
   margin: auto auto 5px;
   border: 3px solid #e7c8e5;
-}
-
-.feed-scroll {
-  max-height: calc(100vh - 125px);
-  overflow-y: auto;
-  padding-right: 6px;
-  scroll-behavior: smooth;
 }
 
 .post {
@@ -359,11 +318,6 @@ button {
   background: none;
   font-size: 20px;
   cursor: pointer;
-  color: #777;
-}
-
-.post-menu:hover {
-  color: var(--purple-dark);
 }
 
 .post-image {
@@ -401,4 +355,1669 @@ button {
 }
 
 .like-button.liked {
-  color: #df4771
+  color: #df4771;
+}
+
+.post-body {
+  padding: 4px 14px 15px;
+}
+
+.likes {
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.caption strong {
+  margin-right: 5px;
+}
+
+.view-comments {
+  border: none;
+  background: none;
+  color: #8b858f;
+  padding: 8px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.post-date {
+  color: #aaa5ad;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+/* RIGHT SIDE */
+
+.editor-section {
+  border-top: 1px solid #eee;
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 20, 30, .55);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.25);
+}
+
+.modal-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  color: var(--purple-dark);
+  font-weight: 800;
+}
+
+.close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 23px;
+  color: #888;
+}
+
+.modal-content {
+  padding: 18px;
+}
+
+/* COMMENTS */
+
+.comment-list {
+  max-height: 330px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.comment {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comment strong {
+  font-size: 13px;
+}
+
+.comment-text {
+  font-size: 13px;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.comment-actions {
+  margin-top: 5px;
+  display: flex;
+  gap: 10px;
+}
+
+.comment-actions button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #888;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* PROFILE */
+
+.profile-edit-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* FILE INPUT */
+
+.file-input {
+  font-size: 12px;
+  padding: 7px;
+}
+
+/* MOBILE */
+
+@media (max-width: 1050px) {
+  .app {
+    grid-template-columns: 240px minmax(350px, 1fr);
+  }
+
+  .right-column {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 750px) {
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .app {
+    display: block;
+    padding: 12px;
+  }
+
+  .left-column,
+  .right-column {
+    margin-bottom: 15px;
+  }
+
+  .right-column {
+    display: block;
+  }
+
+  .post-image,
+  .placeholder-image {
+    height: 330px;
+  }
+
+  .left-column {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">✦ OC Social</div>
+
+  <div class="topbar-user">
+    <span id="topbar-name">@Barista_Arin</span>
+    <div class="avatar" id="topbar-avatar">A</div>
+  </div>
+</header>
+
+
+<main class="app">
+
+  <!-- LEFT -->
+  <aside class="left-column">
+
+    <div class="panel">
+      <div class="panel-title">💬 Private DMs</div>
+
+      <label>Chatting with</label>
+
+      <select id="dmRecipient" onchange="changeDM()">
+      </select>
+
+      <div class="dm-list" id="dmList"></div>
+
+      <div class="dm-compose">
+        <input
+          id="dmInput"
+          type="text"
+          placeholder="Write a message..."
+          onkeydown="if(event.key==='Enter') sendDM()"
+        >
+        <button class="btn btn-purple" onclick="sendDM()">➤</button>
+      </div>
+    </div>
+
+
+    <div class="panel">
+      <div class="panel-title">👤 Your Account</div>
+
+      <div class="profile-mini">
+        <div class="avatar large" id="leftAvatar"></div>
+
+        <div>
+          <div class="profile-name" id="leftName"></div>
+          <div class="profile-handle" id="leftHandle"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-light btn-full" onclick="openProfileModal()">
+        ✏️ Edit Profile
+      </button>
+    </div>
+
+  </aside>
+
+
+  <!-- CENTER FEED -->
+  <section class="feed">
+
+    <div class="story-bar" id="storyBar"></div>
+
+    <div id="feed"></div>
+
+  </section>
+
+
+  <!-- RIGHT -->
+  <aside class="right-column">
+
+    <div class="panel">
+
+      <div class="panel-title">👤 Active Account</div>
+
+      <label>Switch character</label>
+
+      <select id="actorSelect" onchange="changeActor()"></select>
+
+      <button
+        class="btn btn-light btn-full"
+        onclick="openProfileModal()"
+      >
+        ✏️ Edit This Profile
+      </button>
+
+
+      <div class="editor-section">
+
+        <div class="panel-title">
+          📝 Edit Center Post
+        </div>
+
+        <label>Post author</label>
+        <select id="postAuthor"></select>
+
+        <label>Caption</label>
+
+        <textarea
+          id="postCaption"
+          placeholder="Write your OC's caption..."
+        ></textarea>
+
+
+        <label>Likes</label>
+
+        <input
+          id="postLikes"
+          type="number"
+          min="0"
+        >
+
+
+        <label>Photo</label>
+
+        <input
+          id="postImage"
+          class="file-input"
+          type="file"
+          accept="image/*"
+          onchange="loadPostImage(event)"
+        >
+
+        <button
+          class="btn btn-purple btn-full"
+          onclick="savePost()"
+        >
+          💾 Save Post
+        </button>
+
+        <button
+          class="btn btn-light btn-full"
+          onclick="openComments()"
+        >
+          💬 Edit Comments
+        </button>
+
+        <button
+          class="btn btn-danger btn-full"
+          onclick="resetPost()"
+        >
+          ↺ Reset Post
+        </button>
+
+        <p class="small-note">
+          Changes are automatically saved in this browser.
+          A real shared database will be needed for the same data to appear
+          on different devices.
+        </p>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+</main>
+
+
+<!-- COMMENTS MODAL -->
+
+<div class="modal" id="commentsModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        💬 Comments
+      </div>
+
+      <button class="close" onclick="closeModal('commentsModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-content">
+
+      <div class="comment-list" id="commentList"></div>
+
+      <label>Add comment</label>
+
+      <input
+        id="commentInput"
+        placeholder="Write a comment..."
+        onkeydown="if(event.key==='Enter') addComment()"
+      >
+
+      <button
+        class="btn btn-purple btn-full"
+        onclick="addComment()"
+      >
+        Post Comment
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PROFILE MODAL -->
+
+<div class="modal" id="profileModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        ✏️ Edit Profile
+      </div>
+
+      <button class="close" onclick="closeModal('profileModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-content">
+
+      <div class="profile-edit-top">
+
+        <div class="avatar large" id="editAvatar"></div>
+
+        <div>
+          <strong id="editProfileHandle"></strong>
+          <div class="small-note">
+            Editing the currently selected OC.
+          </div>
+        </div>
+
+      </div>
+
+
+      <label>Display name</label>
+
+      <input id="editName">
+
+
+      <label>Username</label>
+
+      <input id="editUsername">
+
+
+      <label>Bio</label>
+
+      <textarea id="editBio"></textarea>
+
+
+      <label>Profile picture</label>
+
+      <input
+        class="file-input"
+        type="file"
+        accept="image/*"
+        onchange="loadAvatar(event)"
+      >
+
+
+      <button
+        class="btn btn-purple btn-full"
+        onclick="saveProfile()"
+      >
+        💾 Save Profile
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const defaultCharacters = {
+  Barista_Arin: {
+    name: "Arin",
+    username: "Barista_Arin",
+    bio: "☕ Professional barista. Amateur chaos enthusiast.",
+    avatar: "",
+    color: "#A993D9"
+  },
+
+  Coffee_Shop_Hero: {
+    name: "Coffee Shop Hero",
+    username: "Coffee_Shop_Hero",
+    bio: "⚔️ Somehow always ends up in an adventure.",
+    avatar: "",
+    color: "#C28D72"
+  },
+
+  Grumpy_Regular: {
+    name: "The Grumpy Regular",
+    username: "Grumpy_Regular",
+    bio: "📖 I came here for coffee. Please leave me alone.",
+    avatar: "",
+    color: "#75859A"
+  },
+
+  Chai_Enthusiast: {
+    name: "Chai Enthusiast",
+    username: "Chai_Enthusiast",
+    bio: "✨ Chai solves approximately 72% of life's problems.",
+    avatar: "",
+    color: "#D9A05C"
+  }
+};
+
+
+const defaultDMs = {
+  Coffee_Shop_Hero: [
+    { from: "them", text: "You working tonight?" },
+    { from: "me", text: "Unfortunately." },
+    { from: "them", text: "Perfect. I need caffeine." }
+  ],
+
+  Barista_Arin: [
+    { from: "them", text: "Your usual is ready." }
+  ],
+
+  Grumpy_Regular: [
+    { from: "them", text: "Someone moved my chair." },
+    { from: "me", text: "Tragic." }
+  ],
+
+  Chai_Enthusiast: [
+    { from: "them", text: "I found a new chai place!!" }
+  ]
+};
+
+
+const defaultPost = {
+  author: "Barista_Arin",
+  caption: "Another completely normal day at the coffee shop ☕✨",
+  likes: 32,
+  image: "",
+  comments: [
+    {
+      author: "Coffee_Shop_Hero",
+      text: "This place looks suspiciously peaceful.",
+      likes: 4
+    },
+    {
+      author: "Chai_Enthusiast",
+      text: "WAIT IS THAT MY CUP??",
+      likes: 8
+    },
+    {
+      author: "Grumpy_Regular",
+      text: "Too bright.",
+      likes: 2
+    }
+  ]
+};
+
+
+/* =========================================================
+   LOAD / SAVE
+========================================================= */
+
+function loadData() {
+
+  let savedCharacters =
+    localStorage.getItem("ocCharacters");
+
+  let savedDMs =
+    localStorage.getItem("ocDMs");
+
+  let savedPost =
+    localStorage.getItem("ocPost");
+
+  return {
+    characters: savedCharacters
+      ? JSON.parse(savedCharacters)
+      : structuredClone(defaultCharacters),
+
+    dms: savedDMs
+      ? JSON.parse(savedDMs)
+      : structuredClone(defaultDMs),
+
+    post: savedPost
+      ? JSON.parse(savedPost)
+      : structuredClone(defaultPost)
+  };
+}
+
+
+let data = loadData();
+
+let activeActor =
+  localStorage.getItem("activeActor") || "Barista_Arin";
+
+let currentDM =
+  localStorage.getItem("currentDM") || "Coffee_Shop_Hero";
+
+
+function saveAll() {
+
+  localStorage.setItem(
+    "ocCharacters",
+    JSON.stringify(data.characters)
+  );
+
+  localStorage.setItem(
+    "ocDMs",
+    JSON.stringify(data.dms)
+  );
+
+  localStorage.setItem(
+    "ocPost",
+    JSON.stringify(data.post)
+  );
+
+  localStorage.setItem(
+    "activeActor",
+    activeActor
+  );
+
+  localStorage.setItem(
+    "currentDM",
+    currentDM
+  );
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function init() {
+
+  populateActorSelects();
+  renderEverything();
+
+}
+
+
+function populateActorSelects() {
+
+  const actorSelect =
+    document.getElementById("actorSelect");
+
+  const dmRecipient =
+    document.getElementById("dmRecipient");
+
+  const postAuthor =
+    document.getElementById("postAuthor");
+
+
+  actorSelect.innerHTML = "";
+  dmRecipient.innerHTML = "";
+  postAuthor.innerHTML = "";
+
+
+  Object.keys(data.characters).forEach(key => {
+
+    const character =
+      data.characters[key];
+
+
+    const option1 =
+      document.createElement("option");
+
+    option1.value = key;
+    option1.textContent =
+      "@" + character.username;
+
+    actorSelect.appendChild(option1);
+
+
+    const option2 =
+      document.createElement("option");
+
+    option2.value = key;
+    option2.textContent =
+      "@" + character.username;
+
+    dmRecipient.appendChild(option2);
+
+
+    const option3 =
+      document.createElement("option");
+
+    option3.value = key;
+    option3.textContent =
+      character.name + " (@" + character.username + ")";
+
+    postAuthor.appendChild(option3);
+
+  });
+
+
+  actorSelect.value = activeActor;
+  dmRecipient.value = currentDM;
+  postAuthor.value = data.post.author;
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderEverything() {
+
+  renderAccount();
+  renderStories();
+  renderFeed();
+  renderDM();
+  renderPostEditor();
+
+}
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+function renderAccount() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  document.getElementById("topbar-name").textContent =
+    "@" + character.username;
+
+
+  setAvatar(
+    document.getElementById("topbar-avatar"),
+    character
+  );
+
+
+  setAvatar(
+    document.getElementById("leftAvatar"),
+    character
+  );
+
+
+  document.getElementById("leftName").textContent =
+    character.name;
+
+
+  document.getElementById("leftHandle").textContent =
+    "@" + character.username;
+
+
+  document.getElementById("actorSelect").value =
+    activeActor;
+
+}
+
+
+function setAvatar(element, character) {
+
+  element.innerHTML = "";
+
+  element.style.background =
+    character.color || "#A993D9";
+
+
+  if (character.avatar) {
+
+    const img =
+      document.createElement("img");
+
+    img.src = character.avatar;
+
+    element.appendChild(img);
+
+  } else {
+
+    element.textContent =
+      character.name.charAt(0).toUpperCase();
+
+  }
+
+}
+
+
+/* =========================================================
+   STORIES
+========================================================= */
+
+function renderStories() {
+
+  const bar =
+    document.getElementById("storyBar");
+
+  bar.innerHTML = "";
+
+
+  Object.keys(data.characters).forEach(key => {
+
+    const character =
+      data.characters[key];
+
+
+    const story =
+      document.createElement("div");
+
+    story.className = "story";
+
+
+    const avatar =
+      document.createElement("div");
+
+    avatar.className = "avatar";
+
+
+    setAvatar(avatar, character);
+
+
+    const name =
+      document.createElement("div");
+
+    name.textContent =
+      character.username;
+
+
+    story.appendChild(avatar);
+    story.appendChild(name);
+
+    bar.appendChild(story);
+
+  });
+
+}
+
+
+/* =========================================================
+   FEED
+========================================================= */
+
+function renderFeed() {
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML = "";
+
+
+  const post =
+    data.post;
+
+
+  const author =
+    data.characters[post.author];
+
+
+  const article =
+    document.createElement("article");
+
+  article.className = "post";
+
+
+  /* HEADER */
+
+  const header =
+    document.createElement("div");
+
+  header.className = "post-header";
+
+
+  const user =
+    document.createElement("div");
+
+  user.className = "post-user";
+
+
+  const avatar =
+    document.createElement("div");
+
+  avatar.className = "avatar";
+
+  setAvatar(avatar, author);
+
+
+  const userText =
+    document.createElement("div");
+
+
+  const name =
+    document.createElement("div");
+
+  name.className = "post-user-name";
+
+  name.textContent =
+    author.name;
+
+
+  const handle =
+    document.createElement("div");
+
+  handle.className = "post-user-handle";
+
+  handle.textContent =
+    "@" + author.username;
+
+
+  userText.appendChild(name);
+  userText.appendChild(handle);
+
+  user.appendChild(avatar);
+  user.appendChild(userText);
+
+
+  const menu =
+    document.createElement("button");
+
+  menu.className = "post-menu";
+
+  menu.textContent = "•••";
+
+  menu.onclick = () =>
+    openPostEditor();
+
+
+  header.appendChild(user);
+  header.appendChild(menu);
+
+
+  /* IMAGE */
+
+  let imageElement;
+
+
+  if (post.image) {
+
+    imageElement =
+      document.createElement("img");
+
+    imageElement.className =
+      "post-image";
+
+    imageElement.src =
+      post.image;
+
+  } else {
+
+    imageElement =
+      document.createElement("div");
+
+    imageElement.className =
+      "placeholder-image";
+
+    imageElement.textContent = "✦";
+
+  }
+
+
+  /* ACTIONS */
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "post-actions";
+
+
+  const likeButton =
+    document.createElement("button");
+
+  likeButton.className =
+    "icon-btn like-button";
+
+
+  likeButton.textContent =
+    "♡";
+
+
+  likeButton.onclick = function() {
+
+    post.likes++;
+
+    this.textContent = "♥";
+
+    this.classList.add("liked");
+
+    saveAll();
+    renderFeed();
+    renderPostEditor();
+
+  };
+
+
+  const commentButton =
+    document.createElement("button");
+
+  commentButton.className =
+    "icon-btn";
+
+  commentButton.textContent =
+    "💬";
+
+  commentButton.onclick =
+    openComments;
+
+
+  const editButton =
+    document.createElement("button");
+
+  editButton.className =
+    "icon-btn";
+
+  editButton.textContent =
+    "✏️";
+
+  editButton.onclick =
+    openPostEditor;
+
+
+  actions.appendChild(likeButton);
+  actions.appendChild(commentButton);
+  actions.appendChild(editButton);
+
+
+  /* BODY */
+
+  const body =
+    document.createElement("div");
+
+  body.className =
+    "post-body";
+
+
+  const likes =
+    document.createElement("div");
+
+  likes.className =
+    "likes";
+
+  likes.textContent =
+    post.likes + " likes";
+
+
+  const caption =
+    document.createElement("div");
+
+  caption.className =
+    "caption";
+
+
+  const strong =
+    document.createElement("strong");
+
+  strong.textContent =
+    author.username;
+
+
+  caption.appendChild(strong);
+
+  caption.appendChild(
+    document.createTextNode(
+      " " + post.caption
+    )
+  );
+
+
+  const commentsButton =
+    document.createElement("button");
+
+  commentsButton.className =
+    "view-comments";
+
+  commentsButton.textContent =
+    "View all " +
+    post.comments.length +
+    " comments";
+
+  commentsButton.onclick =
+    openComments;
+
+
+  const date =
+    document.createElement("div");
+
+  date.className =
+    "post-date";
+
+  date.textContent =
+    "OC SOCIAL NETWORK";
+
+
+  body.appendChild(likes);
+  body.appendChild(caption);
+  body.appendChild(commentsButton);
+  body.appendChild(date);
+
+
+  article.appendChild(header);
+  article.appendChild(imageElement);
+  article.appendChild(actions);
+  article.appendChild(body);
+
+
+  feed.appendChild(article);
+
+}
+
+
+/* =========================================================
+   POST EDITOR
+========================================================= */
+
+function renderPostEditor() {
+
+  document.getElementById("postCaption").value =
+    data.post.caption;
+
+  document.getElementById("postLikes").value =
+    data.post.likes;
+
+  document.getElementById("postAuthor").value =
+    data.post.author;
+
+}
+
+
+function openPostEditor() {
+
+  document.getElementById("postCaption").value =
+    data.post.caption;
+
+  document.getElementById("postLikes").value =
+    data.post.likes;
+
+  document.getElementById("postAuthor").value =
+    data.post.author;
+
+  document.getElementById("postCaption")
+    .focus();
+
+}
+
+
+function savePost() {
+
+  data.post.caption =
+    document.getElementById("postCaption").value;
+
+  data.post.likes =
+    Math.max(
+      0,
+      Number(
+        document.getElementById("postLikes").value
+      ) || 0
+    );
+
+  data.post.author =
+    document.getElementById("postAuthor").value;
+
+
+  saveAll();
+
+  renderFeed();
+
+  alert("Post saved!");
+
+}
+
+
+function loadPostImage(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = function(e) {
+
+    data.post.image =
+      e.target.result;
+
+    saveAll();
+
+    renderFeed();
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+function resetPost() {
+
+  if (!confirm("Reset the post to its original state?"))
+    return;
+
+
+  data.post =
+    structuredClone(defaultPost);
+
+  saveAll();
+
+  renderFeed();
+  renderPostEditor();
+
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+function openComments() {
+
+  renderComments();
+
+  openModal("commentsModal");
+
+}
+
+
+function renderComments() {
+
+  const list =
+    document.getElementById("commentList");
+
+  list.innerHTML = "";
+
+
+  if (data.post.comments.length === 0) {
+
+    list.innerHTML =
+      "<p style='color:#888;font-size:13px;'>No comments yet.</p>";
+
+    return;
+
+  }
+
+
+  data.post.comments.forEach(
+    (comment, index) => {
+
+      const author =
+        data.characters[comment.author];
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "comment";
+
+
+      const strong =
+        document.createElement("strong");
+
+      strong.textContent =
+        author
+          ? "@" + author.username
+          : "Unknown";
+
+
+      const text =
+        document.createElement("div");
+
+      text.className =
+        "comment-text";
+
+      text.textContent =
+        comment.text;
+
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "comment-actions";
+
+
+      const deleteButton =
+        document.createElement("button");
+
+      deleteButton.textContent =
+        "Delete";
+
+
+      deleteButton.onclick =
+        function() {
+
+          data.post.comments.splice(
+            index,
+            1
+          );
+
+          saveAll();
+
+          renderComments();
+          renderFeed();
+
+        };
+
+
+      const editButton =
+        document.createElement("button");
+
+      editButton.textContent =
+        "Edit";
+
+
+      editButton.onclick =
+        function() {
+
+          const replacement =
+            prompt(
+              "Edit comment:",
+              comment.text
+            );
+
+
+          if (
+            replacement !== null &&
+            replacement.trim()
+          ) {
+
+            comment.text =
+              replacement.trim();
+
+            saveAll();
+
+            renderComments();
+            renderFeed();
+
+          }
+
+        };
+
+
+      actions.appendChild(editButton);
+      actions.appendChild(deleteButton);
+
+
+      item.appendChild(strong);
+      item.appendChild(text);
+      item.appendChild(actions);
+
+
+      list.appendChild(item);
+
+    }
+  );
+
+}
+
+
+function addComment() {
+
+  const input =
+    document.getElementById("commentInput");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text)
+    return;
+
+
+  data.post.comments.push({
+
+    author: activeActor,
+
+    text: text,
+
+    likes: 0
+
+  });
+
+
+  input.value = "";
+
+
+  saveAll();
+
+  renderComments();
+  renderFeed();
+
+}
+
+
+/* =========================================================
+   DMS
+========================================================= */
+
+function changeDM() {
+
+  currentDM =
+    document.getElementById("dmRecipient").value;
+
+
+  saveAll();
+
+  renderDM();
+
+}
+
+
+function renderDM() {
+
+  const list =
+    document.getElementById("dmList");
+
+
+  list.innerHTML = "";
+
+
+  const messages =
+    data.dms[currentDM] || [];
+
+
+  messages.forEach(message => {
+
+    const bubble =
+      document.createElement("div");
+
+
+    bubble.className =
+      "message " +
+      (
+        message.from === "me"
+          ? "me"
+          : "them"
+      );
+
+
+    bubble.textContent =
+      message.text;
+
+
+    list.appendChild(bubble);
+
+  });
+
+
+  list.scrollTop =
+    list.scrollHeight;
+
+}
+
+
+function sendDM() {
+
+  const input =
+    document.getElementById("dmInput");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text)
+    return;
+
+
+  if (!data.dms[currentDM])
+    data.dms[currentDM] = [];
+
+
+  data.dms[currentDM].push({
+
+    from: "me",
+
+    text: text
+
+  });
+
+
+  input.value = "";
+
+
+  saveAll();
+
+  renderDM();
+
+}
+
+
+/* =========================================================
+   ACTOR SWITCHING
+========================================================= */
+
+function changeActor() {
+
+  activeActor =
+    document.getElementById("actorSelect").value;
+
+
+  saveAll();
+
+  renderEverything();
+
+}
+
+
+/* =========================================================
+   PROFILE EDITOR
+========================================================= */
+
+function openProfileModal() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  document.getElementById("editName").value =
+    character.name;
+
+
+  document.getElementById("editUsername").value =
+    character.username;
+
+
+  document.getElementById("editBio").value =
+    character.bio;
+
+
+  document.getElementById("editProfileHandle").textContent =
+    "@" + character.username;
+
+
+  setAvatar(
+    document.getElementById("editAvatar"),
+    character
+  );
+
+
+  openModal("profileModal");
+
+}
+
+
+function loadAvatar(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e) {
+
+      data.characters[activeActor].avatar =
+        e.target.result;
+
+
+      setAvatar(
+        document.getElementById("editAvatar"),
+        data.characters[activeActor]
+      );
+
+    };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+function saveProfile() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  character.name =
+    document.getElementById("editName").value.trim()
+    || character.name;
+
+
+  character.username =
+    document.getElementById("editUsername").value.trim()
+    || character.username;
+
+
+  character.bio =
+    document.getElementById("editBio").value.trim();
+
+
+  saveAll();
+
+  populateActorSelects();
+
+  renderEverything();
+
+  closeModal("profileModal");
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.add("open");
+
+}
+
+
+function closeModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.remove("open");
+
+}
+
+
+/* Close when clicking outside modal */
+
+document.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target.classList.contains("modal")
+    ) {
+
+      event.target.classList.remove("open");
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
+</script>
+
+</body>
+</html>
