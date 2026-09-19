@@ -36,17 +36,17 @@
     .post-item-card { border: 1px solid #dbdbdb; border-radius: 8px; margin-bottom: 15px; background: white; overflow: hidden; max-width: 520px; margin-left: auto; margin-right: auto; }
     .post-header { padding: 10px 14px; font-weight: bold; border-bottom: 1px solid #f2f2f2; font-size: 0.88rem; display: flex; align-items: center; gap: 8px; }
     
-    /* Dynamic Circular Post Avatar */
+    /* Network-Safe Circular Avatar */
     .post-header-avatar { width: 28px; height: 28px; border-radius: 50%; background: #A993D9; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: bold; }
     .post-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
     
-    .post-img { width: 100%; height: 280px; object-fit: cover; display: block; background: #eee; }
+    /* Network-Safe Visual Box Placeholder */
+    .post-img-placeholder { width: 100%; height: 280px; background: #e0d9f0; display: flex; align-items: center; justify-content: center; color: #7a7aff; font-size: 2rem; font-weight: bold; border-bottom: 1px solid #eee; }
     .post-likes-bar { padding: 10px 14px 2px 14px; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
     .post-caption { padding: 4px 14px 12px 14px; font-size: 0.88rem; line-height: 1.4; }
     
-    /* CRITICAL UPDATE: Shortened link label toggle button exactly to user request */
-    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 10px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; text-decoration: none; }
-    .comment-open-btn:hover { background: #f2f2f2; text-decoration: underline; }
+    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 10px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
+    .comment-open-btn:hover { background: #f2f2f2; }
 
     /* --- RIGHT SIDE COLUMN: CONTROL PANEL --- */
     .input-field { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.88rem; }
@@ -138,7 +138,6 @@
       
       <button class="action-btn" onclick="window.publishNewStudioPostCard()">Publish Post Card to Feed</button>
 
-      <!-- RIGHT SIDE PROFILE PREVIEW COMPONENT -->
       <div class="mini-hub-box" id="mini-dossier-card-hub"></div>
     </div>
 
@@ -160,7 +159,7 @@
   </div>
 
   <script>
-    // FIX CONTEXT: Mounted functions directly onto global window object to bypass adblock compilation rejections
+    // Pure Direct Global Windows Binding Layout (Completely unblockable)
     (function() {
       let characters = {
-
+        "Barista_Arin": { name: "Arin ☕", followers: "1,240", bio: "Main barista at the shop counter. Secretly brewing experimental magic espresso lines.", code: "AR", pfp: "" },
