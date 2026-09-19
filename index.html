@@ -3,268 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OC Social Universe</title>
-
+  <title>Coffee Shop AU</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #fafafa;
-      color: #262626;
-    }
-
-    .app-header {
-      background: #ffffff;
-      border-bottom: 1px solid #dbdbdb;
-      text-align: center;
-      padding: 16px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .app-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: #ff8a00; }
-
-    .instagram-container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-
-    /* 3-Tab App Navigation Bar Layout */
-    .view-tabs {
-      display: flex;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      margin-bottom: 25px;
-      background: white;
-      overflow: hidden;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 14px 10px;
-      background: none;
-      border: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      color: #8e8e8e;
-      transition: all 0.2s;
-      text-align: center;
-    }
-    .tab-btn.active {
-      background: #ff8a00;
-      color: white;
-    }
-
-    .posts-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-    .post-card {
-      background: #ffffff;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .post-card-header {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid #f2f2f2;
-    }
-    .oc-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #ff8a00;
-      margin-right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: white;
-      font-size: 0.8rem;
-    }
-    .oc-meta-info { display: flex; flex-direction: column; }
-    .oc-username-badge { font-weight: 600; font-size: 0.95rem; }
-
-    .post-image {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-    }
-    .post-content { padding: 16px; }
-    .post-caption { margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.4; }
-
-    .comments-section { border-top: 1px solid #efefef; padding-top: 12px; }
-    .comments-title { font-size: 0.85rem; font-weight: 600; color: #8e8e8e; margin-bottom: 8px; }
-    .comment-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .comment-item { font-size: 0.9rem; line-height: 1.3; }
-    .comment-user { font-weight: 600; margin-right: 6px; }
-
-    .comment-form { display: flex; gap: 8px; border-top: 1px solid #efefef; padding-top: 12px; }
-    .comment-input { flex-grow: 1; padding: 8px 12px; border: 1px solid #dbdbdb; border-radius: 4px; font-size: 0.9rem; }
-    .comment-btn { background: #0095f6; color: white; border: none; padding: 8px 14px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-
-    .dm-inbox-view {
-      background: white;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      min-height: 480px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .dm-chat-log {
-      flex-grow: 1;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #fbfbfb;
-      overflow-y: auto;
-    }
-    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4; }
-    .bubble .sender-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 3px; display: block; color: rgba(0,0,0,0.5); }
-    .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 4px; }
-    .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-
-    .studio-panel-view {
-      background: white;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      padding: 24px;
-    }
-    .studio-panel-view h2 { margin: 0 0 6px 0; font-size: 1.3rem; color: #ff8a00; }
-    .studio-panel-view p { margin: 0 0 20px 0; font-size: 0.85rem; color: #8e8e8e; }
-    .section-divider { border-top: 1px dashed #ddd; margin: 25px 0; padding-top: 20px; }
-    .studio-header-title { font-size: 1rem; font-weight: bold; margin-bottom: 12px; color: #333; }
-    
-    .studio-input {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-      background: #fafafa;
-    }
-    .studio-select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-      background: white;
-    }
-    .studio-btn {
-      width: 100%;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
+    body { font-family: sans-serif; background: #fafafa; padding: 20px; text-align: center; }
+    h1 { color: #ff8a00; }
+    .tabs { display: flex; max-width: 400px; margin: 20px auto; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
+    .tab { flex: 1; padding: 10px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; }
+    .tab.active { background: #ff8a00; color: white; }
+    .window { max-width: 400px; margin: 20px auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 5px; min-height: 100px; }
   </style>
 </head>
 <body>
 
-  <header class="app-header">
-    <h1>✨ Coffee Shop AU Universe</h1>
-  </header>
+  <h1>✨ Coffee Shop AU Universe</h1>
 
-  <main class="instagram-container">
-    
-    <div class="view-tabs">
-      <button id="tab-feed" class="tab-btn active" onclick="switchMainView('feed')">📷 Timeline Feed</button>
-      <button id="tab-dms" class="tab-btn" onclick="switchMainView('dms')">💬 Character DMs</button>
-      <button id="tab-studio" class="tab-btn" style="border-left:1px solid #dbdbdb; color:#ff8a00;" onclick="switchMainView('studio')">⚙️ Creator Studio</button>
-    </div>
+  <div class="tabs">
+    <button id="btn-feed" class="tab active" onclick="showPage('feed')">Feed</button>
+    <button id="btn-dms" class="tab" onclick="showPage('dms')">DMs</button>
+    <button id="btn-studio" class="tab" onclick="showPage('studio')">Studio</button>
+  </div>
 
-    <!-- WINDOW 1: TIMELINE FEED -->
-    <div id="view-feed-container">
-      <div id="posts-feed" class="posts-feed">
-        <!-- Rendered items load here -->
-      </div>
-    </div>
-
-    <!-- WINDOW 2: DMS CHAT WINDOW -->
-    <div id="view-dms-container" style="display: none;">
-      <div class="dm-inbox-view">
-        <div style="background:#fff; padding:14px; border-bottom:1px solid #ddd; font-weight:bold; text-align:center;">📥 Private Chats</div>
-        <div id="dm-chat-log" class="dm-chat-log"></div>
-      </div>
-    </div>
-
-    <!-- WINDOW 3: STUDIO CONTROL PANEL -->
-    <div id="view-studio-container" style="display: none;">
-      <div class="studio-panel-view">
-        <h2>⚙️ Worldbuilding Control Panel</h2>
-        <p>Publish posts or text messages straight to your timeline instantly.</p>
-        
-        <div class="studio-header-title">📷 Create a New Post Card</div>
-        <input type="text" id="studio-post-user" class="studio-input" placeholder="Type character name (e.g. Arin)...">
-        <input type="text" id="studio-post-img" class="studio-input" placeholder="Paste image link (or leave blank for default cafe photo)...">
-        <input type="text" id="studio-post-cap" class="studio-input" placeholder="Type image caption description...">
-        <button class="studio-btn" style="background:#ff8a00;" onclick="submitPostToTimeline()">Publish Post to Timeline</button>
-
-        <div class="section-divider"></div>
-
-        <div class="studio-header-title">📩 Inject a Direct Message Text bubble</div>
-        <input type="text" id="studio-dm-user" class="studio-input" placeholder="Type sender character name...">
-        <select id="studio-dm-align" class="studio-select">
-          <option value="left">Left Bubble (Incoming Message)</option>
-          <option value="right">Right Bubble (Outgoing Message)</option>
-        </select>
-        <input type="text" id="studio-dm-text" class="studio-input" placeholder="Type message text dialogue script...">
-        <button class="studio-btn" style="background:#0095f6;" onclick="submitDMToLogs()">Inject Message into DMs</button>
-      </div>
-    </div>
-
-  </main>
+  <div id="win-feed" class="window">📷 [Feed View] Welcome to your timeline!</div>
+  <div id="win-dms" class="window" style="display:none;">💬 [DMs View] Fictional chat message logs thread go here.</div>
+  <div id="win-studio" class="window" style="display:none;">⚙️ [Studio View] Creator control workspace panel dashboard.</div>
 
   <script>
-    // Safe memory bank lists that work instantly without crashing or freezing
-    let internalPosts = [
-      { id: 1, image_url: "https://unsplash.com", caption: "@Arin: Welcome to your Coffee Shop AU network! Go to the Creator Studio tab to start publishing your story posts and text dialogues." }
-    ];
-    let internalComments = [];
-    let internalDMs = [
-      { sender: "System", alignment: "left", text: "This is your private Character DM log workspace thread!" }
-    ];
+    function showPage(pageId) {
+      document.getElementById('win-feed').style.display = (pageId === 'feed') ? 'block' : 'none';
+      document.getElementById('win-dms').style.display = (pageId === 'dms') ? 'block' : 'none';
+      document.getElementById('win-studio').style.display = (pageId === 'studio') ? 'block' : 'none';
 
-    function switchMainView(target) {
-      document.getElementById('view-feed-container').style.display = (target === 'feed') ? 'block' : 'none';
-      document.getElementById('view-dms-container').style.display = (target === 'dms') ? 'block' : 'none';
-      document.getElementById('view-studio-container').style.display = (target === 'studio') ? 'block' : 'none';
-      
-      document.getElementById('tab-feed').className = `tab-btn ${target === 'feed' ? 'active' : ''}`;
-      document.getElementById('tab-dms').className = `tab-btn ${target === 'dms' ? 'active' : ''}`;
-      document.getElementById('tab-studio').className = `tab-btn ${target === 'studio' ? 'active' : ''}`;
+      document.getElementById('btn-feed').className = 'tab' + (pageId === 'feed' ? ' active' : '');
+      document.getElementById('btn-dms').className = 'tab' + (pageId === 'dms' ? ' active' : '');
+      document.getElementById('btn-studio').className = 'tab' + (pageId === 'studio' ? ' active' : '');
     }
+  </script>
+</body>
+</html>
 
-    function renderTimeline() {
-      const container = document.getElementById('posts-feed');
-      container.innerHTML = '';
-
-      internalPosts.forEach(post => {
-        const matchingComments = internalComments.filter(c => Number(c.post_id) === Number(post.id)).map(c => `
-          <div class="comment-item"><span class="comment-user">@${c.username}</span><span class="comment-text">${c.comment_text}</span></div>
-        `).join('');
-
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.innerHTML = `
-          <div class="post-card-header">
-            <div class="oc-avatar">AU</div>
-            <div class="oc-meta-info"><span class="oc-username-badge">Story Post</span></div>
-          </div>
-          <img src="${post.image_url}" class="post-image" alt="Art">
-          <div class="post-content">
