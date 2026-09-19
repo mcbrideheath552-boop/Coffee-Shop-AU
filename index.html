@@ -10,25 +10,45 @@
     h1 { text-align: center; color: #ff8a00; margin-bottom: 5px; }
     .sub { text-align: center; color: #8e8e8e; font-size: 0.9rem; margin-bottom: 20px; }
     
-    /* 3-Tab App Navigation Header Menu */
     .tabs { display: flex; max-width: 500px; margin: 0 auto 20px auto; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; background: white; }
     .tab { flex: 1; padding: 12px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; text-align: center; }
     .tab.active { background: #ff8a00; color: white; }
 
-    /* Character Selection Sidebar */
     .profile-card { max-width: 500px; margin: 0 auto 20px auto; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; gap: 15px; align-items: center; }
     .avatar { width: 50px; height: 50px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     .select-box { padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; }
 
-    /* Main Display Panels */
     .window { max-width: 500px; margin: 0 auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .input-field { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
-    .btn { width: 100%; padding: 10px; border: none; border-radius: 4px; color: white; font-weight: bold; cursor: pointer; }
+    .input-field { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }
+    .btn { width: 100%; padding: 10px; border: none; border-radius: 4px; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
     
-    /* Timeline Item Cards */
-    .post-item { border: 1px solid #eee; padding: 12px; border-radius: 6px; margin-top: 15px; background: #fafafa; }
-    .post-user { font-weight: bold; color: #ff8a00; margin-bottom: 5px; }
-    .comment-row { font-size: 0.85rem; margin-top: 4px; padding-left: 10px; border-left: 2px solid #ddd; }
+    /* Post Cards and Interactive Comment Feeds */
+    .post-item { border: 1px solid #dbdbdb; padding: 0; border-radius: 8px; margin-top: 20px; background: white; overflow: hidden; }
+    .post-header { padding: 12px; font-weight: bold; color: #ff8a00; border-bottom: 1px solid #f2f2f2; display: flex; align-items: center; gap: 8px; }
+    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee; }
+    .post-body-text { padding: 14px; font-size: 0.95rem; line-height: 1.4; border-bottom: 1px solid #f2f2f2; }
+    
+    .comment-box-area { padding: 12px; background: #fbfbfb; }
+    .comment-title-label { font-size: 0.8rem; font-weight: bold; color: #8e8e8e; margin-bottom: 6px; }
+    .comment-container-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    
+    /* Comment Items and Edit Controls */
+    .comment-row { font-size: 0.88rem; line-height: 1.3; display: flex; justify-content: space-between; align-items: center; }
+    .comment-text-wrapper { flex-grow: 1; }
+    .comment-user-tag { font-weight: bold; color: #333; margin-right: 4px; }
+    .edit-comment-link { font-size: 0.75rem; color: #0095f6; cursor: pointer; font-weight: bold; margin-left: 8px; text-decoration: none; }
+    .edit-comment-link:hover { text-decoration: underline; }
+    
+    .live-comment-form { display: flex; gap: 6px; margin-top: 10px; }
+    .comment-input-inline { flex-grow: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; }
+    .comment-submit-btn { background: #0095f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
+
+    /* Text Dialogue Chat Bubbles */
+    .dm-bubble-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; }
+    .bubble { max-width: 80%; padding: 10px 14px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4; }
+    .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .bubble-author-sub { font-size: 0.7rem; font-weight: bold; color: #8e8e8e; margin-bottom: 2px; }
   </style>
 </head>
 <body>
@@ -36,67 +56,90 @@
   <h1>✨ Coffee Shop AU Universe</h1>
   <div class="sub">Your private multi-account character sandbox dashboard</div>
 
-  <!-- Profile Switcher Card -->
+  <!-- Profile Switcher Card Header -->
   <div class="profile-card">
-    <div id="active-avatar" class="avatar">AU</div>
+    <div id="active-avatar" class="avatar">RE</div>
     <div>
       <div style="font-weight: bold; margin-bottom: 4px;">Acting As Character:</div>
+      <!-- FIXED: Dropdown directly updates the active character state for all studio and feed features -->
       <select id="char-selector" class="select-box" onchange="updateCharacterState(this.value)">
-        <option value="Arin">☕ @Barista_Arin (Followers: 1,240)</option>
-        <option value="Hero">⚔️ @Coffee_Shop_Hero (Followers: 45.8K)</option>
-        <option value="Regular">📖 @Grumpy_Regular (Followers: 142)</option>
-        <option value="Chai">✨ @Chai_Enthusiast (Followers: 3,890)</option>
+        <option value="Grumpy_Regular">📖 @Grumpy_Regular (Followers: 142)</option>
+        <option value="Barista_Arin">☕ @Barista_Arin (Followers: 1,240)</option>
+        <option value="Coffee_Shop_Hero">⚔️ @Coffee_Shop_Hero (Followers: 45.8K)</option>
+        <option value="Chai_Enthusiast">✨ @Chai_Enthusiast (Followers: 3,890)</option>
       </select>
     </div>
   </div>
 
-  <!-- Navigation Bar -->
+  <!-- Navigation App Tabs Menu Bar -->
   <div class="tabs">
     <button id="tab-feed" class="tab active" onclick="showTab('feed')">📷 Timeline Feed</button>
     <button id="tab-dms" class="tab" onclick="showTab('dms')">💬 Character DMs</button>
     <button id="tab-studio" class="tab" onclick="showTab('studio')">⚙️ Creator Studio</button>
   </div>
 
-  <!-- TAB WINDOW 1: FEED TIMELINE -->
+  <!-- TAB AREA 1: TIMELINE FEED DISPLAY -->
   <div id="win-feed" class="window">
     <div style="font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px;">📷 Recent Universe Posts</div>
     <div id="feed-list">
-      <div class="post-item">
-        <div class="post-user">@Barista_Arin</div>
-        <div>Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖</div>
-        <div class="comment-row"><b>@Grumpy_Regular:</b> Save two for me, Arin. Don't let the morning rush steal them.</div>
+      <div class="post-item" id="post-card-101">
+        <div class="post-header">☕ @Barista_Arin</div>
+        <img class="post-img" src="https://unsplash.com" alt="Cafe Roll Art">
+        <div class="post-body-text">Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖</div>
+        <div class="comment-box-area">
+          <div class="comment-title-label">Comments Log</div>
+          <div class="comment-container-list" id="comment-stream-101">
+            <div class="comment-row" id="comment-101-default">
+              <span class="comment-text-wrapper"><span class="comment-user-tag">@Grumpy_Regular:</span><span id="comment-text-101-default">Save two for me, Arin. Don't let the morning rush steal them.</span></span>
+              <a class="edit-comment-link" onclick="editInlineComment('101-default')">[Edit]</a>
+            </div>
+          </div>
+          <div class="live-comment-form">
+            <input type="text" class="comment-input-inline" id="comment-field-101" placeholder="Write a comment response as your character...">
+            <button class="comment-submit-btn" onclick="submitInlineComment(101)">Comment</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB WINDOW 2: DIRECT MESSAGE CHATS LOGS -->
+  <!-- TAB AREA 2: DIRECT DIALOGUE MESSAGE CHATS -->
   <div id="win-dms" class="window" style="display:none;">
     <div style="font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px;">📥 Active Dialogue Chat Scripts</div>
-    <div id="dm-list" style="display:flex; flex-direction:column; gap:8px;">
-      <div style="background:#efefef; padding:8px 12px; border-radius:12px; align-self:flex-start; max-width:80%;"><b>@Barista_Arin:</b> The espresso machine is heated up and ready for you!</div>
-      <div style="background:#ff8a00; color:white; padding:8px 12px; border-radius:12px; align-self:flex-end; max-width:80%;"><b>@Coffee_Shop_Hero:</b> Awesome, walking in now!</div>
+    <div id="dm-list" style="display:flex; flex-direction:column; gap:12px; align-items: flex-start;">
+      <div class="dm-bubble-row" style="align-self: flex-start;">
+        <span class="bubble-author-sub">@Barista_Arin</span>
+        <div class="bubble left">The espresso machine is heated up and ready for you!</div>
+      </div>
+      <div class="dm-bubble-row" style="align-self: flex-end; align-items: flex-end;">
+        <span class="bubble-author-sub">@Coffee_Shop_Hero</span>
+        <div class="bubble right">Awesome, walking in now!</div>
+      </div>
     </div>
   </div>
 
-  <!-- TAB WINDOW 3: CREATOR STUDIO PRODUCTION AREA -->
+  <!-- TAB AREA 3: CREATOR STUDIO PRODUCTION DASHBOARD -->
   <div id="win-studio" class="window" style="display:none;">
     <div style="font-weight: bold; margin-bottom: 12px; color: #ff8a00;">⚙️ Creator Studio Panel</div>
+    <p style="font-size:0.85rem; color:#666; margin: 0 0 15px 0;">Use this private panel to instantly publish image cards or dialogue message blocks matching your selected character badge.</p>
     
-    <p style="font-size:0.85rem; color:#666; margin: 0 0 15px 0;">Type text updates below. Clicking add will immediately inject cards or bubbles into your active tabs view list.</p>
+    <input type="text" id="studio-image-link" class="input-field" placeholder="Paste image artwork link (or leave empty for test cafe image)...">
+    <input type="text" id="studio-caption-text" class="input-field" placeholder="Type what your character writes in the caption or description box...">
     
-    <input type="text" id="studio-text" class="input-field" placeholder="Type caption description or text dialogue text script line...">
     <div style="display: flex; gap: 10px;">
-      <button class="btn" style="background:#ff8a00; flex:1;" onclick="addPostItem()">Add to Timeline Feed</button>
-      <button class="btn" style="background:#0095f6; flex:1;" onclick="addDMItem()">Inject into DMs Log</button>
+      <button class="btn" style="background:#ff8a00; flex:1;" onclick="addPostToTimeline()">Publish to Timeline Feed</button>
+      <button class="btn" style="background:#0095f6; flex:1;" onclick="addDMToConversation()">Inject into DMs Log</button>
     </div>
   </div>
 
   <script>
-    let activeCharacter = "Arin";
+    // FIXED: Ensured activeCharacter tracks the exact raw value from the dropdown select input element
+    let activeCharacter = "Grumpy_Regular";
 
     function updateCharacterState(val) {
       activeCharacter = val;
-      document.getElementById('active-avatar').innerText = val.substring(0,2).toUpperCase();
+      let shortInitials = val.replace("Barista_", "").replace("Coffee_Shop_", "").substring(0,2).toUpperCase();
+      document.getElementById('active-avatar').innerText = shortInitials;
     }
 
     function showTab(tabId) {
@@ -109,33 +152,8 @@
       document.getElementById('tab-studio').className = 'tab' + (tabId === 'studio' ? ' active' : '');
     }
 
-    function addPostItem() {
-      const txt = document.getElementById('studio-text').value.trim();
-      if(!txt) return;
-
-      const feed = document.getElementById('feed-list');
-      const card = document.createElement('div');
-      card.className = 'post-item';
-      card.innerHTML = `<div class="post-user">@Barista_${activeCharacter}</div><div>${txt}</div>`;
+    function addPostToTimeline() {
+      const caption = document.getElementById('studio-caption-text').value.trim();
+      let imgUrl = document.getElementById('studio-image-link').value.trim();
       
-      feed.insertBefore(card, feed.firstChild);
-      document.getElementById('studio-text').value = '';
-      showTab('feed');
-    }
 
-    function addDMItem() {
-      const txt = document.getElementById('studio-text').value.trim();
-      if(!txt) return;
-
-      const dms = document.getElementById('dm-list');
-      const bubble = document.createElement('div');
-      bubble.style = "background:#ff8a00; color:white; padding:8px 12px; border-radius:12px; align-self:flex-end; max-width:80%;";
-      bubble.innerHTML = `<b>@${activeCharacter}:</b> ${txt}`;
-      
-      dms.appendChild(bubble);
-      document.getElementById('studio-text').value = '';
-      showTab('dms');
-    }
-  </script>
-</body>
-</html>
