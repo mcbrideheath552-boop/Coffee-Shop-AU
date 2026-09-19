@@ -31,6 +31,7 @@
       padding: 0 15px;
     }
 
+    /* 3-Tab App Navigation Bar Layout */
     .view-tabs {
       display: flex;
       border: 1px solid #dbdbdb;
@@ -49,6 +50,7 @@
       cursor: pointer;
       color: #8e8e8e;
       transition: all 0.2s;
+      text-align: center;
     }
     .tab-btn.active {
       background: #ff8a00;
@@ -180,10 +182,11 @@
 
   <main class="instagram-container">
     
+    <!-- FIXED: Removed all inline 'onclick' event properties to stop Opera shield blockers -->
     <div class="view-tabs">
-      <button id="tab-feed" class="tab-btn active" onclick="switchMainView('feed')">📷 Timeline Feed</button>
-      <button id="tab-dms" class="tab-btn" onclick="switchMainView('dms')">💬 Character DMs</button>
-      <button id="tab-studio" class="tab-btn" style="border-left:1px solid #dbdbdb; color:#ff8a00;" onclick="switchMainView('studio')">⚙️ Creator Studio</button>
+      <button id="tab-feed" class="tab-btn active">📷 Timeline Feed</button>
+      <button id="tab-dms" class="tab-btn">💬 Character DMs</button>
+      <button id="tab-studio" class="tab-btn" style="border-left:1px solid #dbdbdb; color:#ff8a00;">⚙️ Creator Studio</button>
     </div>
 
     <!-- WINDOW 1: TIMELINE -->
@@ -211,7 +214,7 @@
         <input type="text" id="studio-post-user" class="studio-input" placeholder="Type character name (e.g. Arin)...">
         <input type="text" id="studio-post-img" class="studio-input" placeholder="Paste image address link (or leave blank for test cafe image)...">
         <input type="text" id="studio-post-cap" class="studio-input" placeholder="Type image caption description...">
-        <button class="studio-btn" style="background:#ff8a00;" onclick="submitPostToCloud()">Send to Supabase Timeline</button>
+        <button id="btn-submit-post" class="studio-btn" style="background:#ff8a00;">Send to Supabase Timeline</button>
 
         <div class="section-divider"></div>
 
@@ -222,7 +225,7 @@
           <option value="right">Right Bubble (Outgoing Speech)</option>
         </select>
         <input type="text" id="studio-dm-text" class="studio-input" placeholder="Type message text dialogue script...">
-        <button class="studio-btn" style="background:#0095f6;" onclick="submitDMToCloud()">Send to Supabase DM Logs</button>
+        <button id="btn-submit-dm" class="studio-btn" style="background:#0095f6;">Send to Supabase DM Logs</button>
       </div>
     </div>
 
@@ -232,10 +235,17 @@
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
-    // Backup Memory States to keep tabs functioning perfectly even if your network blocks connection
+    // Safe Offline Data States
     let offlinePosts = [];
     let offlineComments = [];
     let offlineDMs = [];
+
+    // FIXED: Standard Event Listeners isolated completely away from HTML layout tree context
+    document.getElementById('tab-feed').addEventListener('click', () => switchMainView('feed'));
+    document.getElementById('tab-dms').addEventListener('click', () => switchMainView('dms'));
+    document.getElementById('tab-studio').addEventListener('click', () => switchMainView('studio'));
+    document.getElementById('btn-submit-post').addEventListener('click', submitPostToCloud);
+    document.getElementById('btn-submit-dm').addEventListener('click', submitDMToCloud);
 
     function switchMainView(target) {
       document.getElementById('view-feed-container').style.display = (target === 'feed') ? 'block' : 'none';
@@ -253,16 +263,3 @@
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const cloudPosts = postsRes.ok ? await postsRes.json() : null;
-
-        const commentsRes = await fetch(`${SUPABASE_URL}/rest/v1/comments?select=post_id,username,comment_text`, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const cloudComments = commentsRes.ok ? await commentsRes.json() : null;
-
-        if (cloudPosts) {
-          renderTimeline(cloudPosts, cloudComments || []);
-        } else {
-          // If network error/block occurs, fallback to smooth internal render engine
-          renderTimeline(offlinePosts, offlineComments);
-        }
-      } catch (e) { 
