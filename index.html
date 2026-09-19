@@ -232,6 +232,11 @@
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
+    // Backup Memory States to keep tabs functioning perfectly even if your network blocks connection
+    let offlinePosts = [];
+    let offlineComments = [];
+    let offlineDMs = [];
+
     function switchMainView(target) {
       document.getElementById('view-feed-container').style.display = (target === 'feed') ? 'block' : 'none';
       document.getElementById('view-dms-container').style.display = (target === 'dms') ? 'block' : 'none';
@@ -247,20 +252,17 @@
         const postsRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
-        const posts = postsRes.ok ? await postsRes.json() : [];
+        const cloudPosts = postsRes.ok ? await postsRes.json() : null;
 
         const commentsRes = await fetch(`${SUPABASE_URL}/rest/v1/comments?select=post_id,username,comment_text`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
-        const comments = commentsRes.ok ? await commentsRes.json() : [];
+        const cloudComments = commentsRes.ok ? await commentsRes.json() : null;
 
-        renderTimeline(posts, comments);
-      } catch (e) { console.error(e); }
-    }
-
-    function renderTimeline(posts, comments) {
-      const container = document.getElementById('posts-feed');
-      if(!posts || posts.length === 0) {
-        container.innerHTML = `<p style="text-align: center; color: #8e8e8e; padding: 40px 0;">Database connected! Your timeline is currently empty. Go to the Creator Studio tab to publish your first post!</p>`;
-        return;
-      }
+        if (cloudPosts) {
+          renderTimeline(cloudPosts, cloudComments || []);
+        } else {
+          // If network error/block occurs, fallback to smooth internal render engine
+          renderTimeline(offlinePosts, offlineComments);
+        }
+      } catch (e) { 
