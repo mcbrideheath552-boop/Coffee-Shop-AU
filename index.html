@@ -14,6 +14,7 @@
       color: #262626;
     }
 
+    /* Top Universal Header Theme */
     .app-header {
       background: #ffffff;
       border-bottom: 1px solid #dbdbdb;
@@ -31,10 +32,84 @@
       padding: 0 15px;
     }
 
+    /* Admin Panel Creation Center */
+    .admin-box {
+      background: #fff;
+      border: 2px dashed #ff8a00;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .admin-box h3 { margin: 0 0 12px 0; font-size: 1.1rem; color: #ff8a00; display: flex; align-items: center; gap: 6px; }
+    
+    .panel-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    
+    .panel-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .panel-select {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+    }
+
+    .publish-btn {
+      width: 100%;
+      background: #ff8a00;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .publish-btn:hover { background: #e07a00; }
+
+    /* Custom Navigation Tabs for Feed vs DMs */
+    .view-tabs {
+      display: flex;
+      border: 1px solid #dbdbdb;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      background: white;
+      overflow: hidden;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #8e8e8e;
+    }
+    .tab-btn.active {
+      background: #ff8a00;
+      color: white;
+    }
+
+    /* Main Feed Cards System Layout Component */
     .posts-feed {
       display: flex;
       flex-direction: column;
-      gap: 35px;
+      gap: 30px;
+      min-height: 200px; /* FIXED: Prevents initial framework collapse errors */
     }
 
     .post-card {
@@ -42,7 +117,34 @@
       border: 1px solid #dbdbdb;
       border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
+
+    /* Instagram Profile Meta Header */
+    .post-card-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f2f2f2;
+    }
+    .oc-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #eee;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+    .oc-meta-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .oc-username-badge { font-weight: 600; font-size: 0.95rem; }
+    .oc-followers-counter { font-size: 0.75rem; color: #8e8e8e; }
 
     .post-image {
       width: 100%;
@@ -52,61 +154,67 @@
     }
 
     .post-content { padding: 16px; }
-    .post-caption { margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.4; font-weight: 500; }
+    .post-caption { margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.4; }
 
     .comments-section {
       border-top: 1px solid #efefef;
       padding-top: 12px;
-      margin-top: 12px;
     }
     .comments-title { font-size: 0.85rem; font-weight: 600; color: #8e8e8e; margin-bottom: 8px; }
     .comment-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    
     .comment-item { font-size: 0.9rem; line-height: 1.3; }
-    .comment-user { font-weight: 600; margin-right: 6px; color: #000000; }
-    .comment-text { color: #333333; }
+    .comment-user { font-weight: 600; margin-right: 6px; }
 
-    .comment-form {
-      display: flex;
-      gap: 8px;
-      border-top: 1px solid #efefef;
-      padding-top: 12px;
-    }
-    .comment-select {
-      padding: 8px;
-      border: 1px solid #dbdbdb;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      background: #fff;
-    }
-    .comment-input {
-      flex-grow: 1;
-      padding: 8px 12px;
-      border: 1px solid #dbdbdb;
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-    .comment-btn {
-      background: #0095f6;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 4px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-    .comment-btn:hover { background: #1877f2; }
+    .comment-form { display: flex; gap: 8px; border-top: 1px solid #efefef; padding-top: 12px; }
 
-    /* Admin Quick Post Addition Controls Box */
-    .admin-box {
-      background: #fff;
-      border: 1px dashed #ff8a00;
+    /* SIMULATED DIRECT MESSAGES MODULE INTERFACE */
+    .dm-inbox-view {
+      background: white;
+      border: 1px solid #dbdbdb;
       border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 25px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
-    .admin-box h3 { margin: 0 0 10px 0; font-size: 1rem; color: #ff8a00; }
+    .dm-chat-log {
+      flex-grow: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+      background: #fbfbfb;
+    }
+    .bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      position: relative;
+    }
+    .bubble .sender-label {
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-bottom: 3px;
+      display: block;
+      color: rgba(0,0,0,0.5);
+    }
+    .bubble.left {
+      background: #efefef;
+      color: black;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .bubble.right {
+      background: #ff8a00;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.right .sender-label { color: rgba(255,255,255,0.8); }
   </style>
 </head>
 <body>
@@ -117,142 +225,96 @@
 
   <main class="instagram-container">
     
-    <!-- Visual Portal Box allowing rapid adding of posts straight from any screen screen -->
+    <!-- Unified Admin Creation Dashboard -->
     <div class="admin-box">
-      <h3>➕ Post to the Timeline as your Character</h3>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <input type="text" id="new-post-img" placeholder="Paste image link here (or leave blank for test cafe image)..." style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-        <input type="text" id="new-post-cap" placeholder="Type what your character writes in the description box..." style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-        <button onclick="createNewCharacterPost()" style="background:#ff8a00; color:white; border:none; padding:10px; border-radius:4px; font-weight:600; cursor:pointer;">Publish Post to Grid</button>
+      <h3>✍️ Worldbuilding Control Panel</h3>
+      
+      <!-- Toggle form views automatically based on intent -->
+      <div class="panel-row">
+        <select id="admin-mode-select" class="panel-select" onchange="toggleAdminFormType(this.value)">
+          <option value="post">➕ Create Timeline Post</option>
+          <option value="dm">📩 Send Character Direct Message (DM)</option>
+        </select>
+      </div>
+
+      <!-- Context Form A: Post Creation -->
+      <div id="form-post-group">
+        <div class="panel-row">
+          <select id="new-post-author" class="panel-select">
+            <option value="Barista_Arin">@Barista_Arin (Arin)</option>
+            <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero (Hero)</option>
+            <option value="Grumpy_Regular">@Grumpy_Regular (Regular)</option>
+            <option value="Chai_Enthusiast">@Chai_Enthusiast (Chai)</option>
+          </select>
+        </div>
+        <input type="text" id="new-post-img" class="panel-input" placeholder="Paste image link here (or leave blank for cafe photo)...">
+        <input type="text" id="new-post-cap" class="panel-input" placeholder="Type image description caption...">
+        <button class="publish-btn" onclick="publishNewOCPost()">Publish to Timeline Feed</button>
+      </div>
+
+      <!-- Context Form B: DM Simulation Creation -->
+      <div id="form-dm-group" style="display: none;">
+        <div class="panel-row">
+          <select id="dm-sender" class="panel-select">
+            <option value="Barista_Arin">Sender: @Barista_Arin</option>
+            <option value="Coffee_Shop_Hero">Sender: @Coffee_Shop_Hero</option>
+            <option value="Grumpy_Regular">Sender: @Grumpy_Regular</option>
+            <option value="Chai_Enthusiast">Sender: @Chai_Enthusiast</option>
+          </select>
+          <select id="dm-align" class="panel-select">
+            <option value="left">Speech Bubble: Left (Receiver Side)</option>
+            <option value="right">Speech Bubble: Right (Sender Side)</option>
+          </select>
+        </div>
+        <input type="text" id="dm-text" class="panel-input" placeholder="Type text message script...">
+        <button class="publish-btn" style="background:#0095f6;" onclick="sendSimulatedDM()">Inject into Chat Logs</button>
+      </div>
+
+    </div>
+
+    <!-- Navigation Bar between Feed Framework and DM Chatbox Windows -->
+    <div class="view-tabs">
+      <button id="tab-feed" class="tab-btn active" onclick="switchMainView('feed')">📷 Timeline Feed</button>
+      <button id="tab-dms" class="tab-btn" onclick="switchMainView('dms')">💬 Character DMs Chat Logs</button>
+    </div>
+
+    <!-- WINDOW SELECTION A: POSTS GRID -->
+    <div id="view-feed-container">
+      <div id="posts-feed" class="posts-feed">
+        <!-- Rendered items inject cleanly right here -->
       </div>
     </div>
 
-    <div id="posts-feed" class="posts-feed">
-      <!-- Layout renders right here seamlessly -->
+    <!-- WINDOW SELECTION B: DMS DIALOGUE CHATS -->
+    <div id="view-dms-container" style="display: none;">
+      <div class="dm-inbox-view">
+        <div style="background:#fff; padding:12px; border-bottom:1px solid #ddd; font-weight:bold; text-align:center;">
+          📥 Private Dialogue Script Thread
+        </div>
+        <div id="dm-chat-log" class="dm-chat-log">
+          <!-- Text bubbles inject right here -->
+        </div>
+      </div>
     </div>
+
   </main>
 
   <script>
-    const SUPABASE_URL = 'https://supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
+    // Configuration Metadata Presets mapping profile badges instantly onto screens
+    const ocProfiles = {
+      "Barista_Arin": { label: "Arin ☕", followers: "1,240", color: "#ff8a00" },
+      "Coffee_Shop_Hero": { label: "Hero ⚔️", followers: "45.8K", color: "#0095f6" },
+      "Grumpy_Regular": { label: "Regular 📖", followers: "142", color: "#333333" },
+      "Chai_Enthusiast": { label: "Chai ✨", followers: "3,890", color: "#d10056" }
+    };
 
-    // Initial Local Backup values to ensure your timeline runs instantly even if web networks fail
-    const fallbackPosts = [
-      { id: 1, image_url: "https://unsplash.com", caption: "Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖" }
+    const initialPosts = [
+      { id: 101, author: "Barista_Arin", image_url: "https://unsplash.com", caption: "Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖" }
     ];
-    const fallbackComments = [
-      { post_id: 1, username: "Grumpy_Regular", comment_text: "Save two for me, Arin. Don't let the morning rush steal them." },
-      { post_id: 1, username: "Chai_Enthusiast", comment_text: "Oh wow, those look incredible!! On my way right now!" }
+    
+    const initialComments = [
+      { post_id: 101, username: "Grumpy_Regular", comment_text: "Save two for me, Arin. Don't let the morning rush steal them." },
+      { post_id: 101, username: "Chai_Enthusiast", comment_text: "Oh wow, those look incredible!! On my way right now!" }
     ];
 
-    // Read stored sessions out of memory so it keeps your changes when you refresh your browser link
-    let activePosts = JSON.parse(localStorage.getItem('oc_posts')) || fallbackPosts;
-    let activeComments = JSON.parse(localStorage.getItem('oc_comments')) || fallbackComments;
-
-    async function loadUniverseTimeline() {
-      try {
-        const postsRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        if (!postsRes.ok) throw new Error("Blocked network handle");
-        const cloudPosts = await postsRes.json();
-
-        const commentsRes = await fetch(`${SUPABASE_URL}/rest/v1/comments?select=post_id,username,comment_text`, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const cloudComments = await commentsRes.json();
-
-        if(cloudPosts && cloudPosts.length > 0) activePosts = cloudPosts;
-        if(cloudComments && cloudComments.length > 0) activeComments = cloudComments;
-      } catch (error) {
-        console.warn("Database network block detected by browser tracking suite. Safely launching local backup runtime engine configuration framework.");
-      }
-      
-      renderTimelineLayout();
-    }
-
-    function renderTimelineLayout() {
-      const feedContainer = document.getElementById('posts-feed');
-      feedContainer.innerHTML = '';
-
-      activePosts.forEach(post => {
-        const postCard = document.createElement('div');
-        postCard.className = 'post-card';
-
-        const matchingComments = activeComments.filter(c => Number(c.post_id) === Number(post.id));
-        let commentsHTML = '';
-        matchingComments.forEach(c => {
-          commentsHTML += `
-            <div class="comment-item">
-              <span class="comment-user">@${c.username}</span>
-              <span class="comment-text">${c.comment_text}</span>
-            </div>`;
-        });
-
-        postCard.innerHTML = `
-          <img src="${post.image_url}" class="post-image" alt="OC Visual Snapshot Component Frame">
-          <div class="post-content">
-            <p class="post-caption">${post.caption || ''}</p>
-            
-            <div class="comments-section">
-              <div class="comments-title">Comments Log</div>
-              <div class="comment-list" id="comment-list-${post.id}">
-                ${commentsHTML || '<p style="color:#b2b2b2; font-size:0.85rem; margin:0;" id="empty-comment-'+post.id+'">No entries yet. Write a character response below...</p>'}
-              </div>
-              
-              <div class="comment-form">
-                <select class="comment-select" id="user-select-${post.id}">
-                  <option value="Barista_Arin">@Barista_Arin</option>
-                  <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero</option>
-                  <option value="Grumpy_Regular">@Grumpy_Regular</option>
-                  <option value="Chai_Enthusiast">@Chai_Enthusiast</option>
-                </select>
-                <input type="text" class="comment-input" id="input-${post.id}" placeholder="Write a comment as your character...">
-                <button class="comment-btn" onclick="submitCharacterComment(${post.id})">Post</button>
-              </div>
-            </div>
-          </div>
-        `;
-        feedContainer.appendChild(postCard);
-      });
-    }
-
-    function createNewCharacterPost() {
-      const imgInput = document.getElementById('new-post-img');
-      const capInput = document.getElementById('new-post-cap');
-      
-      let imgUrl = imgInput.value.trim() || "https://unsplash.com";
-      let captionText = capInput.value.trim() || "Stopped by the cafe window to watch the rain fall. 🌧️☕";
-
-      const newPost = {
-        id: Date.now(),
-        image_url: imgUrl,
-        caption: captionText
-      };
-
-      activePosts.unshift(newPost);
-      localStorage.setItem('oc_posts', JSON.stringify(activePosts));
-      
-      // Attempt to backing upload to remote server if connections let up
-      fetch(`${SUPABASE_URL}/rest/v1/posts`, {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image_url: imgUrl, caption: captionText })
-      }).catch(e => console.log('Local save logged successfully. Remote network skipped.'));
-
-      imgInput.value = '';
-      capInput.value = '';
-      renderTimelineLayout();
-    }
-
-    async function submitCharacterComment(postId) {
-      const selectBox = document.getElementById(`user-select-${postId}`);
-      const inputBox = document.getElementById(`input-${postId}`);
-      const chosenOC = selectBox.value;
-      const commentTxt = inputBox.value.trim();
-
-      if (!commentTxt) return;
-
-      const newComment = { post_id: postId, username: chosenOC, comment_text: commentTxt };
-      activeComments.push(newComment);
-      localStorage.setItem('oc_comments', JSON.stringify(activeComments));
+    const initialDMs = [
