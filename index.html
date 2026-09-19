@@ -1,161 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OC Social Network</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
-    h1 { text-align: center; color: #A993D9; margin-bottom: 20px; font-size: 1.6rem; font-weight: bold; }
-    
-    /* 🌐 THREE-COLUMN MASTER APPARATUS GRID LAYOUT */
-    .master-workspace-layout {
-      display: grid;
-      grid-template-columns: 320px 1fr 340px;
-      gap: 20px;
-      max-width: 1440px;
-      margin: 0 auto;
-      align-items: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* Column Container Panel Styling */
-    .panel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .panel-title { font-weight: bold; font-size: 0.95rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; color: #A993D9; display: flex; align-items: center; gap: 6px; }
+<title>OC Social Network</title>
 
-    /* --- LEFT SIDE COLUMN: PERSONAL 1-ON-1 DMS BOX --- */
-    .dm-column-interface { display: flex; flex-direction: column; height: 500px; justify-content: center; }
-    .dm-recipient-selector { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; }
-    .dm-stream-viewport { flex-grow: 1; border: 1px solid #f2f2f2; border-radius: 6px; background: #fbfbfb; padding: 10px; overflow-y: auto; height: 340px; display: flex; flex-direction: column; gap: 8px; }
-    .bubble { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; margin-bottom: 4px; }
-    .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 2px; }
-    .bubble.right { background: #A993D9; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    /* --- CENTER COLUMN: INSTAGRAM HOME TIMELINE FEED --- */
-    .feed-column-interface { max-height: 520px; overflow-y: auto; padding-right: 4px; }
-    .post-item-card { border: 1px solid #dbdbdb; border-radius: 8px; margin-bottom: 15px; background: white; overflow: hidden; max-width: 520px; margin-left: auto; margin-right: auto; }
-    .post-header { padding: 10px 14px; font-weight: bold; border-bottom: 1px solid #f2f2f2; font-size: 0.88rem; display: flex; align-items: center; justify-content: space-between; }
-    .post-header-left { display: flex; align-items: center; gap: 8px; }
-    .post-header-avatar { width: 28px; height: 28px; border-radius: 50%; background: #A993D9; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: bold; }
-    .post-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .post-img-placeholder { width: 100%; height: 280px; background: #e0d9f0; display: flex; align-items: center; justify-content: center; color: #7a7aff; font-size: 2rem; font-weight: bold; border-bottom: 1px solid #eee; }
-    .post-img-real { width: 100%; height: 280px; object-fit: cover; display: block; border-bottom: 1px solid #eee; }
-    .post-likes-bar { padding: 10px 14px 2px 14px; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-    .post-caption { padding: 4px 14px 12px 14px; font-size: 0.88rem; line-height: 1.4; }
-    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 10px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
+:root {
+  --purple: #a993d9;
+  --purple-dark: #8065bd;
+  --purple-light: #eee8fa;
+  --blue: #0095f6;
+  --background: #fafafa;
+  --border: #dbdbdb;
+  --text: #262626;
+  --muted: #737373;
+}
 
-    /* --- RIGHT SIDE COLUMN: CONTROL PANEL --- */
-    .input-field { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.88rem; }
-    .select-box { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; background: #fafafa; }
-    .action-btn { width: 100%; padding: 11px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; background: #A993D9; margin-bottom: 8px; }
-    .action-link { font-size: 0.72rem; color: #0095f6; cursor: pointer; font-weight: bold; }
-    
-    .mini-hub-box { border-top: 1px dashed #ddd; margin-top: 15px; padding-top: 15px; }
-    .mini-avatar-badge { width: 44px; height: 44px; border-radius: 50%; background: #A993D9; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin-bottom: 8px; overflow: hidden; }
-    .mini-avatar-badge img { width: 100%; height: 100%; object-fit: cover; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
-    /* 📌 POP-UP MODAL WINDOW OVERLAYS CODES PANEL STYLING */
-    .modal-overlay-backdrop {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-window-box {
-      background: white;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    }
-    .modal-scroll-pane {
-      max-height: 260px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      border: 1px solid #eee;
-      border-radius: 6px;
-      padding: 10px;
-      background: #fbfbfb;
-    }
-    .comment-item-card { padding: 8px 0; font-size: 0.88rem; border-bottom: 1px solid #eee; }
-    .comment-actions-row { font-size: 0.75rem; color: #8e8e8e; font-weight: bold; margin-top: 4px; display: flex; gap: 10px; }
-    .reply-nested-box { margin-left: 20px; padding-left: 10px; border-left: 2px solid #efefef; margin-top: 6px; display: flex; flex-direction: column; gap: 4px; }
-  </style>
-</head>
-<body>
+/* =========================
+   HEADER
+========================= */
 
-  <h1>OC Social Network</h1>
+.topbar {
+  height: 62px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-  <main class="master-workspace-layout">
+.logo {
+  color: var(--purple-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
 
-    <!-- LEFT SIDE COLUMN: PERSONAL CHAT INBOX -->
-    <div class="panel-box dm-column-interface">
-      <div class="panel-title">💬 Private Dialogue Threads</div>
-      <label style="font-size:0.75rem; font-weight:bold; color:#666;">Chatting With Target:</label>
-      <select id="dm-recipient-selector" class="dm-recipient-selector" onchange="window.switchPrivateChatThread(this.value)">
-        <option value="Coffee_Shop_Hero">⚔️ @Coffee_Shop_Hero</option>
-        <option value="Barista_Arin">☕ @Barista_Arin</option>
-        <option value="Grumpy_Regular">📖 @Grumpy_Regular</option>
-        <option value="Chai_Enthusiast">✨ @Chai_Enthusiast</option>
-      </select>
-      
-      <div id="dm-log-viewport" class="dm-stream-viewport"></div>
-      
-      <div style="margin-top:10px; display:flex; gap:4px;">
-        <input type="text" id="dm-typed-input" class="input-field" placeholder="Type DM text line..." style="margin:0; padding:6px;">
-        <button style="background:#A993D9; border:none; padding:0 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="window.submitPrivateDMMessage()">Send</button>
-      </div>
-    </div>
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+}
 
-    <!-- CENTER COLUMN: INSTAGRAM HOME TIMELINE FEED -->
-    <div class="feed-column-interface" id="feed-column-list"></div>
+.small-top-btn {
+  border: none;
+  background: var(--purple-light);
+  color: var(--purple-dark);
+  border-radius: 20px;
+  padding: 8px 13px;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-    <!-- RIGHT SIDE COLUMN: GLOBAL ACTOR MANAGER & CREATOR STUDIO -->
-    <div class="panel-box">
-      <div class="panel-title">👤 Active Account Manager</div>
-      <label style="font-size:0.75rem; font-weight:bold; color:#666;">Control Profile Character:</label>
-      <select id="actor-selector" class="select-box" onchange="window.swapActiveGlobalActor(this.value)">
-        <option value="Barista_Arin">☕ @Barista_Arin</option>
-        <option value="Coffee_Shop_Hero">⚔️ @Coffee_Shop_Hero</option>
-        <option value="Grumpy_Regular">📖 @Grumpy_Regular</option>
-        <option value="Chai_Enthusiast">✨ @Chai_Enthusiast</option>
-      </select>
+.small-top-btn:hover {
+  background: #dfd4f2;
+}
 
-      <div class="panel-title" style="margin-top:15px;">⚙️ Creator Studio Panel</div>
-      <p style="font-size:0.75rem; color:#666; margin:0 0 10px 0; line-height:1.3;">Add image links and captions below to instantly inject content cards into the center feed.</p>
-      
-      <input type="text" id="studio-image-url" class="input-field" placeholder="Paste any image web link address here...">
-      <input type="text" id="studio-caption" class="input-field" placeholder="Type post caption lore...">
-      <input type="number" id="studio-likes" class="input-field" value="32">
-      
-      <button class="action-btn" onclick="window.publishNewStudioPostCard()">Publish Post Card to Feed</button>
+/* =========================
+   MAIN LAYOUT
+========================= */
 
-      <!-- PROFILE CARD DISPLAY -->
-      <div class="mini-hub-box" id="mini-dossier-card-hub"></div>
-    </div>
+.master-workspace-layout {
+  display: grid;
+  grid-template-columns: 300px minmax(400px, 1fr) 310px;
+  gap: 20px;
+  max-width: 1450px;
+  margin: 25px auto;
+  padding: 0 18px;
+  align-items: start;
+}
 
-  </main>
+.panel-box {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.03);
+}
 
-  <!-- 📌 MODAL POPUP 1: OVER-THE-TOP COMMENTS OVERLAY PANEL -->
-  <div id="comment-overlay-window" class="modal-overlay-backdrop">
-    <div class="modal-window-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:8px; margin-bottom:12px;">
-        <span style="font-weight:bold; color:#A993D9;">📝 Over-the-Top Comments Panel</span>
-        <button style="border:none; background:none; font-weight:bold; cursor:pointer; color:#8e8e8e; font-size:1.1rem;" onclick="window.closeCommentsModal()">✕</button>
-      </div>
-      <div id="modal-comments-pane" class="modal-scroll-pane"></div>
-      <div style="display:flex; gap:6px;">
-        <input type="text" id="modal-comment-input" class="input-field" placeholder="Type comment dialogue..." style="margin:0;">
-        <button style="background:#A993D9; border:none; padding:0 14px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;" onclick="window.submitModalCommentRow()">Post</button>
-      </div>
-    </div>
-  </div>
+.panel-title {
+  font-weight: bold;
+  font-size: .95rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 9px;
+  margin-bottom: 12px;
+  color: var(--purple-dark);
+}
 
-  <!-- 📌 MODAL POPUP 2: RESTORED PROFILE INFO POP-UP WINDOW AND INPUT FIELDS -->
-  <div id="profile-edit-window" class="modal-overlay-backdrop">
-    <div class="modal-window-box">
+/* =========================
+   INPUTS / BUTTONS
+========================= */
 
+.input-field,
+.select-box {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  font: inherit;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 7px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  background: var(--purple);
+  margin-bottom: 8px;
+}
+
+.action-btn:hover {
+  background: var(--purple-dark);
+}
+
+.secondary-btn {
+  background: #efefef;
+  color: #333;
+}
+
+.secondary-btn:hover {
+  background: #ddd;
+}
+
+.danger-btn {
+  background: #e74c3c;
+}
+
+.danger-btn:hover {
+  background: #c0392b;
+}
+
+/* =========================
+   DM PANEL
+========================= */
+
+.dm-column-interface {
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-stream-viewport {
+  flex: 1;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fbfbfb;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: .85rem;
+  line-height: 1.4;
+}
+
+.bubble.left {
+  background: #ededed;
+  align-self: flex-start;
+  border-bottom-left-radius: 3px;
+}
+
+.bubble.right {
+  background: var(--purple);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 3px;
+}
+
+/* =========================
+   FEED
+========================= */
+
+.feed-column-interface {
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+}
+
+.post-item-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background: white;
+  overflow: hidden;
+}
+
+.post-header {
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-header-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.post-header-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--purple);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.post-header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-author {
+  font-weight: bold;
+  font-size: .9rem;
+}
+
+.post-image-wrapper {
+  width: 100%;
+  height: 400px;
+  background: #e9e1f5;
+  position: relative;
+  overflow: hidden;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--purple-dark);
+  font-size: 3rem;
+}
+
+.post-actions {
+  padding: 10px 14px 5px;
+  display: flex;
+  gap: 16px;
+}
+
+.post-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.35rem;
+  padding: 0;
+}
+
+.post-action-btn:hover {
+  transform: scale(1.08);
+}
+
+.like-button.liked {
+  color: #ed4956;
+}
+
+.post-likes {
+  padding: 3px 14px;
+  font-size: .88rem;
+  font-weight: bold;
+}
+
+.post-caption {
+  padding: 5px 14px 12px;
+  line-height: 1
