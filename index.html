@@ -9,21 +9,25 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
     h1 { text-align: center; color: #ff8a00; margin-bottom: 20px; }
     
+    /* 4-Tab Main Navigation Bar Layout */
     .view-tabs { display: flex; max-width: 600px; margin: 0 auto 20px auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; }
     .tab-btn { flex: 1; padding: 14px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; text-align: center; font-size: 0.85rem; }
     .tab-btn.active { background: #ff8a00; color: white; }
 
+    /* Account Manager & Switcher Panel */
     .manager-card { max-width: 600px; margin: 0 auto 20px auto; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
     .actor-box { display: flex; align-items: center; gap: 12px; }
     .avatar-circle { width: 44px; height: 44px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; text-transform: uppercase; overflow: hidden; }
     .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
     .select-dropdown { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; cursor: pointer; }
 
+    /* Universal Content Windows */
     .window { max-width: 600px; margin: 0 auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .input-field { width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; background: #fafafa; }
     .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
     .studio-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 6px; }
 
+    /* Home Feed Post Cards Layout */
     .post-item { border: 1px solid #dbdbdb; padding: 0; border-radius: 8px; margin-top: 20px; background: white; overflow: hidden; }
     .post-header { padding: 14px; font-weight: bold; color: #262626; border-bottom: 1px solid #f2f2f2; display: flex; align-items: center; gap: 10px; }
     .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #f0f0f2; }
@@ -32,6 +36,7 @@
     .post-caption { padding: 0 14px 14px 14px; font-size: 0.95rem; line-height: 1.4; border-bottom: 1px solid #f2f2f2; }
     .comment-open-btn { display: block; width: 100%; text-align: center; padding: 12px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
 
+    /* 1-on-1 Personal Chat Layout */
     .dm-grid { display: flex; border: 1px solid #dbdbdb; border-radius: 8px; overflow: hidden; min-height: 420px; }
     .dm-sidebar { width: 35%; border-right: 1px solid #dbdbdb; background: #ffffff; }
     .dm-thread-btn { padding: 14px 10px; background: none; border: none; border-bottom: 1px solid #f2f2f2; text-align: left; font-weight: bold; font-size: 0.85rem; color: #444; cursor: pointer; width: 100%; }
@@ -45,6 +50,7 @@
     .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
     .bubble-meta { font-size: 0.7rem; font-weight: bold; color: #8e8e8e; margin-bottom: 2px; }
 
+    /* Character Profile Tab UI Layout */
     .hub-header { display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #efefef; padding-bottom: 20px; margin-bottom: 20px; }
     .hub-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.6rem; overflow: hidden; }
     .hub-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
@@ -53,9 +59,11 @@
     .hub-handle { font-size: 1.3rem; font-weight: bold; margin: 0; }
     .hub-edit-profile-btn { padding: 4px 10px; border: 1px solid #dbdbdb; border-radius: 4px; font-size: 0.75rem; font-weight: bold; background: #fafafa; cursor: pointer; }
     .hub-stats { display: flex; gap: 20px; font-size: 0.9rem; margin-bottom: 8px; }
+    .hub-bio { font-size: 0.88rem; line-height: 1.4; color: #555; margin: 0; }
     .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
     .hub-grid-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
 
+    /* Dedicated Comments Section Overlay Page Screen */
     .comment-page-view { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
     .comment-item-card { border-bottom: 1px solid #f2f2f2; padding: 10px 0; font-size: 0.9rem; display: flex; flex-direction: column; gap: 4px; }
     .comment-main-line { display: flex; justify-content: space-between; align-items: center; }
@@ -69,6 +77,7 @@
 
   <h1>✨ OC Social Universe</h1>
 
+  <!-- Top Global Account Manager -->
   <div class="manager-card">
     <div class="actor-box">
       <div id="global-actor-avatar" class="avatar-circle">AR</div>
@@ -80,6 +89,7 @@
     <div style="font-size: 0.8rem; color:#ff8a00; font-weight:bold; border: 1px dashed #ff8a00; padding:6px 10px; border-radius:6px;">✨ Control Center Active</div>
   </div>
 
+  <!-- Main Navigation Tabs -->
   <div class="view-tabs">
     <button id="nav-btn-feed" class="tab-btn active">📷 Home Feed</button>
     <button id="nav-btn-dms" class="tab-btn">💬 Personal DMs</button>
@@ -87,10 +97,12 @@
     <button id="nav-btn-studio" class="tab-btn" style="color:#ff8a00;">⚙️ Creator Studio</button>
   </div>
 
+  <!-- WINDOW 1: HOME FEED -->
   <div id="win-feed" class="window">
     <div id="feed-list-stream"></div>
   </div>
 
+  <!-- WINDOW 2: PERSONAL 1-ON-1 CHATS -->
   <div id="win-dms" class="window" style="display:none; padding:10px;">
     <div class="dm-grid">
       <div class="dm-sidebar" id="dm-sidebar-threads"></div>
@@ -105,6 +117,7 @@
     </div>
   </div>
 
+  <!-- WINDOW 3: DETACHED PROFILES HUB PAGE -->
   <div id="win-hub" class="window" style="display:none;">
     <div style="margin-bottom: 15px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-weight:bold; font-size:0.9rem; color:#666;">👤 Select Profile Page Tab View:</span>
@@ -113,6 +126,7 @@
     <div id="hub-profile-card-view"></div>
   </div>
 
+  <!-- WINDOW 4: CREATOR STUDIO PRODUCTION PANEL -->
   <div id="win-studio" class="window" style="display:none;">
     <div class="studio-title">📷 Create an Instagram Feed Post</div>
     <label style="font-size:0.8rem; font-weight:bold; color:#555;">Image Upload Asset Source:</label>
@@ -122,15 +136,3 @@
     <div style="display:flex; gap:10px;">
       <div style="flex:2;">
         <label style="font-size:0.8rem; font-weight:bold; color:#555;">Caption Description Box Lore:</label>
-        <input type="text" id="studio-caption" class="input-field" placeholder="Type post caption text...">
-      </div>
-      <div style="flex:1;">
-        <label style="font-size:0.8rem; font-weight:bold; color:#555;">Likes Initial Size:</label>
-        <input type="number" id="studio-likes" class="input-field" value="28">
-      </div>
-    </div>
-    <button class="btn" style="background:#ff8a00;" id="studio-submit-post-btn">Publish Post to Home Feed</button>
-  </div>
-
-  <div id="win-comments" class="window" style="display:none;">
-    <div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
