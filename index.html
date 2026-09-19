@@ -14,14 +14,37 @@
             --accent-color: #0095f6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 60px; }
-        header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 40px; }
+        header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 40px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
         h1 { font-size: 1.5rem; font-style: italic; }
         
-        .container { max-width: 935px; margin: 20px auto; display: grid; grid-template-columns: 1fr 350px; gap: 28px; padding: 0 20px; }
-        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } .sidebar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border-color); padding: 10px; z-index: 1000; display: flex; overflow-x: auto; gap: 10px; } body { padding-bottom: 120px; } }
+        /* 3-Column Layout Grid Setup */
+        .dashboard-container { 
+            max-width: 1400px; 
+            margin: 20px auto; 
+            display: grid; 
+            grid-template-columns: 320px 1fr 350px; 
+            gap: 20px; 
+            padding: 0 20px; 
+            align-items: start;
+        }
 
-        /* Feed & Posts */
+        /* Responsive Layout for Smaller Screens */
+        @media (max-width: 1100px) {
+            .dashboard-container { grid-template-columns: 1fr; }
+            .left-column, .right-column { position: static; }
+        }
+
+        /* Fixed / Sticky Layout Columns for smooth scrolling */
+        .left-column { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; }
+        .center-column { display: flex; flex-direction: column; gap: 20px; }
+        .right-column { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; max-height: calc(100vh - 120px); overflow-y: auto; padding-right: 4px; }
+
+        /* General Panel Cards */
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
+        .panel h3 { font-size: 0.95rem; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Feed & Posts (Center Column) */
         .feed { display: flex; flex-direction: column; gap: 24px; }
         .post-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
         .post-header { display: flex; align-items: center; padding: 12px; gap: 10px; border-bottom: 1px solid #efefef; }
@@ -30,7 +53,7 @@
         .post-img { width: 100%; max-height: 600px; object-fit: cover; background: #f0f0f0; }
         .post-actions { padding: 12px; display: flex; gap: 15px; font-size: 1.2rem; }
         .post-body { padding: 0 12px 12px 12px; font-size: 0.9rem; }
-        .likes-count { font-weight: 600; margin-bottom: 60pxpx; margin-bottom: 5px; }
+        .likes-count { font-weight: 600; margin-bottom: 5px; }
         .caption-text { margin-bottom: 8px; }
         
         /* Comments Sections */
@@ -38,35 +61,31 @@
         .comment-item { margin-bottom: 4px; font-size: 0.85rem; }
         .comment-user { font-weight: 600; margin-right: 6px; }
         .comment-input-box { display: flex; border-top: 1px solid #efefef; padding: 8px 12px; gap: 8px; align-items: center; }
-        .comment-input-box select { padding: 4px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.8rem; }
+        .comment-input-box select { padding: 4px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.8rem; max-width: 110px; }
         .comment-input-box input { flex: 1; border: none; outline: none; font-size: 0.85rem; }
         .comment-btn { color: var(--accent-color); font-weight: 600; background: none; border: none; cursor: pointer; font-size: 0.85rem; }
 
-        /* Sidebar & Control Panels */
-        .sidebar { display: flex; flex-direction: column; gap: 20px; }
-        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
-        .panel h3 { font-size: 0.95rem; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        /* Form styling elements */
         .form-group { margin-bottom: 10px; display: flex; flex-direction: column; gap: 4px; }
         .form-group label { font-size: 0.8rem; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; }
+        .form-group input, .form-group textarea, .form-group select { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; width: 100%; }
         
         .btn { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; text-align: center; }
         .btn-secondary { background: #333; }
         .btn:hover { opacity: 0.9; }
 
-        /* Active Account Switcher */
+        /* Active Account Switcher Display */
         .account-switcher { display: flex; align-items: center; gap: 10px; padding: 8px; background: #f0f0f0; border-radius: 6px; margin-bottom: 10px; }
 
-        /* DMs Section */
-        .dm-window { height: 250px; border: 1px solid var(--border-color); border-radius: 4px; display: flex; flex-direction: column; margin-top: 10px; }
+        /* Polished DMs Panel (Left Column Optimization) */
+        .dm-window { height: 400px; border: 1px solid var(--border-color); border-radius: 4px; display: flex; flex-direction: column; margin-top: 10px; background: #fff; }
         .dm-messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
-        .message { padding: 6px 10px; border-radius: 12px; max-width: 70%; word-break: break-word; }
+        .message { padding: 6px 10px; border-radius: 12px; max-width: 80%; word-break: break-word; line-height: 1.3; }
         .message.sent { background: var(--accent-color); color: white; align-self: flex-end; }
         .message.received { background: #efefef; color: var(--text-color); align-self: flex-start; }
         .dm-input { display: flex; border-top: 1px solid var(--border-color); }
-        .dm-input input { flex: 1; border: none; padding: 8px; outline: none; }
+        .dm-input input { flex: 1; border: none; padding: 8px; outline: none; font-size: 0.85rem; }
         
-        /* Modals / Sync Panel */
         .sync-box { font-size: 0.75rem; color: var(--text-muted); background: #eee; padding: 8px; border-radius: 4px; margin-top: 10px; word-break: break-all; max-height: 80px; overflow-y: auto; }
     </style>
 </head>
@@ -76,21 +95,42 @@
         <h1>✦ OC Social</h1>
         <div style="display: flex; gap: 15px; align-items: center;">
             <div id="top-profile-display" style="display: flex; align-items: center; gap: 8px;">
-                <!-- Filled dynamically -->
+                <!-- Filled dynamically via JS context -->
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <!-- Main Scrollable Feed (Feature 3) -->
-        <div class="feed" id="main-feed">
-            <!-- Posts populate here dynamically: Newest on Top -->
+    <div class="dashboard-container">
+        
+        <!-- LEFT COLUMN: Private DMs -->
+        <div class="left-column">
+            <div class="panel" style="position: sticky; top: inherit;">
+                <h3>💬 Private DMs</h3>
+                <div class="form-group">
+                    <label for="dm-target-select">Chatting with:</label>
+                    <select id="dm-target-select" onchange="loadDMMessages()"></select>
+                </div>
+                <div class="dm-window">
+                    <div class="dm-messages" id="dm-messages-container"></div>
+                    <div class="dm-input">
+                        <input type="text" id="dm-text" placeholder="Type a message...">
+                        <button class="comment-btn" style="padding: 0 12px;" onclick="sendDM()">➤</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Sidebar Configuration and Control Panel -->
-        <div class="sidebar">
+        <!-- CENTER COLUMN: Main Scrolling Feed (Newest on top) -->
+        <div class="center-column">
+            <div class="feed" id="main-feed">
+                <!-- Posts render here dynamically -->
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: User controls, Create Panels, and Data Sync -->
+        <div class="right-column">
             
-            <!-- Account Status & Switcher -->
+            <!-- Active Account Context Switcher -->
             <div class="panel">
                 <h3>👤 Active Account</h3>
                 <div class="account-switcher">
@@ -106,7 +146,7 @@
                 </div>
             </div>
 
-            <!-- Create / Edit Users (Feature 1) -->
+            <!-- Create / Edit Users Directory -->
             <div class="panel">
                 <h3>✏ Add / Edit OC Directory</h3>
                 <div class="form-group">
@@ -134,42 +174,10 @@
                 <button class="btn" onclick="saveUser()">💾 Save Character Profile</button>
             </div>
 
-            <!-- Create New Posts Panel (Feature 3) -->
+            <!-- Create New Posts Panel -->
             <div class="panel">
                 <h3>📝 Create New Feed Post</h3>
                 <div class="form-group">
                     <label for="post-author-select">Post Author:</label>
                     <select id="post-author-select"></select>
                 </div>
-                <div class="form-group">
-                    <label>Photo URL</label>
-                    <input type="text" id="post-photo-url" placeholder="https://picsum.photos">
-                </div>
-                <div class="form-group">
-                    <label>Caption</label>
-                    <textarea id="post-caption" rows="2" placeholder="Write a caption..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Initial Likes Count</label>
-                    <input type="number" id="post-likes" value="0">
-                </div>
-                <button class="btn" onclick="createNewPost()">📸 Publish to Feed</button>
-            </div>
-
-            <!-- Polished Private DMs Panel (Feature 4) -->
-            <div class="panel">
-                <h3>💬 Private DMs</h3>
-                <div class="form-group">
-                    <label for="dm-target-select">Chatting with:</label>
-                    <select id="dm-target-select" onchange="loadDMMessages()"></select>
-                </div>
-                <div class="dm-window">
-                    <div class="dm-messages" id="dm-messages-container"></div>
-                    <div class="dm-input">
-                        <input type="text" id="dm-text" placeholder="Type a message...">
-                        <button class="comment-btn" style="padding: 0 10px;" onclick="sendDM()">➤</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cross-Device Cloud Simulation Sync -->
