@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OC Social Universe</title>
   
-  <!-- FIXED: Complete, valid CDN url to download the core Supabase client library -->
+  <!-- Complete, valid CDN url to download the core Supabase client library -->
   <script src="https://jsdelivr.net"></script>
 
   <style>
@@ -104,7 +104,7 @@
         border-radius: 0;
       }
       .post-content {
-        display: none; /* Auto-hides captions on index screens just like classic phone profiles */
+        display: none; /* Auto-hides captions on index screens just like real phone profiles */
       }
     }
   </style>
@@ -124,11 +124,10 @@
   </main>
 
   <script>
-    // Config: Connect layout interface straight to your Supabase application network
+    // Config: Loaded with your verified public network project data
     const SUPABASE_URL = 'https://supabase.co'; 
-    const SUPABASE_KEY = 'sb_publishable_S2WNdeD4qHAiBYhJtPnXVQ_-zHK87he'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
-    // FIXED: Renamed global variable configuration framework instance to resolve initialization collision error
     const supabaseApp = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function fetchOCPosts() {
