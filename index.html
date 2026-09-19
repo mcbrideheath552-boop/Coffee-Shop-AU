@@ -6,10 +6,7 @@
   <title>OC Social Universe</title>
 
   <style>
-    /* Global Resets and Visual Themes */
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -17,7 +14,6 @@
       color: #262626;
     }
 
-    /* Fixed Top App Navigation Bar */
     .app-header {
       background: #ffffff;
       border-bottom: 1px solid #dbdbdb;
@@ -27,38 +23,27 @@
       top: 0;
       z-index: 100;
     }
-    .app-header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+    .app-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
 
-    /* Main Responsive Container Layout */
     .instagram-container {
-      max-width: 935px;
+      max-width: 600px; /* Centered feed style to accommodate clean comment streams */
       margin: 20px auto;
-      padding: 0 20px;
+      padding: 0 15px;
     }
 
-    /* 3-Column Instagram Profile Grid Layout */
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
+    .posts-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
     }
 
-    /* Standard Core Post Card Component Layout */
     .post-card {
       background: #ffffff;
       border: 1px solid #dbdbdb;
-      border-radius: 4px;
+      border-radius: 8px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
-    /* Force Square Crop Aspect Ratio For Art/Images */
     .post-image {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -66,38 +51,54 @@
       display: block;
     }
 
-    /* Layout Styling For Captions Below Pictures */
-    .post-content {
-      padding: 14px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-    .post-caption {
-      margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: #4a4a4a;
-    }
+    .post-content { padding: 16px; }
+    .post-caption { margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.4; }
 
-    /* Responsive CSS Adjustments for Small Mobile Phone Interfaces */
-    @media (max-width: 735px) {
-      .instagram-container {
-        padding: 0;
-        margin: 0;
-      }
-      .posts-grid {
-        gap: 3px;
-      }
-      .post-card {
-        border: none;
-        border-radius: 0;
-      }
-      .post-content {
-        display: none;
-      }
+    /* Interactive Comment Section Styling */
+    .comments-section {
+      border-top: 1px solid #efefef;
+      padding-top: 12px;
+      margin-top: 12px;
     }
+    .comments-title { font-size: 0.85rem; font-weight: 600; color: #8e8e8e; margin-bottom: 8px; }
+    .comment-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    
+    .comment-item { font-size: 0.9rem; line-height: 1.3; }
+    .comment-user { font-weight: 600; margin-right: 6px; color: #000000; }
+    .comment-text { color: #333333; }
+
+    /* Live Comment Form Placement Drawer */
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #efefef;
+      padding-top: 12px;
+    }
+    .comment-select {
+      padding: 8px;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      background: #fff;
+    }
+    .comment-input {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .comment-btn {
+      background: #0095f6;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .comment-btn:hover { background: #1877f2; }
   </style>
 </head>
 <body>
@@ -107,10 +108,8 @@
   </header>
 
   <main class="instagram-container">
-    <div id="posts-grid" class="posts-grid">
-      <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-        Connecting directly to your universe...
-      </p>
+    <div id="posts-feed" class="posts-feed">
+      <p style="text-align: center; color: #8e8e8e; padding: 40px 0;">Connecting directly to your universe...</p>
     </div>
   </main>
 
@@ -118,62 +117,120 @@
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
-    async function fetchOCPostsDirectly() {
+    async function loadUniverseData() {
       try {
-        // Fetch posts table directly without attempting table joins to avoid internal foreign-key routing errors
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
-          method: 'GET',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-          }
+        // Step A: Grab all active core posts
+        const postsRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
+        const posts = await postsRes.json();
 
-        if (!response.ok) {
-          throw new Error(`HTTP network error status: ${response.status}`);
-        }
+        // Step B: Grab all existing comments matching those posts
+        const commentsRes = await fetch(`${SUPABASE_URL}/rest/v1/comments?select=post_id,username,comment_text&order=created_at.asc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const comments = await commentsRes.json();
 
-        const posts = await response.json();
-        renderGrid(posts);
+        renderTimeline(posts, comments);
       } catch (error) {
-        console.error('Direct fetch connection error:', error);
-        document.getElementById('posts-grid').innerHTML = `
-          <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
-            Connection Error. Please double-check your credentials.
-          </p>`;
+        console.error("Data pipeline processing failure:", error);
+        document.getElementById('posts-feed').innerHTML = `<p style="text-align:center; color:red; padding:20px;">Connection wall encountered. Verify RLS rules inside Supabase.</p>`;
       }
     }
 
-    function renderGrid(posts) {
-      const gridContainer = document.getElementById('posts-grid');
-      
+    function renderTimeline(posts, comments) {
+      const feedContainer = document.getElementById('posts-feed');
       if (!posts || posts.length === 0) {
-        gridContainer.innerHTML = `
-          <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-            Connected to database! No posts found yet. Add rows inside your posts table in Supabase to start worldbuilding!
-          </p>`;
+        feedContainer.innerHTML = `<p style="text-align: center; color: #8e8e8e; padding: 40px 0;">Database connected! Go ahead and add rows to your posts table in Supabase to start worldbuilding.</p>`;
         return;
       }
 
-      gridContainer.innerHTML = '';
+      feedContainer.innerHTML = ''; // Wipe loading placeholder
 
       posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.className = 'post-card';
-        
-        postElement.innerHTML = `
-          <img src="${post.image_url}" class="post-image" alt="OC Visual Art Piece">
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card';
+
+        // Filter out comments linked to this unique image ID row
+        const matchingComments = comments.filter(c => c.post_id === post.id);
+        let commentsHTML = '';
+        matchingComments.forEach(c => {
+          commentsHTML += `
+            <div class="comment-item">
+              <span class="comment-user">@${c.username}</span>
+              <span class="comment-text">${c.comment_text}</span>
+            </div>`;
+        });
+
+        postCard.innerHTML = `
+          <img src="${post.image_url}" class="post-image" alt="OC Universe Snapshot">
           <div class="post-content">
             <p class="post-caption">${post.caption || ''}</p>
+            
+            <div class="comments-section">
+              <div class="comments-title">Comments</div>
+              <div class="comment-list" id="comment-list-${post.id}">
+                ${commentsHTML || '<p style="color:#b2b2b2; font-size:0.85rem; margin:0;" id="empty-comment-'+post.id+'">Be the first character to comment...</p>'}
+              </div>
+              
+              <!-- Form to submit real-time character roleplay dialogue logs -->
+              <div class="comment-form">
+                <select class="comment-select" id="user-select-${post.id}">
+                  <option value="Barista_Arin">@Barista_Arin</option>
+                  <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero</option>
+                  <option value="Grumpy_Regular">@Grumpy_Regular</option>
+                  <option value="Chai_Enthusiast">@Chai_Enthusiast</option>
+                </select>
+                <input type="text" class="comment-input" id="input-${post.id}" placeholder="Write a comment as your character...">
+                <button class="comment-btn" onclick="submitCharacterComment(${post.id})">Post</button>
+              </div>
+            </div>
           </div>
         `;
-        
-        gridContainer.appendChild(postElement);
+        feedContainer.appendChild(postCard);
       });
     }
 
-    window.addEventListener('DOMContentLoaded', fetchOCPostsDirectly);
+    async function submitCharacterComment(postId) {
+      const selectBox = document.getElementById(`user-select-${postId}`);
+      const inputBox = document.getElementById(`input-${postId}`);
+      
+      const chosenOC = selectBox.value;
+      const commentTxt = inputBox.value.trim();
+
+      if (!commentTxt) return; // Prevent logging empty nodes
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({ post_id: postId, username: chosenOC, comment_text: commentTxt })
+        });
+
+        if (response.ok) {
+          inputBox.value = ''; // Flush input lane after delivery
+          
+          // Instantly inject comment into the HTML grid dynamically so you don't have to reload
+          const listElement = document.getElementById(`comment-list-${postId}`);
+          const fallbackText = document.getElementById(`empty-comment-${postId}`);
+          if (fallbackText) fallbackText.remove();
+
+          const newCommentDiv = document.createElement('div');
+          newCommentDiv.className = 'comment-item';
+          newCommentDiv.innerHTML = `<span class="comment-user">@${chosenOC}</span><span class="comment-text">${commentTxt}</span>`;
+          listElement.appendChild(newCommentDiv);
+        }
+      } catch (err) {
+        console.error("Comment routing runtime error:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadUniverseData);
   </script>
 </body>
 </html>
