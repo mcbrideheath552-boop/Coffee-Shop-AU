@@ -14,7 +14,6 @@
       color: #262626;
     }
 
-    /* Universal App Header Navigation */
     .app-header {
       background: #ffffff;
       border-bottom: 1px solid #dbdbdb;
@@ -32,7 +31,6 @@
       padding: 0 15px;
     }
 
-    /* Modern 3-Tab App Navigation Bar Layout */
     .view-tabs {
       display: flex;
       border: 1px solid #dbdbdb;
@@ -57,7 +55,6 @@
       color: white;
     }
 
-    /* Tab Window A: Timeline Feed Display Component */
     .posts-feed {
       display: flex;
       flex-direction: column;
@@ -91,7 +88,6 @@
     }
     .oc-meta-info { display: flex; flex-direction: column; }
     .oc-username-badge { font-weight: 600; font-size: 0.95rem; }
-    .oc-followers-counter { font-size: 0.75rem; color: #8e8e8e; }
 
     .post-image {
       width: 100%;
@@ -102,7 +98,6 @@
     .post-content { padding: 16px; }
     .post-caption { margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.4; }
 
-    /* Profile Dynamic Comments Module */
     .comments-section { border-top: 1px solid #efefef; padding-top: 12px; }
     .comments-title { font-size: 0.85rem; font-weight: 600; color: #8e8e8e; margin-bottom: 8px; }
     .comment-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -110,11 +105,9 @@
     .comment-user { font-weight: 600; margin-right: 6px; }
 
     .comment-form { display: flex; gap: 8px; border-top: 1px solid #efefef; padding-top: 12px; }
-    .comment-select { padding: 8px; border: 1px solid #dbdbdb; border-radius: 4px; font-size: 0.85rem; background: #fff; }
     .comment-input { flex-grow: 1; padding: 8px 12px; border: 1px solid #dbdbdb; border-radius: 4px; font-size: 0.9rem; }
     .comment-btn { background: #0095f6; color: white; border: none; padding: 8px 14px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
 
-    /* Tab Window B: Simulated Private DM Panel Screen */
     .dm-inbox-view {
       background: white;
       border: 1px solid #dbdbdb;
@@ -123,7 +116,6 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .dm-chat-log {
       flex-grow: 1;
@@ -138,21 +130,17 @@
     .bubble .sender-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 3px; display: block; color: rgba(0,0,0,0.5); }
     .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 4px; }
     .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .bubble.right .sender-label { color: rgba(255,255,255,0.8); }
 
-    /* Tab Window C: Separated Creator Dashboard Control Box Area */
     .studio-panel-view {
       background: white;
       border: 1px solid #dbdbdb;
       border-radius: 8px;
       padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .studio-panel-view h2 { margin: 0 0 6px 0; font-size: 1.3rem; color: #ff8a00; }
-    .studio-panel-view p { margin: 0 0 20px 0; font-size: 0.85rem; color: #8e8e8e; line-height: 1.4; }
-    
+    .studio-panel-view p { margin: 0 0 20px 0; font-size: 0.85rem; color: #8e8e8e; }
     .section-divider { border-top: 1px dashed #ddd; margin: 25px 0; padding-top: 20px; }
-    .studio-header-title { font-size: 1rem; font-weight: bold; margin-bottom: 12px; color: #333; display: flex; align-items: center; gap: 6px; }
+    .studio-header-title { font-size: 1rem; font-weight: bold; margin-bottom: 12px; color: #333; }
     
     .studio-input {
       width: 100%;
@@ -192,75 +180,87 @@
 
   <main class="instagram-container">
     
-    <!-- 🎛️ Three-Way Universal App View Selector Tabs Links -->
     <div class="view-tabs">
       <button id="tab-feed" class="tab-btn active" onclick="switchMainView('feed')">📷 Timeline Feed</button>
       <button id="tab-dms" class="tab-btn" onclick="switchMainView('dms')">💬 Character DMs</button>
       <button id="tab-studio" class="tab-btn" style="border-left:1px solid #dbdbdb; color:#ff8a00;" onclick="switchMainView('studio')">⚙️ Creator Studio</button>
     </div>
 
-    <!-- WINDOW 1: TIMELINE FEED VIEWPORT LAYER -->
+    <!-- WINDOW 1: TIMELINE -->
     <div id="view-feed-container">
-      <div id="posts-feed" class="posts-feed"></div>
+      <div id="posts-feed" class="posts-feed">
+        <p style="text-align: center; color: #8e8e8e; padding: 40px 0;">Syncing universe grid layout...</p>
+      </div>
     </div>
 
-    <!-- WINDOW 2: DIRECT DIALOGUE MESSAGE THREAD INBOX -->
+    <!-- WINDOW 2: DMS CHAT -->
     <div id="view-dms-container" style="display: none;">
       <div class="dm-inbox-view">
-        <div style="background:#fff; padding:14px; border-bottom:1px solid #ddd; font-weight:bold; text-align:center;">
-          📥 Private Dialogue Chat Logs
-        </div>
+        <div style="background:#fff; padding:14px; border-bottom:1px solid #ddd; font-weight:bold; text-align:center;">📥 Private Chats</div>
         <div id="dm-chat-log" class="dm-chat-log"></div>
       </div>
     </div>
 
-    <!-- WINDOW 3: COMPLETELY SEPARATED HIDDEN CREATOR STUDIO PANEL TAB -->
+    <!-- WINDOW 3: STUDIO PANEL -->
     <div id="view-studio-container" style="display: none;">
       <div class="studio-panel-view">
-        <h2>⚙️ Worldbuilding Creator Studio</h2>
-        <p>Use this private dashboard interface tab to publish timeline events or simulate texting dialogues between your original characters instantly without touching code.</p>
+        <h2>⚙️ Worldbuilding Control Panel</h2>
+        <p>Publish posts or text messages straight to your live cloud database.</p>
         
-        <!-- BLOCK SYSTEM 1: CHANNELS POST CREATION SUB FORM -->
-        <div class="studio-header-title">📷 Publish a New Feed Post Card</div>
-        <label style="font-size:0.8rem; font-weight:600; color:#555;">Select Character Posting:</label>
-        <select id="studio-post-author" class="studio-select">
-          <option value="Barista_Arin">@Barista_Arin (Arin)</option>
-          <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero (Hero)</option>
-          <option value="Grumpy_Regular">@Grumpy_Regular (Regular)</option>
-          <option value="Chai_Enthusiast">@Chai_Enthusiast (Chai)</option>
-        </select>
-        <input type="text" id="studio-post-img" class="studio-input" placeholder="Paste image file URL address link (or leave blank)...">
-        <input type="text" id="studio-post-cap" class="studio-input" placeholder="Type what your character writes in the caption box...">
-        <button class="studio-btn" style="background:#ff8a00;" onclick="handleStudioPostPublish()">Publish Post to Timeline</button>
+        <div class="studio-header-title">📷 Create a New Post Card</div>
+        <input type="text" id="studio-post-user" class="studio-input" placeholder="Type character name (e.g. Arin)...">
+        <input type="text" id="studio-post-img" class="studio-input" placeholder="Paste image address link (or leave blank for test cafe image)...">
+        <input type="text" id="studio-post-cap" class="studio-input" placeholder="Type image caption description...">
+        <button class="studio-btn" style="background:#ff8a00;" onclick="submitPostToCloud()">Send to Supabase Timeline</button>
 
         <div class="section-divider"></div>
 
-        <!-- BLOCK SYSTEM 2: DIALOGUE INJECTOR CHAT SUB FORM -->
-        <div class="studio-header-title">📩 Inject a Character Text Message Dialogue</div>
-        <div style="display: flex; gap: 10px;">
-          <div style="flex:1;">
-            <label style="font-size:0.8rem; font-weight:600; color:#555;">Select Sender Profile:</label>
-            <select id="studio-dm-sender" class="studio-select">
-              <option value="Barista_Arin">@Barista_Arin</option>
-              <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero</option>
-              <option value="Grumpy_Regular">@Grumpy_Regular</option>
-              <option value="Chai_Enthusiast">@Chai_Enthusiast</option>
-            </select>
-          </div>
-          <div style="flex:1;">
-            <label style="font-size:0.8rem; font-weight:600; color:#555;">Bubble Screen Side:</label>
-            <select id="studio-dm-align" class="studio-select">
-              <option value="left">Left (Incoming Speech)</option>
-              <option value="right">Right (Outgoing Speech)</option>
-            </select>
-          </div>
-        </div>
-        <input type="text" id="studio-dm-text" class="studio-input" placeholder="Type message dialogue script line here...">
-        <button class="studio-btn" style="background:#0095f6;" onclick="handleStudioDMPublish()">Inject Message into Chat Logs</button>
+        <div class="studio-header-title">📩 Inject a Direct Message Text bubble</div>
+        <input type="text" id="studio-dm-user" class="studio-input" placeholder="Type sender character name...">
+        <select id="studio-dm-align" class="studio-select">
+          <option value="left">Left Bubble (Incoming Speech)</option>
+          <option value="right">Right Bubble (Outgoing Speech)</option>
+        </select>
+        <input type="text" id="studio-dm-text" class="studio-input" placeholder="Type message text dialogue script...">
+        <button class="studio-btn" style="background:#0095f6;" onclick="submitDMToCloud()">Send to Supabase DM Logs</button>
       </div>
     </div>
 
   </main>
 
   <script>
-    // Character Profile Custom Configurations Metadata Grid
+    const SUPABASE_URL = 'https://supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
+
+    function switchMainView(target) {
+      document.getElementById('view-feed-container').style.display = (target === 'feed') ? 'block' : 'none';
+      document.getElementById('view-dms-container').style.display = (target === 'dms') ? 'block' : 'none';
+      document.getElementById('view-studio-container').style.display = (target === 'studio') ? 'block' : 'none';
+      
+      document.getElementById('tab-feed').className = `tab-btn ${target === 'feed' ? 'active' : ''}`;
+      document.getElementById('tab-dms').className = `tab-btn ${target === 'dms' ? 'active' : ''}`;
+      document.getElementById('tab-studio').className = `tab-btn ${target === 'studio' ? 'active' : ''}`;
+    }
+
+    async function syncUniverseDatabase() {
+      try {
+        const postsRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const posts = postsRes.ok ? await postsRes.json() : [];
+
+        const commentsRes = await fetch(`${SUPABASE_URL}/rest/v1/comments?select=post_id,username,comment_text`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const comments = commentsRes.ok ? await commentsRes.json() : [];
+
+        renderTimeline(posts, comments);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderTimeline(posts, comments) {
+      const container = document.getElementById('posts-feed');
+      if(!posts || posts.length === 0) {
+        container.innerHTML = `<p style="text-align: center; color: #8e8e8e; padding: 40px 0;">Database connected! Your timeline is currently empty. Go to the Creator Studio tab to publish your first post!</p>`;
+        return;
+      }
