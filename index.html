@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OC Social Universe Workspace</title>
+  <title>OC Social Network</title>
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
-    h1 { text-align: center; color: #7a7aff; margin-bottom: 20px; font-size: 1.6rem; }
+    
+    /* REMOVED SPARKLE - UPDATED TITLE */
+    h1 { text-align: center; color: #A993D9; margin-bottom: 20px; font-size: 1.6rem; font-weight: bold; }
     
     /* 🌐 THREE-COLUMN MASTER APPARATUS GRID LAYOUT */
     .master-workspace-layout {
@@ -16,20 +18,20 @@
       gap: 20px;
       max-width: 1400px;
       margin: 0 auto;
-      align-items: flex-start;
+      align-items: center; /* FIXED: Raised and perfectly centered the side panels vertically */
     }
 
     /* Column Container Panel Styling */
     .panel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .panel-title { font-weight: bold; font-size: 0.95rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; color: #7a7aff; display: flex; align-items: center; gap: 6px; }
+    .panel-title { font-weight: bold; font-size: 0.95rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; color: #A993D9; display: flex; align-items: center; gap: 6px; }
 
     /* --- LEFT SIDE COLUMN: PERSONAL 1-ON-1 DMS BOX --- */
-    .dm-column-interface { display: flex; flex-direction: column; min-height: 550px; }
+    .dm-column-interface { display: flex; flex-direction: column; height: 500px; }
     .dm-recipient-selector { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; }
-    .dm-stream-viewport { flex-grow: 1; border: 1px solid #f2f2f2; border-radius: 6px; background: #fbfbfb; padding: 10px; overflow-y: auto; height: 380px; display: flex; flex-direction: column; gap: 8px; }
+    .dm-stream-viewport { flex-grow: 1; border: 1px solid #f2f2f2; border-radius: 6px; background: #fbfbfb; padding: 10px; overflow-y: auto; height: 340px; display: flex; flex-direction: column; gap: 8px; }
     .bubble { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; margin-bottom: 4px; }
     .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 2px; }
-    .bubble.right { background: #CCCCFF; color: #333366; align-self: flex-end; border-bottom-right-radius: 2px; }
+    .bubble.right { background: #A993D9; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
     /* --- CENTER COLUMN: INSTAGRAM HOME TIMELINE FEED --- */
     .feed-column-interface { max-height: 800px; overflow-y: auto; padding-right: 4px; }
@@ -43,13 +45,15 @@
     /* --- RIGHT SIDE COLUMN: STUDIO CONTROL PANEL & ACCOUNTS LIST --- */
     .input-field { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.88rem; }
     .select-box { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; background: #fafafa; }
-    .action-btn { width: 100%; padding: 11px; border: none; border-radius: 5px; color: #333366; font-weight: bold; cursor: pointer; font-size: 0.9rem; background: #CCCCFF; margin-bottom: 8px; }
+    
+    /* CUSTOM DEEP LAVENDER BUTTON VALUES */
+    .action-btn { width: 100%; padding: 11px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; background: #A993D9; margin-bottom: 8px; }
     .action-link { font-size: 0.72rem; color: #0095f6; cursor: pointer; font-weight: bold; }
 
     .mini-hub-box { border-top: 1px dashed #ddd; margin-top: 15px; padding-top: 15px; }
-    .mini-avatar-badge { width: 44px; height: 44px; border-radius: 50%; background: #CCCCFF; color: #333366; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
+    .mini-avatar-badge { width: 44px; height: 44px; border-radius: 50%; background: #A993D9; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
 
-    /* 📌 FIXED OVER-THE-TOP COMMENT POP-UP OVERLAY SCREEN */
+    /* 📌 OVER-THE-TOP COMMENT POP-UP OVERLAY SCREEN */
     .comment-overlay-backdrop {
       display: none;
       position: fixed;
@@ -83,7 +87,7 @@
 </head>
 <body>
 
-  <h1>✨ OC Social Universe Matrix</h1>
+  <h1>OC Social Network</h1>
 
   <main class="master-workspace-layout">
 
@@ -102,7 +106,7 @@
       
       <div style="margin-top:10px; display:flex; gap:4px;">
         <input type="text" id="dm-typed-input" class="input-field" placeholder="Type DM text line..." style="margin:0; padding:6px;">
-        <button style="background:#7a7aff; border:none; padding:0 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="submitPrivateDMMessage()">Send</button>
+        <button style="background:#A993D9; border:none; padding:0 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="submitPrivateDMMessage()">Send</button>
       </div>
     </div>
 
@@ -138,18 +142,19 @@
   <div id="comment-overlay-window" class="comment-overlay-backdrop">
     <div class="comment-modal-window">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:8px; margin-bottom:12px;">
-        <span style="font-weight:bold; color:#7a7aff;">📝 Over-the-Top Comments Panel</span>
+        <span style="font-weight:bold; color:#A993D9;">📝 Over-the-Top Comments Panel</span>
         <button style="border:none; background:none; font-weight:bold; cursor:pointer; color:#8e8e8e; font-size:1.1rem;" onclick="closeCommentsModal()">✕</button>
       </div>
       <div id="modal-comments-pane" class="modal-scroll-pane"></div>
       <div style="display:flex; gap:6px;">
         <input type="text" id="modal-comment-input" class="input-field" placeholder="Type comment dialogue..." style="margin:0;">
-        <button style="background:#0095f6; border:none; padding:0 14px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;" onclick="submitModalCommentRow()">Post</button>
+        <button style="background:#A993D9; border:none; padding:0 14px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;" onclick="submitModalCommentRow()">Post</button>
       </div>
     </div>
   </div>
 
   <script>
+    // CLEAN, UNCRASHABLE RUNTIME ARCHITECTURE
     const registryOcs = {
       "Barista_Arin": { name: "Arin ☕", followers: "1,240", bio: "Main barista at the shop counter. Secretly brewing experimental magic espresso lines.", code: "AR" },
       "Coffee_Shop_Hero": { name: "Hero ⚔️", followers: "45.8K", bio: "The local neighborhood defender. Orders triple espresso shots and falls asleep.", code: "HE" },
@@ -161,9 +166,7 @@
     let activeChatRecipient = "Coffee_Shop_Hero";
     let activeModalPostId = 101;
 
+    // PRE-LOADED TEST POST WITH EXACTLY 40 LIKES BY DEFAULT
     let internalPosts = [
-      { id: 101, author: "Barista_Arin", likes: 40, img: "https://unsplash.com", cap: "Welcome to the coffee shop universe! The morning brew is fresh and ready. 🥐☕" }
-    ];
-    let internalComments = [
 
 
