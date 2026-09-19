@@ -12,81 +12,107 @@
             --text-color: #262626;
             --text-muted: #737373;
             --accent-color: #0095f6;
+            --danger-color: #ed4956;
+            --secondary-btn: #efefef;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 40px; }
-        header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 40px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        h1 { font-size: 1.5rem; font-style: italic; }
         
-        /* 3-Column Layout Grid Setup */
+        /* Premium IG-Style Top Header Bar */
+        header { 
+            background: var(--card-bg); 
+            border-bottom: 1px solid var(--border-color); 
+            padding: 10px 40px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        h1 { font-family: 'Grand Hotel', 'Billabong', cursive, sans-serif; font-size: 2rem; font-weight: 500; font-style: italic; letter-spacing: 1px; }
+        
+        /* 3-Column Layout Grid matching your layout preference */
         .dashboard-container { 
-            max-width: 1400px; 
-            margin: 20px auto; 
+            max-width: 1350px; 
+            margin: 30px auto; 
             display: grid; 
-            grid-template-columns: 320px 1fr 350px; 
-            gap: 20px; 
+            grid-template-columns: 330px 1fr 360px; 
+            gap: 28px; 
             padding: 0 20px; 
             align-items: start;
         }
 
-        /* Responsive Layout for Smaller Screens */
         @media (max-width: 1100px) {
             .dashboard-container { grid-template-columns: 1fr; }
             .left-column, .right-column { position: static; }
         }
 
-        /* Fixed / Sticky Layout Columns for smooth scrolling */
-        .left-column { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; }
-        .center-column { display: flex; flex-direction: column; gap: 20px; }
-        .right-column { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; max-height: calc(100vh - 120px); overflow-y: auto; padding-right: 4px; }
+        .left-column { position: sticky; top: 85px; display: flex; flex-direction: column; gap: 20px; }
+        .center-column { display: flex; flex-direction: column; gap: 24px; }
+        .right-column { position: sticky; top: 85px; display: flex; flex-direction: column; gap: 20px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
 
-        /* General Panel Cards */
-        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
-        .panel h3 { font-size: 0.95rem; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        /* Elegant IG-Style Cards & Subheadings */
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
+        .panel h3 { font-size: 0.85rem; margin-bottom: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
-        /* Feed & Posts (Center Column) */
+        /* Feed & Posts Styling */
         .feed { display: flex; flex-direction: column; gap: 24px; }
-        .post-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-        .post-header { display: flex; align-items: center; padding: 12px; gap: 10px; border-bottom: 1px solid #efefef; }
-        .avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #eee; }
-        .post-author { font-weight: 600; font-size: 0.9rem; }
-        .post-img { width: 100%; max-height: 600px; object-fit: cover; background: #f0f0f0; }
-        .post-actions { padding: 12px; display: flex; gap: 15px; font-size: 1.2rem; }
-        .post-body { padding: 0 12px 12px 12px; font-size: 0.9rem; }
-        .likes-count { font-weight: 600; margin-bottom: 5px; }
-        .caption-text { margin-bottom: 8px; }
+        .post-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .post-header { display: flex; align-items: center; padding: 14px; gap: 12px; border-bottom: 1px solid #f2f2f2; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); background: #fafafa; }
+        .post-author { font-weight: 600; font-size: 0.9rem; color: var(--text-color); text-decoration: none; }
+        .post-author:hover { text-decoration: underline; }
+        .post-img { width: 100%; max-height: 580px; object-fit: cover; background: #fafafa; border-bottom: 1px solid #f2f2f2; }
         
-        /* Comments Sections */
-        .comments-section { border-top: 1px solid #efefef; padding-top: 8px; margin-top: 8px; }
-        .comment-item { margin-bottom: 4px; font-size: 0.85rem; }
+        /* Wired Functional Buttons Bar Layout */
+        .post-actions { padding: 14px 14px 8px 14px; display: flex; gap: 14px; align-items: center; border-bottom: 1px solid #fafafa; }
+        .action-icon-btn { background: none; border: none; font-size: 1.35rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s ease; padding: 2px; }
+        .action-icon-btn:hover { transform: scale(1.1); }
+        .action-txt-btn { background: var(--secondary-btn); border: 1px solid var(--border-color); font-size: 0.75rem; font-weight: 600; padding: 5px 10px; border-radius: 6px; cursor: pointer; color: var(--text-color); margin-left: auto; }
+        .action-txt-btn:hover { background: #e5e5e5; }
+        .action-txt-btn.danger { color: var(--danger-color); }
+
+        .post-body { padding: 0 14px 14px 14px; font-size: 0.9rem; line-height: 1.4; }
+        .likes-count { font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+        .caption-text { margin-bottom: 10px; word-break: break-word; }
+        
+        /* Comments Layout Config */
+        .comments-section { border-top: 1px solid #f2f2f2; padding-top: 10px; margin-top: 6px; display: flex; flex-direction: column; gap: 4px; }
+        .comment-item { font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
         .comment-user { font-weight: 600; margin-right: 6px; }
-        .comment-input-box { display: flex; border-top: 1px solid #efefef; padding: 8px 12px; gap: 8px; align-items: center; }
-        .comment-input-box select { padding: 4px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.8rem; max-width: 110px; }
-        .comment-input-box input { flex: 1; border: none; outline: none; font-size: 0.85rem; }
-        .comment-btn { color: var(--accent-color); font-weight: 600; background: none; border: none; cursor: pointer; font-size: 0.85rem; }
-
-        /* Form styling elements */
-        .form-group { margin-bottom: 10px; display: flex; flex-direction: column; gap: 4px; }
-        .form-group label { font-size: 0.8rem; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; width: 100%; }
+        .delete-comment-btn { background: none; border: none; color: var(--danger-color); font-size: 0.75rem; cursor: pointer; display: none; font-weight: 600; }
         
-        .btn { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; text-align: center; }
-        .btn-secondary { background: #333; }
-        .btn:hover { opacity: 0.9; }
+        /* Modernized Dynamic Comment Input Element Box */
+        .comment-input-box { display: flex; border-top: 1px solid #f2f2f2; padding: 10px 14px; gap: 10px; align-items: center; background: #fff; }
+        .comment-input-box select { padding: 6px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8rem; max-width: 120px; background: var(--bg-color); outline: none; }
+        .comment-input-box input { flex: 1; border: none; outline: none; font-size: 0.85rem; padding: 4px 0; }
+        .comment-btn { color: var(--accent-color); font-weight: 600; background: none; border: none; cursor: pointer; font-size: 0.85rem; padding: 4px; }
+        .comment-btn:hover { color: #00376b; }
 
-        /* Active Account Switcher Display */
-        .account-switcher { display: flex; align-items: center; gap: 10px; padding: 8px; background: #f0f0f0; border-radius: 6px; margin-bottom: 10px; }
-
-        /* Polished DMs Panel (Left Column Optimization) */
-        .dm-window { height: 400px; border: 1px solid var(--border-color); border-radius: 4px; display: flex; flex-direction: column; margin-top: 10px; background: #fff; }
-        .dm-messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
-        .message { padding: 6px 10px; border-radius: 12px; max-width: 80%; word-break: break-word; line-height: 1.3; }
-        .message.sent { background: var(--accent-color); color: white; align-self: flex-end; }
-        .message.received { background: #efefef; color: var(--text-color); align-self: flex-start; }
-        .dm-input { display: flex; border-top: 1px solid var(--border-color); }
-        .dm-input input { flex: 1; border: none; padding: 8px; outline: none; font-size: 0.85rem; }
+        /* Forms Layout & Input Formatting */
+        .form-group { margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group textarea, .form-group select { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.88rem; width: 100%; background: var(--bg-color); color: var(--text-color); outline: none; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #a8a8a8; }
         
-        .sync-box { font-size: 0.75rem; color: var(--text-muted); background: #eee; padding: 8px; border-radius: 4px; margin-top: 10px; word-break: break-all; max-height: 80px; overflow-y: auto; }
+        /* Aesthetic Interactive Sidebar Button Actions */
+        .btn { background: var(--accent-color); color: white; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.88rem; width: 100%; text-align: center; transition: background 0.15s ease; }
+        .btn:hover { background: #1877f2; }
+        .btn-secondary { background: #262626; color: #fff; margin-top: 6px; }
+        .btn-secondary:hover { background: #000; }
+
+        /* High Fidelity Instagram Direct Message View (Left Panel) */
+        .account-switcher { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 12px; }
+        .dm-window { height: 420px; border: 1px solid var(--border-color); border-radius: 10px; display: flex; flex-direction: column; margin-top: 12px; background: #ffffff; overflow: hidden; }
+        .dm-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; background: #ffffff; }
+        .message { padding: 8px 14px; border-radius: 18px; max-width: 75%; word-break: break-word; line-height: 1.4; font-size: 0.85rem; }
+        .message.sent { background: var(--accent-color); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .message.received { background: #efefef; color: var(--text-color); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .dm-input { display: flex; border-top: 1px solid var(--border-color); padding: 6px 10px; align-items: center; background: #fff; }
+        .dm-input input { flex: 1; border: none; padding: 10px; outline: none; font-size: 0.85rem; }
+        
+        .sync-box { font-size: 0.72rem; color: var(--text-muted); background: var(--bg-color); border: 1px solid var(--border-color); padding: 10px; border-radius: 6px; margin-top: 12px; word-break: break-all; max-height: 70px; overflow-y: auto; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -94,17 +120,17 @@
     <header>
         <h1>✦ OC Social</h1>
         <div style="display: flex; gap: 15px; align-items: center;">
-            <div id="top-profile-display" style="display: flex; align-items: center; gap: 8px;">
-                <!-- Filled dynamically via JS context -->
+            <div id="top-profile-display" style="display: flex; align-items: center; gap: 10px;">
+                
             </div>
         </div>
     </header>
 
     <div class="dashboard-container">
         
-        <!-- LEFT COLUMN: Private DMs -->
+        <!-- LEFT COLUMN: High Fidelity Private DMs Panel -->
         <div class="left-column">
-            <div class="panel" style="position: sticky; top: inherit;">
+            <div class="panel">
                 <h3>💬 Private DMs</h3>
                 <div class="form-group">
                     <label for="dm-target-select">Chatting with:</label>
@@ -113,71 +139,21 @@
                 <div class="dm-window">
                     <div class="dm-messages" id="dm-messages-container"></div>
                     <div class="dm-input">
-                        <input type="text" id="dm-text" placeholder="Type a message...">
-                        <button class="comment-btn" style="padding: 0 12px;" onclick="sendDM()">➤</button>
+                        <input type="text" id="dm-text" placeholder="Message..." onkeydown="if(event.key==='Enter') sendDM()">
+                        <button class="comment-btn" style="font-weight:700;" onclick="sendDM()">Send</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CENTER COLUMN: Main Scrolling Feed (Newest on top) -->
+        <!-- CENTER COLUMN: Main Scrolling Timeline Feed -->
         <div class="center-column">
             <div class="feed" id="main-feed">
-                <!-- Posts render here dynamically -->
+                <!-- Posts map dynamically here: Newest positioned at top -->
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: User controls, Create Panels, and Data Sync -->
+        <!-- RIGHT COLUMN: User Setup and Profile Manager Dashboards -->
         <div class="right-column">
             
-            <!-- Active Account Context Switcher -->
-            <div class="panel">
-                <h3>👤 Active Account</h3>
-                <div class="account-switcher">
-                    <img id="active-avatar" class="avatar" src="" alt="">
-                    <div>
-                        <div id="active-display-name" style="font-weight: 600; font-size: 0.9rem;"></div>
-                        <div id="active-username" style="color: var(--text-muted); font-size: 0.8rem;"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="switch-user-select">Switch character context:</label>
-                    <select id="switch-user-select" onchange="changeActiveUser(this.value)"></select>
-                </div>
-            </div>
 
-            <!-- Create / Edit Users Directory -->
-            <div class="panel">
-                <h3>✏ Add / Edit OC Directory</h3>
-                <div class="form-group">
-                    <label for="edit-user-select">Select OC to edit (or choose New):</label>
-                    <select id="edit-user-select" onchange="populateUserForm(this.value)">
-                        <option value="new">+ Create New Character</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="oc-username" placeholder="@username">
-                </div>
-                <div class="form-group">
-                    <label>Display Name</label>
-                    <input type="text" id="oc-display-name" placeholder="Character Name">
-                </div>
-                <div class="form-group">
-                    <label>Bio</label>
-                    <textarea id="oc-bio" rows="2" placeholder="OC Bio..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Profile Picture URL</label>
-                    <input type="text" id="oc-avatar" placeholder="https://placehold.co">
-                </div>
-                <button class="btn" onclick="saveUser()">💾 Save Character Profile</button>
-            </div>
-
-            <!-- Create New Posts Panel -->
-            <div class="panel">
-                <h3>📝 Create New Feed Post</h3>
-                <div class="form-group">
-                    <label for="post-author-select">Post Author:</label>
-                    <select id="post-author-select"></select>
-                </div>
