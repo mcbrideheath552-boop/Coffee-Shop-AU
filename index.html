@@ -66,19 +66,13 @@
       display: block;
     }
 
-    /* Layout Styling For Captions & User Labels Below Pictures */
+    /* Layout Styling For Captions Below Pictures */
     .post-content {
       padding: 14px;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-    }
-    .post-username {
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-      color: #000000;
     }
     .post-caption {
       margin: 0;
@@ -121,13 +115,13 @@
   </main>
 
   <script>
-    // Self-contained custom fetch wrapper that bypasses external library dependencies
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
     async function fetchOCPostsDirectly() {
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at,characters(username,avatar_url)&order=created_at.desc`, {
+        // Fetch posts table directly without attempting table joins to avoid internal foreign-key routing errors
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at&order=created_at.desc`, {
           method: 'GET',
           headers: {
             'apikey': SUPABASE_KEY,
@@ -146,7 +140,7 @@
         console.error('Direct fetch connection error:', error);
         document.getElementById('posts-grid').innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
-            Connection Error. Please double check that you have disabled Row Level Security (RLS) toggles on both tables in Supabase.
+            Connection Error. Please double-check your credentials.
           </p>`;
       }
     }
@@ -157,7 +151,7 @@
       if (!posts || posts.length === 0) {
         gridContainer.innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-            Connected to database! No posts found yet. Go ahead and insert rows inside your Supabase tables to start worldbuilding!
+            Connected to database! No posts found yet. Add rows inside your posts table in Supabase to start worldbuilding!
           </p>`;
         return;
       }
@@ -171,7 +165,6 @@
         postElement.innerHTML = `
           <img src="${post.image_url}" class="post-image" alt="OC Visual Art Piece">
           <div class="post-content">
-            <div class="post-username">@${post.characters?.username || 'unknown_character'}</div>
             <p class="post-caption">${post.caption || ''}</p>
           </div>
         `;
