@@ -58,7 +58,6 @@
 
   <h1>✨ OC Social Universe Matrix</h1>
 
-  <!-- MAIN SIDE-BY-SIDE WORKING APPARATUS -->
   <main class="master-workspace-layout">
 
     <!-- LEFT SIDE FRAMECOLUMN: PERSONAL CHAT INBOX -->
@@ -81,9 +80,7 @@
     </div>
 
     <!-- CENTER FRAMECOLUMN: LIVE INSTAGRAM HOME TIMELINE FEED -->
-    <div class="feed-column-interface" id="feed-column-list">
-      <!-- Image card modules dynamically stamp here with zero tab dependencies -->
-    </div>
+    <div class="feed-column-interface" id="feed-column-list"></div>
 
     <!-- RIGHT SIDE FRAMECOLUMN: GLOBAL ACTOR MANAGER & CREATOR STUDIO -->
     <div class="panel-box">
@@ -99,17 +96,14 @@
       <div class="panel-title" style="margin-top:15px;">⚙️ Creator Studio Panel</div>
       <p style="font-size:0.75rem; color:#666; margin:0 0 10px 0; line-height:1.3;">Add art links and captions below to instantly inject content cards into the center grid.</p>
       
-      <input type="file" id="studio-upload-file" class="input-field" accept="image/*" onchange="processLocalArtAttachment(this)" style="padding:4px;">
+      <input type="file" id="studio-upload-file" class="input-field" onchange="processLocalArtAttachment(this)" style="padding:4px;">
       <input type="text" id="studio-image-url" class="input-field" placeholder="Or paste web image link...">
       <input type="text" id="studio-caption" class="input-field" placeholder="Type post caption lore...">
-      <input type="number" id="studio-likes" class="input-field" value="32" placeholder="Starting likes count...">
+      <input type="number" id="studio-likes" class="input-field" value="32">
       
       <button class="action-btn" onclick="publishNewStudioPostCard()">Publish Post Card to Feed</button>
 
-      <!-- INTEGRATED ACCOUNT DOSSIER DISPLAY WINDOW -->
-      <div class="mini-hub-box" id="mini-dossier-card-hub">
-        <!-- Renders automatically matching the selected switcher drop -->
-      </div>
+      <div class="mini-hub-box" id="mini-dossier-card-hub"></div>
     </div>
 
   </main>
@@ -140,9 +134,8 @@
 
     function swapActiveGlobalActor(val) {
       activeActor = val;
-      // Auto-align chat recipients so characters don't text themselves
       const options = Object.keys(registryOcs).filter(k => k !== val);
-      if(activeChatRecipient === val) {
+      if(activeChatRecipient === val && options.length > 0) {
         activeChatRecipient = options[0];
         document.getElementById('dm-recipient-selector').value = options[0];
       }
@@ -158,9 +151,19 @@
 
     function renderTimelineLayout() {
       const container = document.getElementById('feed-column-list');
+      if (!container) return;
       container.innerHTML = '';
 
       internalPosts.forEach(post => {
         const commentsHTML = internalComments.filter(c => c.post_id === post.id).map(c => `
           <div class="comment-row">
-            <span><b>@${c.author}:</b> <span id="cmt-span-${c.id}">${c.text}</span></span>
+            <span><b>@${c.author}:</b> <span>${c.text}</span></span>
+            <span class="action-link" onclick="editInlineCommentDialogue(${c.id})">[Edit]</span>
+          </div>
+        `).join('');
+
+        const card = document.createElement('div');
+        card.className = 'post-item-card';
+        card.innerHTML = `
+          <div class="post-header">✨ @${post.author}</div>
+          <img class="post-img" src="${post.img}" alt="Art Card">
