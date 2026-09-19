@@ -9,21 +9,21 @@
     body { font-family: sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
     h1 { text-align: center; color: #ff8a00; margin-bottom: 20px; }
     
-    /* 4-Tab Navigation Menu Layout */
+    /* 4-Tab Navigation Bar */
     .tabs { display: flex; max-width: 600px; margin: 0 auto 20px auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; }
     .tab { flex: 1; padding: 14px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; text-align: center; font-size: 0.85rem; }
     .tab.active { background: #ff8a00; color: white; }
 
-    /* Character Account Management Switcher Card */
+    /* Switcher Manager Card Area */
     .manager-card { max-width: 600px; margin: 0 auto 20px auto; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
     .select-box { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; }
 
-    /* Universal Content Windows Containers */
+    /* Universal Content Container Windows */
     .window { max-width: 600px; margin: 0 auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
     .input-field { width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; }
     .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
 
-    /* Home Feed Instagram-Style Post Cards Layout */
+    /* Post Cards */
     .post-item { border: 1px solid #dbdbdb; padding: 0; border-radius: 8px; margin-top: 20px; background: white; overflow: hidden; }
     .post-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #f2f2f2; color: #ff8a00; }
     .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee; }
@@ -31,7 +31,7 @@
     .post-caption { padding: 10px 14px 14px 14px; font-size: 0.95rem; border-bottom: 1px solid #f2f2f2; }
     .comment-open-btn { display: block; width: 100%; text-align: center; padding: 12px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
 
-    /* 1-on-1 Personal Messaging Box Grid Interface */
+    /* DMs View Grid */
     .dm-box { display: flex; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; min-height: 380px; }
     .dm-sidebar { width: 35%; border-right: 1px solid #ddd; background: #f9f9f9; }
     .dm-side-btn { width: 100%; padding: 12px 10px; border: none; border-bottom: 1px solid #ddd; background: none; text-align: left; font-weight: bold; cursor: pointer; }
@@ -42,22 +42,22 @@
     .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 4px; }
     .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-    /* Profiles Summary Dossier Page Layout */
+    /* Profiles Hub Dossier View */
     .hub-header { display: flex; gap: 15px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
     .hub-avatar { width: 60px; height: 60px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.3rem; }
     .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .hub-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; }
 
-    /* Separate Comments Window Section */
+    /* Comment Section Window */
     .comment-row { font-size: 0.88rem; padding: 8px 0; border-bottom: 1px solid #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
     .comment-edit-btn { font-size: 0.75rem; color: #0095f6; cursor: pointer; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h1>✨ OC Social Universe</h1>
+  <h1>✨ Coffee Shop AU Universe</h1>
 
-  <!-- Top Global Account Manager Dropdown Switcher -->
+  <!-- Active Profile Selector Dropdown Menu -->
   <div class="manager-card">
     <div>
       <span style="font-weight: bold; font-size: 0.85rem; color: #666; margin-right: 8px;">Logged In As:</span>
@@ -71,7 +71,7 @@
     <div style="font-size: 0.8rem; color:#ff8a00; font-weight:bold;">Control Panel Active</div>
   </div>
 
-  <!-- Main Multi-View Navigation Tabs Buttons Links -->
+  <!-- Four Navigation Tab Toggles -->
   <div class="tabs">
     <button id="tab-feed" class="tab active" onclick="switchView('feed')">📷 Home Feed</button>
     <button id="tab-dms" class="tab" onclick="switchView('dms')">💬 Personal DMs</button>
@@ -79,12 +79,12 @@
     <button id="tab-studio" class="tab" style="color:#ff8a00;" onclick="switchView('studio')">⚙️ Creator Studio</button>
   </div>
 
-  <!-- TAB WINDOW 1: TIMELINE FEED BOX -->
+  <!-- WINDOW VIEWPORT LEVEL 1: FEED -->
   <div id="win-feed" class="window">
     <div id="feed-list"></div>
   </div>
 
-  <!-- TAB WINDOW 2: PERSONAL DIRECT MESSAGE CHATS BOX -->
+  <!-- WINDOW VIEWPORT LEVEL 2: 1-ON-1 PERSONAL CHATS -->
   <div id="win-dms" class="window" style="display:none;">
     <div class="dm-box">
       <div class="dm-sidebar" id="dm-threads-menu"></div>
@@ -98,7 +98,7 @@
     </div>
   </div>
 
-  <!-- TAB WINDOW 3: EXTENDED PROFILES ARCHIVE BIO HUB -->
+  <!-- WINDOW VIEWPORT LEVEL 3: PROFILES DIRECTORY HUB -->
   <div id="win-hub" class="window" style="display:none;">
     <div style="margin-bottom: 15px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-weight:bold; font-size:0.9rem;">👤 Select Profile View:</span>
@@ -112,7 +112,7 @@
     <div id="hub-viewport-card"></div>
   </div>
 
-  <!-- TAB WINDOW 4: STUDIO DASHBOARD FORM SUBMISSION -->
+  <!-- WINDOW VIEWPORT LEVEL 4: CREATOR PRODUCTION PANELS -->
   <div id="win-studio" class="window" style="display:none;">
     <div style="font-weight: bold; font-size: 1rem; margin-bottom: 12px; color:#ff8a00;">📷 Publish a New Card Post</div>
     <input type="file" id="studio-file-upload" class="input-field" accept="image/*" onchange="encodeLocalPhotoFile(this)">
@@ -122,7 +122,7 @@
     <button class="btn" style="background:#ff8a00;" onclick="publishPostCard()">Publish Post to Home Feed</button>
   </div>
 
-  <!-- TAB WINDOW 5: SEPARATED LIVE COMMENTS OVERLAY TIMELINE -->
+  <!-- WINDOW VIEWPORT LEVEL 5: TARGETED DISCUSSIONS OVERLAY SCREEN -->
   <div id="win-comments" class="window" style="display:none;">
     <div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
       <button class="btn" style="background:#8e8e8e; width:auto; padding:6px 14px; font-size:0.8rem;" onclick="switchView('feed')">⬅️ Back to Feed</button>
@@ -149,3 +149,4 @@
     let localFileImageBase64 = "";
 
     let memoryPosts = [
+      { id: 2, author: "Chai_Enthusiast", likes: 84, img: "https://unsplash.com", cap: "Look at this cute cozy booth setup! Studying here all afternoon. 🌧️📑" },
