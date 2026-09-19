@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OC Social Universe</title>
-  
-  <!-- Bypasses strict network blocks using an alternate high-security library mirror -->
-  <script src="https://cloudflare.com" integrity="sha512-Y3f6/A06rIcl9f3Y689gAsSOf9R64wV59uA/+mZfWp6YV0p7I/gC7NreN/qXfWlHh339N8XN4bM7wXw86NfS0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     /* Global Resets and Visual Themes */
@@ -118,37 +115,40 @@
   <main class="instagram-container">
     <div id="posts-grid" class="posts-grid">
       <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-        Connecting securely to your universe...
+        Connecting directly to your universe...
       </p>
     </div>
   </main>
 
   <script>
+    // Self-contained custom fetch wrapper that bypasses external library dependencies
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
-    // Initializing using the global library from our fallback link
-    const supabaseApp = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    async function fetchOCPostsDirectly() {
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=id,image_url,caption,created_at,characters(username,avatar_url)&order=created_at.desc`, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
 
-    async function fetchOCPosts() {
-      const { data: posts, error } = await supabaseApp
-        .from('posts')
-        .select(`
-          id, image_url, caption, created_at,
-          characters ( username, avatar_url )
-        `)
-        .order('created_at', { ascending: false });
+        if (!response.ok) {
+          throw new Error(`HTTP network error status: ${response.status}`);
+        }
 
-      if (error) {
-        console.error('Database connection error:', error);
+        const posts = await response.json();
+        renderGrid(posts);
+      } catch (error) {
+        console.error('Direct fetch connection error:', error);
         document.getElementById('posts-grid').innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
-            Connection Error. Please confirm Row Level Security (RLS) is fully disabled for your tables inside Supabase.
+            Connection Error. Please double check that you have disabled Row Level Security (RLS) toggles on both tables in Supabase.
           </p>`;
-        return;
       }
-
-      renderGrid(posts);
     }
 
     function renderGrid(posts) {
@@ -157,7 +157,7 @@
       if (!posts || posts.length === 0) {
         gridContainer.innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-            Connected to database! No posts found yet. Go ahead and add rows inside your Supabase tables to start worldbuilding!
+            Connected to database! No posts found yet. Go ahead and insert rows inside your Supabase tables to start worldbuilding!
           </p>`;
         return;
       }
@@ -180,8 +180,7 @@
       });
     }
 
-    window.addEventListener('DOMContentLoaded', fetchOCPosts);
+    window.addEventListener('DOMContentLoaded', fetchOCPostsDirectly);
   </script>
 </body>
 </html>
-
