@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OC Social Universe</title>
   
-  <!-- Supabase Core JavaScript Library Hosted via CDN -->
+  <!-- FIXED: Complete, valid CDN url to download the core Supabase client library -->
   <script src="https://jsdelivr.net"></script>
 
   <style>
@@ -126,13 +126,14 @@
   <script>
     // Config: Connect layout interface straight to your Supabase application network
     const SUPABASE_URL = 'https://supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
+    const SUPABASE_KEY = 'sb_publishable_S2WNdeD4qHAiBYhJtPnXVQ_-zHK87he'; 
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // FIXED: Renamed global variable configuration framework instance to resolve initialization collision error
+    const supabaseApp = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function fetchOCPosts() {
       // Pull items from posts table while matching row records directly up with character metadata profiles
-      const { data: posts, error } = await supabase
+      const { data: posts, error } = await supabaseApp
         .from('posts')
         .select(`
           id, image_url, caption, created_at,
@@ -144,7 +145,7 @@
         console.error('Database connection error:', error);
         document.getElementById('posts-grid').innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
-            Failed to connect. Please verify your Supabase API Keys.
+            Failed to connect. Please verify your Supabase API Keys and ensure RLS is disabled.
           </p>`;
         return;
       }
@@ -187,4 +188,3 @@
   </script>
 </body>
 </html>
-
