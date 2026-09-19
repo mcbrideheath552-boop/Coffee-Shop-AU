@@ -296,7 +296,6 @@
   </main>
 
   <script>
-    // FIXED: Swapped out localStorage state engines completely to bypass browser-level adblock freezes
     const ocProfiles = {
       "Barista_Arin": { label: "Arin ☕", followers: "1,240", color: "#ff8a00" },
       "Coffee_Shop_Hero": { label: "Hero ⚔️", followers: "45.8K", color: "#0095f6" },
@@ -319,4 +318,8 @@
     ];
 
     function initUniverseApp() {
+      renderTimeline();
+      renderDirectMessages();
+    }
 
+    function toggleAdminFormType(mode) {
