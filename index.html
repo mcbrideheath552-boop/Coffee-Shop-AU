@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OC Social Universe</title>
+  
+  <!-- Supabase Core JavaScript Library Hosted via CDN -->
+  <script src="https://jsdelivr.net"></script>
+
+  <style>
+    /* Global Resets and Visual Themes */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #fafafa;
+      color: #262626;
+    }
+
+    /* Fixed Top App Navigation Bar */
+    .app-header {
+      background: #ffffff;
+      border-bottom: 1px solid #dbdbdb;
+      text-align: center;
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* Main Responsive Container Layout */
+    .instagram-container {
+      max-width: 935px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    /* 3-Column Instagram Profile Grid Layout */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    /* Standard Core Post Card Component Layout */
+    .post-card {
+      background: #ffffff;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Force Square Crop Aspect Ratio For Art/Images */
+    .post-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Layout Styling For Captions & User Labels Below Pictures */
+    .post-content {
+      padding: 14px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .post-username {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #000000;
+    }
+    .post-caption {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #4a4a4a;
+    }
+
+    /* Responsive CSS Adjustments for Small Mobile Phone Interfaces */
+    @media (max-width: 735px) {
+      .instagram-container {
+        padding: 0;
+        margin: 0;
+      }
+      .posts-grid {
+        gap: 3px; /* Mimic real Instagram profile tight-grid separation lines */
+      }
+      .post-card {
+        border: none;
+        border-radius: 0;
+      }
+      .post-content {
+        display: none; /* Auto-hides captions on index screens just like classic phone profiles */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <h1>✨ OCgram</h1>
+  </header>
+
+  <main class="instagram-container">
+    <div id="posts-grid" class="posts-grid">
+      <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
+        Loading your virtual universe...
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // Config: Connect layout interface straight to your Supabase application network
+    const SUPABASE_URL = 'https://supabase.co'; 
+    const SUPABASE_KEY = 'sb_publishable_S2WNdeD4qHAiBYhJtPnXVQ_-zHK87he'; 
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function fetchOCPosts() {
+      // Pull items from posts table while matching row records directly up with character metadata profiles
+      const { data: posts, error } = await supabase
+        .from('posts')
+        .select(`
+          id, image_url, caption, created_at,
+          characters ( username, avatar_url )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Database connection error:', error);
+        document.getElementById('posts-grid').innerHTML = `
+          <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
+            Failed to connect. Please verify your Supabase API Keys.
+          </p>`;
+        return;
+      }
+
+      renderGrid(posts);
+    }
+
+    function renderGrid(posts) {
+      const gridContainer = document.getElementById('posts-grid');
+      
+      if (!posts || posts.length === 0) {
+        gridContainer.innerHTML = `
+          <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
+            No posts found yet. Add rows inside your Supabase tables to start worldbuilding!
+          </p>`;
+        return;
+      }
+
+      gridContainer.innerHTML = ''; // Wipe fallback loading flags
+
+      posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post-card';
+        
+        // Dynamically inject values straight from variables into standard template frames
+        postElement.innerHTML = `
+          <img src="${post.image_url}" class="post-image" alt="OC Visual Art Piece">
+          <div class="post-content">
+            <div class="post-username">@${post.characters?.username || 'unknown_character'}</div>
+            <p class="post-caption">${post.caption || ''}</p>
+          </div>
+        `;
+        
+        gridContainer.appendChild(postElement);
+      });
+    }
+
+    // Trigger immediate database load execution as soon as document elements fully render in view
+    window.addEventListener('DOMContentLoaded', fetchOCPosts);
+  </script>
+</body>
+</html>
