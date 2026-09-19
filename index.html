@@ -76,9 +76,7 @@
       font-weight: bold;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .publish-btn:hover { background: #e07a00; }
 
     /* Custom Navigation Tabs for Feed vs DMs */
     .view-tabs {
@@ -109,7 +107,6 @@
       display: flex;
       flex-direction: column;
       gap: 30px;
-      min-height: 200px; /* FIXED: Prevents initial framework collapse errors */
     }
 
     .post-card {
@@ -131,13 +128,14 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #eee;
+      background: #ff8a00;
       margin-right: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       color: white;
+      font-size: 0.8rem;
     }
     .oc-meta-info {
       display: flex;
@@ -193,7 +191,6 @@
       border-radius: 18px;
       font-size: 0.9rem;
       line-height: 1.4;
-      position: relative;
     }
     .bubble .sender-label {
       font-size: 0.7rem;
@@ -229,7 +226,6 @@
     <div class="admin-box">
       <h3>✍️ Worldbuilding Control Panel</h3>
       
-      <!-- Toggle form views automatically based on intent -->
       <div class="panel-row">
         <select id="admin-mode-select" class="panel-select" onchange="toggleAdminFormType(this.value)">
           <option value="post">➕ Create Timeline Post</option>
@@ -262,8 +258,8 @@
             <option value="Chai_Enthusiast">Sender: @Chai_Enthusiast</option>
           </select>
           <select id="dm-align" class="panel-select">
-            <option value="left">Speech Bubble: Left (Receiver Side)</option>
-            <option value="right">Speech Bubble: Right (Sender Side)</option>
+            <option value="left">Speech Bubble: Left</option>
+            <option value="right">Speech Bubble: Right</option>
           </select>
         </div>
         <input type="text" id="dm-text" class="panel-input" placeholder="Type text message script...">
@@ -272,16 +268,16 @@
 
     </div>
 
-    <!-- Navigation Bar between Feed Framework and DM Chatbox Windows -->
+    <!-- Navigation Tabs -->
     <div class="view-tabs">
       <button id="tab-feed" class="tab-btn active" onclick="switchMainView('feed')">📷 Timeline Feed</button>
       <button id="tab-dms" class="tab-btn" onclick="switchMainView('dms')">💬 Character DMs Chat Logs</button>
     </div>
 
-    <!-- WINDOW SELECTION A: POSTS GRID -->
+    <!-- WINDOW SELECTION A: POSTS FEED -->
     <div id="view-feed-container">
       <div id="posts-feed" class="posts-feed">
-        <!-- Rendered items inject cleanly right here -->
+        <!-- Injected right here -->
       </div>
     </div>
 
@@ -300,7 +296,7 @@
   </main>
 
   <script>
-    // Configuration Metadata Presets mapping profile badges instantly onto screens
+    // FIXED: Swapped out localStorage state engines completely to bypass browser-level adblock freezes
     const ocProfiles = {
       "Barista_Arin": { label: "Arin ☕", followers: "1,240", color: "#ff8a00" },
       "Coffee_Shop_Hero": { label: "Hero ⚔️", followers: "45.8K", color: "#0095f6" },
@@ -308,13 +304,19 @@
       "Chai_Enthusiast": { label: "Chai ✨", followers: "3,890", color: "#d10056" }
     };
 
-    const initialPosts = [
-      { id: 101, author: "Barista_Arin", image_url: "https://unsplash.com", caption: "Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖" }
+    let statePosts = [
+      { id: 1, author: "Barista_Arin", image_url: "https://unsplash.com", caption: "Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖" }
     ];
     
-    const initialComments = [
-      { post_id: 101, username: "Grumpy_Regular", comment_text: "Save two for me, Arin. Don't let the morning rush steal them." },
-      { post_id: 101, username: "Chai_Enthusiast", comment_text: "Oh wow, those look incredible!! On my way right now!" }
+    let stateComments = [
+      { post_id: 1, username: "Grumpy_Regular", comment_text: "Save two for me, Arin. Don't let the morning rush steal them." },
+      { post_id: 1, username: "Chai_Enthusiast", comment_text: "Oh wow, those look incredible!! On my way right now!" }
     ];
 
-    const initialDMs = [
+    let stateDMs = [
+      { sender: "Coffee_Shop_Hero", alignment: "right", text: "Hey Arin, are you guys open yet? I need a triple espresso badly today." },
+      { sender: "Barista_Arin", alignment: "left", text: "Just turned the lights on! The espresso machine is heated up and ready for you." }
+    ];
+
+    function initUniverseApp() {
+
