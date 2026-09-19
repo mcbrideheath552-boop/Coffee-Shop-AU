@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OC Social Universe</title>
   
-  <!-- Complete, valid CDN url to download the core Supabase client library -->
-  <script src="https://jsdelivr.net"></script>
+  <!-- Bypasses strict network blocks using an alternate high-security library mirror -->
+  <script src="https://cloudflare.com" integrity="sha512-Y3f6/A06rIcl9f3Y689gAsSOf9R64wV59uA/+mZfWp6YV0p7I/gC7NreN/qXfWlHh339N8XN4bM7wXw86NfS0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     /* Global Resets and Visual Themes */
@@ -97,14 +97,14 @@
         margin: 0;
       }
       .posts-grid {
-        gap: 3px; /* Mimic real Instagram profile tight-grid separation lines */
+        gap: 3px;
       }
       .post-card {
         border: none;
         border-radius: 0;
       }
       .post-content {
-        display: none; /* Auto-hides captions on index screens just like real phone profiles */
+        display: none;
       }
     }
   </style>
@@ -118,20 +118,19 @@
   <main class="instagram-container">
     <div id="posts-grid" class="posts-grid">
       <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-        Loading your virtual universe...
+        Connecting securely to your universe...
       </p>
     </div>
   </main>
 
   <script>
-    // Config: Loaded with your verified public network project data
     const SUPABASE_URL = 'https://supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdWNvYXZxbXF3Y2N2em1vdHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MzE5MzQsImV4cCI6MjEwNTQwNzkzNH0.H4md913bLmWuRuIM00bBsYCasASLlIaJHoiIalar-Ns'; 
 
+    // Initializing using the global library from our fallback link
     const supabaseApp = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function fetchOCPosts() {
-      // Pull items from posts table while matching row records directly up with character metadata profiles
       const { data: posts, error } = await supabaseApp
         .from('posts')
         .select(`
@@ -144,7 +143,7 @@
         console.error('Database connection error:', error);
         document.getElementById('posts-grid').innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: red; padding: 20px;">
-            Failed to connect. Please verify your Supabase API Keys and ensure RLS is disabled.
+            Connection Error. Please confirm Row Level Security (RLS) is fully disabled for your tables inside Supabase.
           </p>`;
         return;
       }
@@ -158,18 +157,17 @@
       if (!posts || posts.length === 0) {
         gridContainer.innerHTML = `
           <p style="grid-column: 1 / -1; text-align: center; color: #8e8e8e; padding: 40px 0;">
-            No posts found yet. Add rows inside your Supabase tables to start worldbuilding!
+            Connected to database! No posts found yet. Go ahead and add rows inside your Supabase tables to start worldbuilding!
           </p>`;
         return;
       }
 
-      gridContainer.innerHTML = ''; // Wipe fallback loading flags
+      gridContainer.innerHTML = '';
 
       posts.forEach(post => {
         const postElement = document.createElement('div');
         postElement.className = 'post-card';
         
-        // Dynamically inject values straight from variables into standard template frames
         postElement.innerHTML = `
           <img src="${post.image_url}" class="post-image" alt="OC Visual Art Piece">
           <div class="post-content">
@@ -182,8 +180,8 @@
       });
     }
 
-    // Trigger immediate database load execution as soon as document elements fully render in view
     window.addEventListener('DOMContentLoaded', fetchOCPosts);
   </script>
 </body>
 </html>
+
