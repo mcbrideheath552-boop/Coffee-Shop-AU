@@ -7,8 +7,6 @@
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
-    
-    /* REMOVED SPARKLE - UPDATED TITLE */
     h1 { text-align: center; color: #A993D9; margin-bottom: 20px; font-size: 1.6rem; font-weight: bold; }
     
     /* 🌐 THREE-COLUMN MASTER APPARATUS GRID LAYOUT */
@@ -18,7 +16,7 @@
       gap: 20px;
       max-width: 1400px;
       margin: 0 auto;
-      align-items: center; /* FIXED: Raised and perfectly centered the side panels vertically */
+      align-items: center;
     }
 
     /* Column Container Panel Styling */
@@ -45,15 +43,13 @@
     /* --- RIGHT SIDE COLUMN: STUDIO CONTROL PANEL & ACCOUNTS LIST --- */
     .input-field { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.88rem; }
     .select-box { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; background: #fafafa; }
-    
-    /* CUSTOM DEEP LAVENDER BUTTON VALUES */
     .action-btn { width: 100%; padding: 11px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; background: #A993D9; margin-bottom: 8px; }
     .action-link { font-size: 0.72rem; color: #0095f6; cursor: pointer; font-weight: bold; }
 
     .mini-hub-box { border-top: 1px dashed #ddd; margin-top: 15px; padding-top: 15px; }
     .mini-avatar-badge { width: 44px; height: 44px; border-radius: 50%; background: #A993D9; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
 
-    /* 📌 OVER-THE-TOP COMMENT POP-UP OVERLAY SCREEN */
+    /* POP-UP OVERLAY SCREEN */
     .comment-overlay-backdrop {
       display: none;
       position: fixed;
@@ -110,10 +106,10 @@
       </div>
     </div>
 
-    <!-- CENTER FRAMECOLUMN: LIVE INSTAGRAM HOME TIMELINE FEED -->
+    <!-- CENTER FRAMECOLUMN: LIVE TIMELINE FEED -->
     <div class="feed-column-interface" id="feed-column-list"></div>
 
-    <!-- RIGHT SIDE FRAMECOLUMN: GLOBAL ACTOR MANAGER & CREATOR STUDIO -->
+    <!-- RIGHT SIDE FRAMECOLUMN: ACCOUNTS SWITCHER & CREATOR STUDIO -->
     <div class="panel-box">
       <div class="panel-title">👤 Active Account Manager</div>
       <label style="font-size:0.75rem; font-weight:bold; color:#666;">Control Profile Character:</label>
@@ -138,7 +134,7 @@
 
   </main>
 
-  <!-- 📌 OVER-THE-TOP MODAL POPUP LAYER -->
+  <!-- OVER-THE-TOP COMMENTS MODAL WINDOW -->
   <div id="comment-overlay-window" class="comment-overlay-backdrop">
     <div class="comment-modal-window">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:8px; margin-bottom:12px;">
@@ -154,7 +150,6 @@
   </div>
 
   <script>
-    // CLEAN, UNCRASHABLE RUNTIME ARCHITECTURE
     const registryOcs = {
       "Barista_Arin": { name: "Arin ☕", followers: "1,240", bio: "Main barista at the shop counter. Secretly brewing experimental magic espresso lines.", code: "AR" },
       "Coffee_Shop_Hero": { name: "Hero ⚔️", followers: "45.8K", bio: "The local neighborhood defender. Orders triple espresso shots and falls asleep.", code: "HE" },
@@ -166,7 +161,10 @@
     let activeChatRecipient = "Coffee_Shop_Hero";
     let activeModalPostId = 101;
 
-    // PRE-LOADED TEST POST WITH EXACTLY 40 LIKES BY DEFAULT
     let internalPosts = [
-
+      { id: 101, author: "Barista_Arin", likes: 40, img: "https://unsplash.com", cap: "Welcome to the coffee shop universe! The morning brew is fresh and ready. 🥐☕" }
+    ];
+    let internalComments = [
+      { id: 1, post_id: 101, author: "Grumpy_Regular", text: "Is the back booth available today?" }
+    ];
 
