@@ -23,7 +23,7 @@
     .panel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
     .panel-title { font-weight: bold; font-size: 0.95rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; color: #A993D9; display: flex; align-items: center; gap: 6px; }
 
-    /* --- LEFT SIDE COLUMN: PERSONAL 1-ON-1 DMS BOX (VERTICALLY CENTERED) --- */
+    /* --- LEFT SIDE COLUMN: PERSONAL 1-ON-1 DMS BOX --- */
     .dm-column-interface { display: flex; flex-direction: column; height: 500px; justify-content: center; }
     .dm-recipient-selector { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; }
     .dm-stream-viewport { flex-grow: 1; border: 1px solid #f2f2f2; border-radius: 6px; background: #fbfbfb; padding: 10px; overflow-y: auto; height: 340px; display: flex; flex-direction: column; gap: 8px; }
@@ -31,16 +31,18 @@
     .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 2px; }
     .bubble.right { background: #A993D9; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-    /* --- CENTER COLUMN: INSTAGRAM HOME TIMELINE FEED --- */
-    .feed-column-interface { max-height: 800px; overflow-y: auto; padding-right: 4px; }
-    .post-item-card { border: 1px solid #dbdbdb; border-radius: 8px; margin-bottom: 25px; background: white; overflow: hidden; }
-    .post-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #f2f2f2; }
-    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee; }
-    .post-likes-bar { padding: 10px 14px 4px 14px; font-size: 0.88rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-    .post-caption { padding: 4px 14px 14px 14px; font-size: 0.92rem; line-height: 1.4; }
-    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 12px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
+    /* --- CENTER COLUMN: TIMELINE FEED (COMPACT NO-SCROLL LAYOUT) --- */
+    .feed-column-interface { max-height: 520px; overflow-y: auto; padding-right: 4px; }
+    .post-item-card { border: 1px solid #dbdbdb; border-radius: 8px; margin-bottom: 15px; background: white; overflow: hidden; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .post-header { padding: 8px 12px; font-weight: bold; border-bottom: 1px solid #f2f2f2; font-size: 0.85rem; }
+    
+    /* Optimized image container scale to fit screen instantly without scrolling */
+    .post-img { width: 100%; height: 260px; object-fit: cover; display: block; background: #eee; }
+    .post-likes-bar { padding: 8px 12px 2px 12px; font-size: 0.82rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .post-caption { padding: 4px 12px 10px 12px; font-size: 0.85rem; line-height: 1.3; }
+    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 9px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.8rem; font-weight: bold; color: #0095f6; cursor: pointer; }
 
-    /* --- RIGHT SIDE COLUMN: STUDIO CONTROL PANEL & ACCOUNTS LIST --- */
+    /* --- RIGHT SIDE COLUMN: STUDIO PANEL --- */
     .input-field { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.88rem; }
     .select-box { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; background: #fafafa; }
     .action-btn { width: 100%; padding: 11px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; background: #A993D9; margin-bottom: 8px; }
@@ -49,7 +51,7 @@
     .mini-hub-box { border-top: 1px dashed #ddd; margin-top: 15px; padding-top: 15px; }
     .mini-avatar-badge { width: 44px; height: 44px; border-radius: 50%; background: #A993D9; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
 
-    /* 📌 OVER-THE-TOP COMMENT POP-UP OVERLAY SCREEN */
+    /* OVER-THE-TOP POPUP OVERLAY SCREEN */
     .comment-overlay-backdrop {
       display: none;
       position: fixed;
@@ -76,7 +78,7 @@
       padding: 10px;
       background: #fbfbfb;
     }
-    .comment-item-card { border-bottom: 1px solid #f2f2f2; padding: 10px 0; font-size: 0.88rem; border-bottom: 1px solid #eee; }
+    .comment-item-card { padding: 8px 0; font-size: 0.88rem; border-bottom: 1px solid #eee; }
     .comment-actions-row { font-size: 0.75rem; color: #8e8e8e; font-weight: bold; margin-top: 4px; display: flex; gap: 10px; }
     .reply-nested-box { margin-left: 20px; padding-left: 10px; border-left: 2px solid #efefef; margin-top: 6px; display: flex; flex-direction: column; gap: 4px; }
   </style>
@@ -87,7 +89,7 @@
 
   <main class="master-workspace-layout">
 
-    <!-- LEFT SIDE FRAMECOLUMN: PERSONAL CHAT INBOX -->
+    <!-- LEFT SIDE COLUMN: PERSONAL CHAT INBOX -->
     <div class="panel-box dm-column-interface">
       <div class="panel-title">💬 Private Dialogue Threads</div>
       <label style="font-size:0.75rem; font-weight:bold; color:#666;">Chatting With Target:</label>
@@ -104,30 +106,28 @@
       
       <div style="margin-top:10px; display:flex; gap:4px;">
         <input type="text" id="dm-typed-input" class="input-field" placeholder="Type DM text line..." style="margin:0; padding:6px;">
-        <button style="background:#A993D9; border:none; padding:0 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="submitDirectMessage()">Send</button>
+        <!-- UNBLOCKABLE EVENT ELEMENT OVERRIDE PIPELINE -->
+        <button style="background:#A993D9; border:none; padding:0 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="submitDirectMessage(event)">Send</button>
       </div>
     </div>
 
-    <!-- CENTER COLUMN: TIMELINE FEED (PURE HARDCODED LAYOUT INFRASTRUCTURE) -->
+    <!-- CENTER COLUMN: TIMELINE FEED (RESIZED & COMPACT FOR EASY VIEWING) -->
     <div class="feed-column-interface" id="feed-column-list">
       
-      <!-- 📷 Pre-built Example Post Card with 40 Likes -->
       <div class="post-item-card" id="post-card-101">
         <div class="post-header">✨ @Barista_Arin</div>
-        <!-- Reliable fallback image web link -->
         <img class="post-img" src="https://unsplash.com" alt="Post Artwork">
         <div class="post-likes-bar">
           <span>❤️ <span id="likes-digit-101">40</span> likes</span>
-          <span class="action-link" onclick="editLikesValue(101)">[Edit Likes]</span>
+          <span class="action-link" onclick="editLikesValue(event, 101)">[Edit Likes]</span>
         </div>
         <div class="post-caption"><b>@Barista_Arin:</b> Welcome to the coffee shop universe! The morning brew is fresh and ready. 🥐☕</div>
-        <!-- 💬 Popup Opener attached directly as a classic element attribute command -->
-        <button class="comment-open-btn" onclick="openCommentsModal(101)">💬 Click to Open Over-the-Top Comments Panel</button>
+        <button class="comment-open-btn" onclick="openCommentsModal(event, 101)">💬 Click to Open Over-the-Top Comments Panel</button>
       </div>
 
     </div>
 
-    <!-- RIGHT SIDE COLUMN: GLOBAL ACTOR MANAGER & CREATOR STUDIO -->
+    <!-- RIGHT SIDE COLUMN: ACCOUNTS SWITCHER & CREATOR STUDIO -->
     <div class="panel-box">
       <div class="panel-title">👤 Active Account Manager</div>
       <label style="font-size:0.75rem; font-weight:bold; color:#666;">Control Profile Character:</label>
@@ -145,9 +145,8 @@
       <input type="text" id="studio-caption" class="input-field" placeholder="Type post caption lore...">
       <input type="number" id="studio-likes" class="input-field" value="32">
       
-      <button class="action-btn" onclick="publishStudioCard()">Publish Post Card to Feed</button>
+      <button class="action-btn" onclick="publishStudioCard(event)">Publish Post Card to Feed</button>
 
-      <!-- Profile mini dashboard window panel -->
       <div class="mini-hub-box" id="mini-dossier-card-hub">
         <div class="panel-title">👤 Profile Dashboard Portfolio</div>
         <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
@@ -158,11 +157,13 @@
           </div>
         </div>
         <p style="font-size:0.8rem; line-height:1.4; color:#555; margin:0 0 10px 0;"><b>Bio:</b> <span id="dossier-bio">Main barista at the shop counter. Secretly brewing experimental magic espresso lines. Always tired.</span></p>
-        <button style="background:#efefef; border:1px solid #ddd; width:100%; padding:6px; font-weight:bold; font-size:0.75rem; border-radius:4px; cursor:pointer;" onclick="editProfileDossier()">⚙️ Edit Profile Info</button>
+        <button style="background:#efefef; border:1px solid #ddd; width:100%; padding:6px; font-weight:bold; font-size:0.75rem; border-radius:4px; cursor:pointer;" onclick="editProfileDossier(event)">⚙️ Edit Profile Info</button>
       </div>
     </div>
 
   </main>
+
+  <div id="comment-overlay-window" class="comment-overlay-backdrop">
 
 
 
