@@ -3,147 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coffee Shop AU Hub</title>
+  <title>OC Social Universe</title>
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; margin: 0; padding: 20px; color: #262626; }
-    h1 { text-align: center; color: #ff8a00; margin-bottom: 5px; }
-    .sub { text-align: center; color: #8e8e8e; font-size: 0.9rem; margin-bottom: 20px; }
+    h1 { text-align: center; color: #ff8a00; margin-bottom: 20px; }
     
-    /* Navigation Bar */
-    .tabs { display: flex; max-width: 600px; margin: 0 auto 20px auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; }
-    .tab { flex: 1; padding: 14px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; text-align: center; font-size: 0.85rem; }
-    .tab.active { background: #ff8a00; color: white; }
+    /* 4-Tab Main Navigation Bar Layout */
+    .view-tabs { display: flex; max-width: 600px; margin: 0 auto 20px auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; }
+    .tab-btn { flex: 1; padding: 14px; background: white; border: none; cursor: pointer; font-weight: bold; color: #8e8e8e; text-align: center; font-size: 0.85rem; }
+    .tab-btn.active { background: #ff8a00; color: white; }
 
-    /* Actor Switcher Card */
-    .profile-card { max-width: 600px; margin: 0 auto 20px auto; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; gap: 15px; align-items: center; }
-    .avatar { width: 50px; height: 50px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; }
-    .select-box { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; }
+    /* Account Manager & Switcher Panel */
+    .manager-card { max-width: 600px; margin: 0 auto 20px auto; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .actor-box { display: flex; align-items: center; gap: 12px; }
+    .avatar-circle { width: 44px; height: 44px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; text-transform: uppercase; overflow: hidden; }
+    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .select-dropdown { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; background: #fafafa; cursor: pointer; }
 
-    /* Main Display Windows */
-    .window { max-width: 600px; margin: 0 auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .input-field { width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; }
+    /* Universal Content Windows */
+    .window { max-width: 600px; margin: 0 auto; background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .input-field { width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; background: #fafafa; }
     .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+    .studio-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 6px; }
 
-    /* Post Cards */
+    /* Home Feed Post Cards Layout */
     .post-item { border: 1px solid #dbdbdb; padding: 0; border-radius: 8px; margin-top: 20px; background: white; overflow: hidden; }
-    .post-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #f2f2f2; }
-    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee; }
-    .post-likes { padding: 10px 14px 0 14px; font-size: 0.9rem; font-weight: bold; }
-    .post-caption { padding: 10px 14px 14px 14px; font-size: 0.95rem; border-bottom: 1px solid #f2f2f2; }
-    
-    /* Comments */
-    .comment-area { padding: 12px; background: #fbfbfb; }
-    .comment-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-    .comment-row { font-size: 0.88rem; display: flex; justify-content: space-between; align-items: center; }
-    .comment-edit-btn { font-size: 0.75rem; color: #0095f6; cursor: pointer; font-weight: bold; margin-left: 10px; }
+    .post-header { padding: 14px; font-weight: bold; color: #262626; border-bottom: 1px solid #f2f2f2; display: flex; align-items: center; gap: 10px; }
+    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #f0f0f2; }
+    .post-actions { padding: 12px 14px 4px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: bold; }
+    .likes-edit-link { font-size: 0.75rem; color: #0095f6; cursor: pointer; font-weight: normal; margin-left: 6px; }
+    .post-caption { padding: 0 14px 14px 14px; font-size: 0.95rem; line-height: 1.4; border-bottom: 1px solid #f2f2f2; }
+    .comment-open-btn { display: block; width: 100%; text-align: center; padding: 12px; background: #fbfbfb; border: none; border-top: 1px solid #efefef; font-size: 0.85rem; font-weight: bold; color: #0095f6; cursor: pointer; }
 
-    /* DM Matrix Layout */
-    .dm-box { display: flex; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; min-height: 380px; }
-    .dm-sidebar { width: 35%; border-right: 1px solid #ddd; background: #f9f9f9; }
-    .dm-side-btn { width: 100%; padding: 12px 10px; border: none; border-bottom: 1px solid #ddd; background: none; text-align: left; font-weight: bold; cursor: pointer; }
-    .dm-side-btn.active { background: #fff0e0; color: #ff8a00; }
-    .dm-chat-view { width: 65%; display: flex; flex-direction: column; padding: 10px; background: #fbfbfb; }
-    .dm-stream { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; max-height: 280px; }
+    /* 1-on-1 Personal Chat Layout */
+    .dm-grid { display: flex; border: 1px solid #dbdbdb; border-radius: 8px; overflow: hidden; min-height: 420px; }
+    .dm-sidebar { width: 35%; border-right: 1px solid #dbdbdb; background: #ffffff; }
+    .dm-thread-btn { padding: 14px 10px; background: none; border: none; border-bottom: 1px solid #f2f2f2; text-align: left; font-weight: bold; font-size: 0.85rem; color: #444; cursor: pointer; width: 100%; }
+    .dm-thread-btn.active { background: #fff0e0; color: #ff8a00; border-left: 4px solid #ff8a00; }
+    .dm-viewport { width: 65%; display: flex; flex-direction: column; background: #fbfbfb; }
+    .dm-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #dbdbdb; background: white; text-align: center; font-size: 0.9rem; }
+    .dm-stream { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 280px; }
     .bubble-row { display: flex; flex-direction: column; width: 100%; }
-    .bubble { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; }
+    .bubble { max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
     .bubble.left { background: #efefef; color: black; align-self: flex-start; border-bottom-left-radius: 4px; }
     .bubble.right { background: #ff8a00; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
     .bubble-meta { font-size: 0.7rem; font-weight: bold; color: #8e8e8e; margin-bottom: 2px; }
 
-    /* Profile Hub UI Dossier */
-    .hub-header { display: flex; gap: 15px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-    .hub-avatar { width: 60px; height: 60px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.3rem; }
-    .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .hub-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; }
+    /* Character Profile Tab UI Layout */
+    .hub-header { display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #efefef; padding-bottom: 20px; margin-bottom: 20px; }
+    .hub-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: #ff8a00; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.6rem; overflow: hidden; }
+    .hub-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    .hub-meta { flex-grow: 1; }
+    .hub-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .hub-handle { font-size: 1.3rem; font-weight: bold; margin: 0; }
+    .hub-edit-profile-btn { padding: 4px 10px; border: 1px solid #dbdbdb; border-radius: 4px; font-size: 0.75rem; font-weight: bold; background: #fafafa; cursor: pointer; }
+    .hub-stats { display: flex; gap: 20px; font-size: 0.9rem; margin-bottom: 8px; }
+    .hub-bio { font-size: 0.88rem; line-height: 1.4; color: #555; margin: 0; }
+    .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .hub-grid-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
+
+    /* Dedicated Comments Section Overlay Page Screen */
+    .comment-page-view { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
+    .comment-item-card { border-bottom: 1px solid #f2f2f2; padding: 10px 0; font-size: 0.9rem; display: flex; flex-direction: column; gap: 4px; }
+    .comment-main-line { display: flex; justify-content: space-between; align-items: center; }
+    .comment-actions-row { display: flex; gap: 12px; font-size: 0.75rem; color: #8e8e8e; font-weight: bold; margin-left: 20px; }
+    .comment-action-link { color: #0095f6; cursor: pointer; }
+    .reply-nested-box { margin-left: 25px; padding-left: 10px; border-left: 2px solid #efefef; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+    .reply-item { font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
 
-  <h1>✨ Coffee Shop AU Universe</h1>
-  <div class="sub">Your private multi-account character sandbox dashboard</div>
+  <h1>✨ OC Social Universe</h1>
 
-  <!-- Global Switcher Card -->
-  <div class="profile-card">
-    <div id="active-avatar" class="avatar">RE</div>
-    <div>
-      <div style="font-weight: bold; margin-bottom: 4px; font-size: 0.85rem;">Acting As Profile Character:</div>
-      <select id="char-selector" class="select-box" onchange="updateGlobalActorState(this.value)">
-        <option value="Grumpy_Regular">📖 @Grumpy_Regular (Followers: 142)</option>
-        <option value="Barista_Arin">☕ @Barista_Arin (Followers: 1,240)</option>
-        <option value="Coffee_Shop_Hero">⚔️ @Coffee_Shop_Hero (Followers: 45.8K)</option>
-        <option value="Chai_Enthusiast">✨ @Chai_Enthusiast (Followers: 3,890)</option>
-      </select>
+  <!-- Top Global Account Manager -->
+  <div class="manager-card">
+    <div class="actor-box">
+      <div id="global-actor-avatar" class="avatar-circle">AR</div>
+      <div>
+        <div style="font-size: 0.75rem; color:#8e8e8e; font-weight:bold; margin-bottom:2px;">CURRENTLY LOGGED IN AS:</div>
+        <select id="global-actor-dropdown" class="select-dropdown"></select>
+      </div>
     </div>
+    <div style="font-size: 0.8rem; color:#ff8a00; font-weight:bold; border: 1px dashed #ff8a00; padding:6px 10px; border-radius:6px;">✨ Control Center Active</div>
   </div>
 
-  <!-- 4-Tab Navigation Buttons -->
-  <div class="tabs">
-    <button id="tab-feed" class="tab active" onclick="switchView('feed')">📷 Timeline Feed</button>
-    <button id="tab-dms" class="tab" onclick="switchView('dms')">💬 Personal DMs</button>
-    <button id="tab-hub" class="tab" onclick="switchView('hub')">👤 Profiles Hub</button>
-    <button id="tab-studio" class="tab" style="color:#ff8a00;" onclick="switchView('studio')">⚙️ Studio Panel</button>
+  <!-- Main Navigation Tabs -->
+  <div class="view-tabs">
+    <button id="nav-btn-feed" class="tab-btn active">📷 Home Feed</button>
+    <button id="nav-btn-dms" class="tab-btn">💬 Personal DMs</button>
+    <button id="nav-btn-hub" class="tab-btn">👤 Profiles Page</button>
+    <button id="nav-btn-studio" class="tab-btn" style="color:#ff8a00;">⚙️ Creator Studio</button>
   </div>
 
-  <!-- WINDOW 1: TIMELINE FEED -->
+  <!-- WINDOW 1: HOME FEED -->
   <div id="win-feed" class="window">
-    <div id="feed-list"></div>
+    <div id="feed-list-stream"></div>
   </div>
 
-  <!-- WINDOW 2: PERSONAL CHATS -->
-  <div id="win-dms" class="window" style="display:none;">
-    <div class="dm-box">
-      <div class="dm-sidebar" id="dm-threads-menu"></div>
-      <div class="dm-chat-view">
-        <div id="dm-stream-view" class="dm-stream"></div>
-        <div style="display: flex; gap: 4px; margin-top: 10px;">
-          <input type="text" id="dm-input-text" class="input-field" placeholder="Type DM script dialogue..." style="margin:0;">
-          <button style="background:#ff8a00; border:none; padding:10px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;" onclick="publishLiveDMMessage()">Send</button>
+  <!-- WINDOW 2: PERSONAL 1-ON-1 CHATS -->
+  <div id="win-dms" class="window" style="display:none; padding:10px;">
+    <div class="dm-grid">
+      <div class="dm-sidebar" id="dm-sidebar-threads"></div>
+      <div class="dm-viewport">
+        <div class="dm-header" id="dm-header-title">Select a chat thread...</div>
+        <div class="dm-stream" id="dm-log-stream"></div>
+        <div style="padding:10px; background:white; border-top:1px solid #dbdbdb; display:flex; gap:6px;">
+          <input type="text" class="input-field" id="dm-input-field" placeholder="Type DM script message..." style="margin:0; padding:8px;">
+          <button class="btn" style="background:#ff8a00; width:auto; padding:0 16px;" id="dm-send-btn">Send</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- WINDOW 3: PROFILE HUB BIO DIRECTORY -->
+  <!-- WINDOW 3: DETACHED PROFILES HUB PAGE -->
   <div id="win-hub" class="window" style="display:none;">
     <div style="margin-bottom: 15px; display:flex; justify-content:space-between; align-items:center;">
-      <span style="font-weight:bold; font-size:0.9rem;">👤 Select Dossier Profile Card:</span>
-      <select id="hub-selector" class="select-box" onchange="renderHubDossierCard(this.value)">
-        <option value="Barista_Arin">@Barista_Arin</option>
-        <option value="Coffee_Shop_Hero">@Coffee_Shop_Hero</option>
-        <option value="Grumpy_Regular">@Grumpy_Regular</option>
-        <option value="Chai_Enthusiast">@Chai_Enthusiast</option>
-      </select>
+      <span style="font-weight:bold; font-size:0.9rem; color:#666;">👤 Select Profile Page Tab View:</span>
+      <select id="hub-profile-selector" class="select-dropdown"></select>
     </div>
-    <div id="hub-viewport-card"></div>
+    <div id="hub-profile-card-view"></div>
   </div>
 
-  <!-- WINDOW 4: STUDIO DASHBOARD -->
+  <!-- WINDOW 4: CREATOR STUDIO PRODUCTION PANEL -->
   <div id="win-studio" class="window" style="display:none;">
-    <div style="font-weight:bold; font-size: 1rem; margin-bottom: 12px; color:#ff8a00;">📷 Create a New Post Card</div>
-    <input type="file" id="studio-file-upload" class="input-field" accept="image/*" onchange="encodeLocalFile(this)">
-    <input type="text" id="studio-image-url" class="input-field" placeholder="Or paste an image web address link here...">
-    <input type="text" id="studio-caption" class="input-field" placeholder="Type caption description box lore...">
-    <input type="number" id="studio-likes" class="input-field" value="24" placeholder="Likes quantity...">
-    <button class="btn" style="background:#ff8a00;" onclick="publishStudioPost()">Publish Post to Timeline</button>
-  </div>
-
-  <script>
-    // FIXED: REMOVED ALL SUPABASE NETWORK DEPLOYMENT REQUESTS ENTIRELY TO ELIMINATE CORS HANDSHAKE CRASHES
-    const biosRegistry = {
-      "Grumpy_Regular": { label: "Regular 📖", info: "Sits in the back booth reading ancient script manuscripts. Complains about the volume level.", followers: "142", avatar: "RE" },
-      "Barista_Arin": { label: "Arin ☕", info: "Main barista at the counter. Secretly brewing experimental magic espresso lines. Always tired.", followers: "1,240", avatar: "AR" },
-      "Coffee_Shop_Hero": { label: "Hero ⚔️", info: "The local neighborhood defender. Orders triple espresso shots and falls asleep in the beanbag chair.", followers: "45.8K", avatar: "HE" },
-      "Chai_Enthusiast": { label: "Chai ✨", info: "Orders extra sugary customized iced Chais. Takes aesthetic photos of the pastry display counter.", followers: "3,890", avatar: "CH" }
-    };
-
-    let globalActor = "Grumpy_Regular";
-    let activeChatRecipient = "Barista_Arin";
-    let encodedImageBuffer = "";
-
-    // Application Master Memory Lists (Bypasses browser shields completely)
-    let memoryPosts = [
-      { id: 2, author: "Chai_Enthusiast", likes: 84, img: "https://unsplash.com", cap: "Look at this cute cozy booth setup! Studying here all afternoon. 🌧️📑" },
-      { id: 1, author: "Barista_Arin", likes: 142, img: "https://unsplash.com", cap: "Opening up the bakery counter early today. The cinnamon rolls just finished baking! ☕🥖" }
-    ];
-    let memoryComments = [
+    <div class="studio-title">📷 Create an Instagram Feed Post</div>
+    <label style="font-size:0.8rem; font-weight:bold; color:#555;">Image Upload Asset Source:</label>
+    <input type="file" id="studio-upload-file" class="input-field" accept="image/*">
+    <input type="text" id="studio-image-url" class="input-field" placeholder="Or paste any picture web address URL link here...">
+    
+    <div style="display:flex; gap:10px;">
+      <div style="flex:2;">
+        <label style="font-size:0.8rem; font-weight:bold; color:#555;">Caption Description Box Lore:</label>
