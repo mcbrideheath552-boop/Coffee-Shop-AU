@@ -2698,16 +2698,26 @@ init();
 
   /* ---------- Cloud ---------- */
   async function initCloud(){
-    if(!cloudConfigured()){setCloudText("Local mode · cloud not configured",false);return;}
+    if(cloud.auth) return true;
+    if(!cloudConfigured()){setCloudText("Local mode · cloud not configured",false);return false;}
     try{
+      if(typeof firebase === "undefined") throw new Error("Firebase SDK did not load. Check that the Firebase script files are reachable.");
       if(!firebase.apps.length)firebase.initializeApp(OC_FIREBASE_CONFIG);
-      cloud.auth=firebase.auth();cloud.db=firebase.firestore();cloud.enabled=true;
+      cloud.auth=firebase.auth();
+      cloud.db=firebase.firestore();
+      cloud.enabled=true;
       cloud.auth.onAuthStateChanged(async user=>{
         cloud.user=user;
         if(user){setCloudText("Signed in · cloud sync active",true);await pullCloud();}
         else setCloudText("Cloud ready · not signed in",false);
       });
-    }catch(e){console.error(e);setCloudText("Cloud unavailable · local mode",false);}
+      return true;
+    }catch(e){
+      console.error("Cloud initialization failed:",e);
+      cloud.auth=null; cloud.db=null; cloud.enabled=false;
+      setCloudText("Cloud unavailable · local mode",false);
+      return false;
+    }
   }
 
   function setCloudText(text,online){
@@ -2762,10 +2772,13 @@ init();
   async function cloudRegister(){
     const email=safe(document.getElementById("ocxEmail").value), pass=document.getElementById("ocxPassword").value;
     if(!email||pass.length<6){alert("Use an email and a password with at least 6 characters.");return;}
+    if(!(await initCloud())){alert("Cloud login is not available right now. Please refresh the page and try again.");return;}
     try{await cloud.auth.createUserWithEmailAndPassword(email,pass);}catch(e){alert(e.message);}
   }
   async function cloudLogin(){
     const email=safe(document.getElementById("ocxEmail").value), pass=document.getElementById("ocxPassword").value;
+    if(!email||!pass){alert("Enter your email and password.");return;}
+    if(!(await initCloud())){alert("Cloud login could not start. Please refresh the page and try again.");return;}
     try{await cloud.auth.signInWithEmailAndPassword(email,pass);}catch(e){alert(e.message);}
   }
   async function cloudLogout(){if(cloud.auth)await cloud.auth.signOut();}
