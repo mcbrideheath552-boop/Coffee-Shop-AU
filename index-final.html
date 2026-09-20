@@ -1,0 +1,4111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OC Social Network</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --purple: #a993d9;
+  --purple-dark: #8066b5;
+  --purple-light: #eee8fa;
+  --pink: #f3d7e8;
+  --blue: #4d8fdc;
+  --bg: #f7f5f9;
+  --border: #dedbe3;
+  --text: #26232a;
+  --muted: #77727c;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* HEADER */
+
+.topbar {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  color: var(--purple-dark);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ocx-unread-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#40a0b8;color:#fff;font-size:10px;font-weight:900;line-height:18px;text-align:center;box-sizing:border-box;border:2px solid #fff;pointer-events:none;z-index:3}
+
+.ocx-profile-messages{margin-top:18px;padding:14px;border:1px solid #e5ddea;border-radius:14px;background:#faf8fc}
+.ocx-profile-messages-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.ocx-profile-messages-title{font-weight:900;color:#a6285a}
+.ocx-profile-messages-count{background:#40a0b8;color:#fff;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:900}
+.ocx-profile-message-list{display:grid;gap:8px}
+.ocx-profile-message-item{width:100%;display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #e8e0ed;border-radius:12px;background:#fff;text-align:left;cursor:pointer}
+.ocx-profile-message-item:hover{background:#f7f3fa}
+.ocx-profile-message-item .avatar{width:38px;height:38px;min-width:38px}
+.ocx-profile-message-copy{min-width:0;flex:1}
+.ocx-profile-message-sender{font-weight:800;font-size:12px}
+.ocx-profile-message-preview{font-size:11px;color:#77727c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.ocx-profile-message-time{font-size:10px;color:#aaa5ad;white-space:nowrap}
+.avatar.ocx-has-unread{position:relative;overflow:visible}
+
+/* LAYOUT */
+
+.app {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: minmax(680px, 1fr) 340px;
+  gap: 25px;
+  align-items: start;
+}
+
+/* MAIN FEED + RIGHT-SIDE WIDGETS */
+.feed{grid-column:1;grid-row:1;min-width:0}
+.right-column{grid-column:2;grid-row:1;min-width:0}
+.left-column{grid-column:2;grid-row:2;min-width:0}
+.post{font-size:15px}
+.post-image,.placeholder-image{height:540px}
+
+/* PANELS */
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.panel-title {
+  color: var(--purple-dark);
+  font-weight: 800;
+  font-size: 14px;
+  padding-bottom: 11px;
+  margin-bottom: 13px;
+  border-bottom: 1px solid #eee;
+}
+
+/* AVATARS */
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-weight: 800;
+}
+
+.avatar.large {
+  width: 72px;
+  height: 72px;
+  font-size: 23px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* INPUTS */
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #d8d4dc;
+  background: #fff;
+  border-radius: 7px;
+  padding: 10px;
+  font: inherit;
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 2px rgba(169,147,217,.15);
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 10px 0 5px;
+}
+
+/* BUTTONS */
+
+button {
+  font: inherit;
+}
+
+.btn {
+  border: none;
+  border-radius: 7px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-purple {
+  background: var(--purple);
+  color: white;
+}
+
+.btn-purple:hover {
+  background: var(--purple-dark);
+}
+
+.btn-light {
+  background: var(--purple-light);
+  color: var(--purple-dark);
+}
+
+.btn-danger {
+  background: #f5dddd;
+  color: #a64040;
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 9px;
+}
+
+/* PROFILE MINI */
+
+.profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-name {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.profile-handle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* DMS */
+
+.dm-list {
+  height: 280px;
+  overflow-y: auto;
+  background: #faf9fb;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message {
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.message.them {
+  align-self: flex-start;
+  background: #eceaed;
+  border-bottom-left-radius: 3px;
+}
+
+.message.me {
+  align-self: flex-end;
+  background: var(--purple);
+  color: white;
+  border-bottom-right-radius: 3px;
+}
+
+.dm-compose {
+  display: flex;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.dm-compose input {
+  min-width: 0;
+}
+
+/* FEED */
+
+.feed {
+  min-width: 0;
+}
+
+.story-bar {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+}
+
+.story {
+  min-width: 65px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.story .avatar {
+  margin: auto auto 5px;
+  border: 3px solid #e7c8e5;
+}
+
+.post {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+}
+
+.post-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.post-user-name {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.post-user-handle {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.post-menu {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.post-image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  background: var(--purple-light);
+  display: block;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 420px;
+  background: linear-gradient(135deg, #e6def6, #f4dce8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--purple-dark);
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.post-actions {
+  display: flex;
+  gap: 17px;
+  padding: 11px 14px 4px;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 22px;
+}
+
+.like-button.liked {
+  color: #df4771;
+}
+
+.post-body {
+  padding: 4px 14px 15px;
+}
+
+.likes {
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.caption strong {
+  margin-right: 5px;
+}
+
+.view-comments {
+  border: none;
+  background: none;
+  color: #8b858f;
+  padding: 8px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.post-date {
+  color: #aaa5ad;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+/* RIGHT SIDE */
+
+.editor-section {
+  border-top: 1px solid #eee;
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 20, 30, .55);
+  z-index: 20000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.25);
+}
+
+.modal-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  color: var(--purple-dark);
+  font-weight: 800;
+}
+
+.close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 23px;
+  color: #888;
+}
+
+.modal-content {
+  padding: 18px;
+}
+
+/* COMMENTS */
+
+.comment-list {
+  max-height: 330px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.comment {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comment strong {
+  font-size: 13px;
+}
+
+.comment-text {
+  font-size: 13px;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.comment-actions {
+  margin-top: 5px;
+  display: flex;
+  gap: 10px;
+}
+
+.comment-actions button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #888;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* PROFILE */
+
+.profile-edit-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* FILE INPUT */
+
+.file-input {
+  font-size: 12px;
+  padding: 7px;
+}
+
+/* MOBILE */
+
+@media (max-width: 1050px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  .feed{grid-column:1;grid-row:1 / span 2}
+  .right-column{grid-column:2;grid-row:1}
+  .left-column{grid-column:2;grid-row:2}
+  .post-image,.placeholder-image{height:470px}
+}
+
+@media (max-width: 750px) {
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .app {
+    display: block;
+    padding: 12px;
+  }
+  .feed,.left-column,.right-column{grid-column:auto;grid-row:auto}
+
+  .left-column,
+  .right-column {
+    margin-bottom: 15px;
+  }
+
+  .right-column {
+    display: block;
+  }
+
+  .post-image,
+  .placeholder-image {
+    height: 330px;
+  }
+
+  .left-column {
+    display: none;
+  }
+}
+</style>
+
+<style id="ocx-dm-edit-styles">
+  .ocx-dm-row{display:flex;flex-direction:column;max-width:82%;gap:3px}
+  .ocx-dm-row .message{max-width:100%}
+  .ocx-dm-row:has(.message.me){align-self:flex-end;align-items:flex-end}
+  .ocx-dm-tools{display:flex;gap:8px;padding:0 4px}
+  .ocx-dm-tools button{border:0;background:none;color:#8b858f;font-size:10px;cursor:pointer;padding:1px 2px}
+  .ocx-dm-tools button:hover{color:var(--purple-dark)}
+  .ocx-dm-photo{max-width:240px;max-height:280px;width:auto;height:auto;border-radius:12px;display:block;cursor:zoom-in;object-fit:contain;background:#fff}
+  .ocx-dm-photo-wrap{padding:0!important;background:transparent!important}
+  .ocx-dm-photo-btn{padding:9px 10px;flex:0 0 auto}
+  .ocx-profile-stat-btn{border:0;background:transparent;font:inherit;cursor:pointer;border-radius:12px;padding:6px 10px}
+  .ocx-profile-stat-btn:hover{background:#f7f1fa}
+  .ocx-profile-stat-btn:focus-visible{outline:2px solid #a6285a;outline-offset:2px}
+  .ocx-connections-list{display:grid;gap:8px}
+  .ocx-connection-row{display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #eee5f2;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}
+  .ocx-connection-row:hover{background:#faf6fc}
+  .ocx-connection-row .avatar{flex:0 0 auto}
+  .ocx-connection-name{font-weight:800;color:#3d3147}
+  .ocx-connection-handle{font-size:12px;color:#8b7a95;margin-top:2px}
+</style>
+
+<style id="ocx-profile-styles">
+  .ocx-profile-screen{position:fixed;inset:0;z-index:3000;background:rgba(18,15,25,.96);display:none;overflow:auto;padding:28px 18px}
+  .ocx-profile-screen.show{display:block}
+  .ocx-profile-card{width:min(760px,100%);margin:0 auto;background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative}
+  .ocx-profile-close{position:absolute;right:14px;top:12px;width:42px;height:42px;border:0;border-radius:50%;font-size:28px;line-height:1;background:#f2eef8;color:#51445e;cursor:pointer;z-index:2}
+  .close,.ocx-profile-close{color:#a6285a !important}
+  .ocx-profile-head{padding:34px 28px 24px;text-align:center;background:linear-gradient(180deg,#f4eefb,#fff)}
+  .ocx-profile-big-avatar{width:104px;height:104px;margin:0 auto 14px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;border:5px solid #fff;box-shadow:0 5px 18px rgba(0,0,0,.12)}
+  .ocx-profile-big-avatar img{width:100%;height:100%;object-fit:cover}
+  .ocx-profile-name{font-size:25px;font-weight:800;color:#302738}
+  .ocx-profile-handle{color:#806d8e;margin-top:3px}
+  .ocx-profile-bio{max-width:560px;margin:10px auto 0;color:#574b61;white-space:pre-wrap}
+  .ocx-profile-stats{display:flex;justify-content:center;gap:44px;padding:17px 20px;border-top:1px solid #eee6f2;border-bottom:1px solid #eee6f2}
+  .ocx-profile-stat{min-width:90px;text-align:center}
+  .ocx-profile-stat strong{display:block;font-size:20px;color:#302738}
+  .ocx-profile-stat span{font-size:12px;color:#8b7a95}
+  .ocx-profile-actions{display:flex;justify-content:center;gap:10px;padding:14px 20px 0}
+
+  .ocx-profile-message-icon{width:40px;height:40px;border:1px solid #e5d7e9;border-radius:50%;background:#fff;color:#a6285a;font-size:19px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .15s}
+  .ocx-profile-message-icon:hover{background:#f7e9ef;transform:translateY(-1px)}
+  .ocx-profile-edit{border:0;border-radius:999px;padding:9px 15px;background:#efe8f7;color:#59456c;cursor:pointer;font-weight:700}
+  .ocx-profile-body{padding:20px 22px 28px}
+  .ocx-profile-section-title{font-weight:800;color:#3d3147;margin-bottom:12px}
+  .ocx-profile-posts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .ocx-profile-post{min-height:130px;border-radius:12px;overflow:hidden;background:#f3edf7;position:relative;display:flex;align-items:center;justify-content:center;color:#8b7896}
+  .ocx-profile-post img{width:100%;height:100%;min-height:130px;object-fit:cover;display:block}
+  .ocx-profile-post-placeholder{font-size:30px;opacity:.55}
+  .ocx-profile-empty{text-align:center;padding:28px;color:#8a7b91;background:#faf8fc;border-radius:12px}
+  .ocx-profile-edit-box{margin-top:16px;padding:16px;background:#faf8fc;border-radius:14px;border:1px solid #eee5f2}
+  .ocx-profile-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ocx-profile-edit-grid label{display:block;font-size:12px;color:#75657d;margin-bottom:5px}
+  .ocx-profile-edit-grid input{width:100%;box-sizing:border-box}
+  @media(max-width:600px){.ocx-profile-posts{grid-template-columns:repeat(2,1fr)}.ocx-profile-edit-grid{grid-template-columns:1fr}.ocx-profile-stats{gap:18px}}
+
+  .ocx-search-wrap{position:relative;flex:1;max-width:520px;margin:0 28px}
+  .ocx-global-search{width:100%;box-sizing:border-box;border:1px solid #ddd3e3;border-radius:999px;padding:10px 15px;font-size:13px;outline:none;background:#fff}
+  .ocx-global-search:focus{border-color:#9b7bc0;box-shadow:0 0 0 3px rgba(155,123,192,.12)}
+  .ocx-search-results{position:absolute;top:calc(100% + 7px);left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,.12);z-index:5000;display:none;overflow:hidden;max-height:420px;overflow-y:auto}
+  .ocx-search-section{padding:9px 13px 5px;font-size:11px;font-weight:800;color:#8b7b93;text-transform:uppercase}
+  .ocx-search-result{display:flex;align-items:center;gap:10px;padding:9px 13px;cursor:pointer;border:0;background:#fff;width:100%;text-align:left}
+  .ocx-search-result:hover{background:#faf7fc}
+  .ocx-search-result .avatar{width:34px;height:34px;min-width:34px;font-size:12px}
+  .ocx-search-result-main{min-width:0}
+  .ocx-search-result-title{font-weight:800;font-size:13px}
+  .ocx-search-result-sub{font-size:11px;color:#8b858f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ocx-search-empty{padding:16px;color:#8b858f;font-size:13px;text-align:center}
+  .ocx-search-hit{animation:ocxSearchHit 1.8s ease-out}
+  @keyframes ocxSearchHit{0%{box-shadow:0 0 0 5px rgba(155,123,192,.55)}100%{box-shadow:0 0 0 0 rgba(155,123,192,0)}}
+  .ocx-dm-modal-box{max-width:650px;width:min(650px,94vw)}
+  .ocx-dm-modal-content{display:flex;flex-direction:column;gap:10px}
+  .ocx-dm-modal-content .dm-list{height:360px}
+  .ocx-dm-date{font-size:12px}
+  .ocx-dm-compose{display:flex;gap:6px;align-items:center}
+  .ocx-dm-compose input[type="text"]{min-width:0;flex:1}
+  .ocx-dm-compose .btn{flex:0 0 auto}
+  .ocx-image-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:30000;padding:55px 24px 24px}
+  .ocx-image-lightbox.show{display:flex}
+  .ocx-image-lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 15px 60px rgba(0,0,0,.5)}
+  .ocx-image-lightbox-close{position:absolute;right:18px;top:14px;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#a6285a;font-size:30px;line-height:1;cursor:pointer;font-weight:800}
+  .ocx-image-lightbox-close:hover{background:#f7e9ef}
+  .post-image{cursor:zoom-in}
+
+  @media(max-width:700px){.ocx-search-wrap{margin:0 10px;max-width:none}.topbar{gap:5px}.topbar-user{display:none}}
+
+
+  .ocx-top-followers-list{display:grid;gap:8px}
+  .ocx-top-follower-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:1px solid #eee5f2;border-radius:12px;background:#fff;cursor:pointer;text-align:left}
+  .ocx-top-follower-row:hover{background:#faf6fc}
+  .ocx-top-follower-row .avatar{width:40px;height:40px;flex:0 0 40px}
+  .ocx-top-follower-info{min-width:0;flex:1}
+  .ocx-top-follower-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ocx-top-follower-handle{font-size:11px;color:#8b7a95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ocx-top-follower-count{font-size:11px;font-weight:800;color:#8066b5;white-space:nowrap}
+  .ocx-top-liked-list{display:grid;grid-template-columns:1fr;gap:8px}
+  .ocx-top-liked-row{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;padding:9px 10px;border:1px solid #eee5f2;border-radius:12px;background:#fff;cursor:pointer;text-align:left;box-sizing:border-box}
+  .ocx-top-liked-row:hover{background:#faf6fc}
+  .ocx-top-liked-rank{font-weight:900;color:#a6285a;width:20px}
+  .ocx-top-liked-info{min-width:0;flex:1}
+  .ocx-top-liked-author{font-weight:800;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ocx-top-liked-caption{font-size:11px;color:#8b7a95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ocx-top-liked-count{font-size:11px;font-weight:800;color:#8066b5;white-space:nowrap}
+</style>
+
+<style id="ocx-bottom-login-final">
+.ocx-auth{margin-top:20px;}
+#ocxBottomCloudLogin{order:999;}
+#ocxBottomCloudLogin .ocx-toolbar{display:flex;gap:8px;flex-wrap:wrap;}
+#ocxBottomCloudLogin input{width:100%;box-sizing:border-box;margin-bottom:8px;}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">✦ OC Social</div>
+
+  <div class="ocx-search-wrap">
+    <input id="ocxGlobalSearch" class="ocx-global-search" type="search" placeholder="Search users, hashtags, or captions..." autocomplete="off" oninput="OCX.searchSite(this.value)" onfocus="OCX.searchSite(this.value)">
+    <div id="ocxSearchResults" class="ocx-search-results"></div>
+  </div>
+
+  <div class="topbar-user">
+    <span id="topbar-name">@Barista_Arin</span>
+    <div class="avatar" id="topbar-avatar">A</div>
+  </div>
+</header>
+
+
+<main class="app">
+
+  <!-- LEFT -->
+  <aside class="left-column">
+
+    <div class="panel ocx-original-dm-panel" style="display:none">
+      <div class="panel-title">💬 Private DMs</div>
+
+      <label>Chatting with</label>
+
+      <select id="dmRecipient" onchange="changeDM()">
+      </select>
+
+      <div class="dm-list" id="dmList"></div>
+
+      <div class="dm-compose">
+        <input
+          id="dmInput"
+          type="text"
+          placeholder="Write a message..."
+          onkeydown="if(event.key==='Enter') sendDM()"
+        >
+        <button type="button" class="btn btn-light ocx-dm-photo-btn" onclick="document.getElementById('dmPhotoInput').click()" title="Send photo">📷</button>
+        <input id="dmPhotoInput" class="file-input" type="file" accept="image/*" style="display:none" onchange="OCX.sendDMPhoto(this.files[0])">
+        <button class="btn btn-purple" onclick="sendDM()">➤</button>
+      </div>
+    </div>
+
+
+    <div class="panel">
+      <div class="panel-title">👤 Your Account</div>
+
+      <div class="profile-mini">
+        <div class="avatar large" id="leftAvatar"></div>
+
+        <div>
+          <div class="profile-name" id="leftName"></div>
+          <div class="profile-handle" id="leftHandle"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-light btn-full" onclick="openProfileModal()">
+        ✏️ Edit Profile
+      </button>
+    </div>
+
+  </aside>
+
+
+  <!-- CENTER FEED -->
+  <section class="feed">
+
+    <div class="story-bar" id="storyBar"></div>
+
+    <div id="feed"></div>
+
+  </section>
+
+
+  <!-- RIGHT -->
+  <aside class="right-column">
+
+    <div class="panel">
+
+      <div class="panel-title">👤 Active Account</div>
+
+      <label>Switch character</label>
+
+      <select id="actorSelect" onchange="changeActor()"></select>
+
+      <button
+        class="btn btn-light btn-full"
+        onclick="openProfileModal()"
+      >
+        ✏️ Edit This Profile
+      </button>
+
+
+    </div>
+
+  </aside>
+
+</main>
+
+
+<!-- COMMENTS MODAL -->
+
+<div class="modal" id="commentsModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        💬 Comments
+      </div>
+
+      <button class="close" onclick="closeModal('commentsModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-content">
+
+      <div class="comment-list" id="commentList"></div>
+
+      <label>Add comment</label>
+
+      <input
+        id="commentInput"
+        placeholder="Write a comment..."
+        onkeydown="if(event.key==='Enter') addComment()"
+      >
+
+      <button
+        class="btn btn-purple btn-full"
+        onclick="addComment()"
+      >
+        Post Comment
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="ocx-profile-screen" id="ocxProfileScreen" aria-hidden="true">
+  <div class="ocx-profile-card">
+    <button class="ocx-profile-close" onclick="OCX.closeProfile()" aria-label="Close profile">×</button>
+    <div class="ocx-profile-head">
+      <div class="ocx-profile-big-avatar" id="ocxProfileAvatar"></div>
+      <div class="ocx-profile-name" id="ocxProfileName"></div>
+      <div class="ocx-profile-handle" id="ocxProfileHandle"></div>
+      <div class="ocx-profile-bio" id="ocxProfileBio"></div><div class="ocx-profile-status" id="ocxProfileStatus"></div><div class="ocx-profile-extra" id="ocxProfileExtra"></div><div class="ocx-badges" id="ocxProfileBadges"></div>
+    </div>
+    <div class="ocx-profile-stats">
+      <button type="button" class="ocx-profile-stat ocx-profile-stat-btn" id="ocxFollowersStat" onclick="OCX.showConnections('followers')" title="View followers"><strong id="ocxProfileFollowers">0</strong><span>Followers</span></button>
+      <button type="button" class="ocx-profile-stat ocx-profile-stat-btn" id="ocxFollowingStat" onclick="OCX.showConnections('following')" title="View following"><strong id="ocxProfileFollowing">0</strong><span>Following</span></button>
+      <div class="ocx-profile-stat"><strong id="ocxProfilePostCount">0</strong><span>Posts</span></div>
+    </div>
+    <div class="ocx-profile-actions" id="ocxProfileActions"></div>
+    <div class="ocx-profile-messages" id="ocxProfileMessages" style="display:none"></div>
+    <div class="ocx-profile-body">
+      <div class="ocx-profile-section-title">Posts</div>
+      <div class="ocx-profile-posts" id="ocxProfilePosts"></div>
+      <div class="ocx-profile-edit-box" id="ocxProfileEditBox" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+
+<div class="modal" id="profileModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        ✏️ Edit Profile
+      </div>
+
+      <button class="close" onclick="closeModal('profileModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-content">
+
+      <div class="profile-edit-top">
+
+        <div class="avatar large" id="editAvatar"></div>
+
+        <div>
+          <strong id="editProfileHandle"></strong>
+          <div class="small-note">
+            Editing the currently selected OC.
+          </div>
+        </div>
+
+      </div>
+
+
+      <label>Display name</label>
+
+      <input id="editName">
+
+
+      <label>Username</label>
+
+      <input id="editUsername">
+
+
+      <label>Bio</label>
+
+      <textarea id="editBio"></textarea>
+
+
+      <label>Relationship status</label>
+
+      <select id="editRelationship">
+        <option value="">Choose relationship status</option>
+        <option value="Single">Single</option>
+        <option value="Divorced">Divorced</option>
+        <option value="Married">Married</option>
+        <option value="It's complicated">It's complicated</option>
+        <option value="Taken">Taken</option>
+      </select>
+
+
+      <label>Profile picture</label>
+
+      <input
+        class="file-input"
+        type="file"
+        accept="image/*"
+        onchange="loadAvatar(event)"
+      >
+
+
+      <button
+        class="btn btn-purple btn-full"
+        onclick="saveProfile()"
+      >
+        💾 Save Profile
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const defaultCharacters = {
+  Barista_Arin: {
+    name: "Arin",
+    username: "Barista_Arin",
+    bio: "☕ Professional barista. Amateur chaos enthusiast.",
+    avatar: "",
+    color: "#A993D9"
+  },
+
+  Coffee_Shop_Hero: {
+    name: "Coffee Shop Hero",
+    username: "Coffee_Shop_Hero",
+    bio: "⚔️ Somehow always ends up in an adventure.",
+    avatar: "",
+    color: "#C28D72"
+  },
+
+  Grumpy_Regular: {
+    name: "The Grumpy Regular",
+    username: "Grumpy_Regular",
+    bio: "📖 I came here for coffee. Please leave me alone.",
+    avatar: "",
+    color: "#75859A"
+  },
+
+  Chai_Enthusiast: {
+    name: "Chai Enthusiast",
+    username: "Chai_Enthusiast",
+    bio: "✨ Chai solves approximately 72% of life's problems.",
+    avatar: "",
+    color: "#D9A05C"
+  }
+};
+
+
+const defaultDMs = {
+  Coffee_Shop_Hero: [
+    { from: "them", text: "You working tonight?" },
+    { from: "me", text: "Unfortunately." },
+    { from: "them", text: "Perfect. I need caffeine." }
+  ],
+
+  Barista_Arin: [
+    { from: "them", text: "Your usual is ready." }
+  ],
+
+  Grumpy_Regular: [
+    { from: "them", text: "Someone moved my chair." },
+    { from: "me", text: "Tragic." }
+  ],
+
+  Chai_Enthusiast: [
+    { from: "them", text: "I found a new chai place!!" }
+  ]
+};
+
+
+const defaultPost = {
+  author: "Barista_Arin",
+  caption: "Another completely normal day at the coffee shop ☕✨",
+  likes: 32,
+  image: "",
+  comments: [
+    {
+      author: "Coffee_Shop_Hero",
+      text: "This place looks suspiciously peaceful.",
+      likes: 4
+    },
+    {
+      author: "Chai_Enthusiast",
+      text: "WAIT IS THAT MY CUP??",
+      likes: 8
+    },
+    {
+      author: "Grumpy_Regular",
+      text: "Too bright.",
+      likes: 2
+    }
+  ]
+};
+
+
+/* =========================================================
+   LOAD / SAVE
+========================================================= */
+
+function loadData() {
+
+  let savedCharacters =
+    localStorage.getItem("ocCharacters");
+
+  let savedDMs =
+    localStorage.getItem("ocDMs");
+
+  let savedDMs2 =
+    localStorage.getItem("ocDMs2");
+
+  let savedPost =
+    localStorage.getItem("ocPost");
+
+  return {
+    characters: savedCharacters
+      ? JSON.parse(savedCharacters)
+      : structuredClone(defaultCharacters),
+
+    dms: savedDMs
+      ? JSON.parse(savedDMs)
+      : structuredClone(defaultDMs),
+
+    dms2: savedDMs2
+      ? JSON.parse(savedDMs2)
+      : {},
+
+    post: savedPost
+      ? JSON.parse(savedPost)
+      : structuredClone(defaultPost)
+  };
+}
+
+
+let data = loadData();
+
+let activeActor =
+  localStorage.getItem("activeActor") || "Barista_Arin";
+
+let currentDM =
+  localStorage.getItem("currentDM") || "Coffee_Shop_Hero";
+
+
+function saveAll() {
+
+  localStorage.setItem(
+    "ocCharacters",
+    JSON.stringify(data.characters)
+  );
+
+  localStorage.setItem(
+    "ocDMs",
+    JSON.stringify(data.dms)
+  );
+
+  // Extended 1-to-1 DMs (including edits/deletions) must be persisted too.
+  localStorage.setItem(
+    "ocDMs2",
+    JSON.stringify(data.dms2 || {})
+  );
+
+  localStorage.setItem(
+    "ocPost",
+    JSON.stringify(data.post)
+  );
+
+  localStorage.setItem(
+    "activeActor",
+    activeActor
+  );
+
+  localStorage.setItem(
+    "currentDM",
+    currentDM
+  );
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function init() {
+
+  populateActorSelects();
+  renderEverything();
+
+}
+
+
+function populateActorSelects() {
+
+  const actorSelect =
+    document.getElementById("actorSelect");
+
+  const dmRecipient =
+    document.getElementById("dmRecipient");
+
+  const postAuthor =
+    document.getElementById("postAuthor");
+
+
+  actorSelect.innerHTML = "";
+  dmRecipient.innerHTML = "";
+  if(postAuthor) postAuthor.innerHTML = "";
+
+
+  Object.keys(data.characters).forEach(key => {
+
+    const character =
+      data.characters[key];
+
+
+    const option1 =
+      document.createElement("option");
+
+    option1.value = key;
+    option1.textContent =
+      "@" + character.username;
+
+    actorSelect.appendChild(option1);
+
+
+    const option2 =
+      document.createElement("option");
+
+    option2.value = key;
+    option2.textContent =
+      "@" + character.username;
+
+    dmRecipient.appendChild(option2);
+
+
+    const option3 =
+      document.createElement("option");
+
+    option3.value = key;
+    option3.textContent =
+      character.name + " (@" + character.username + ")";
+
+    if(postAuthor) postAuthor.appendChild(option3);
+
+  });
+
+
+  actorSelect.value = activeActor;
+  dmRecipient.value = currentDM;
+  if(postAuthor) postAuthor.value = data.post.author;
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderEverything() {
+
+  renderAccount();
+  renderStories();
+  renderFeed();
+  renderDM();
+  renderPostEditor();
+
+}
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+function renderAccount() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  document.getElementById("topbar-name").textContent =
+    "@" + character.username;
+
+
+  setAvatar(
+    document.getElementById("topbar-avatar"),
+    character
+  );
+
+
+  setAvatar(
+    document.getElementById("leftAvatar"),
+    character
+  );
+  updateUnreadBadge(document.getElementById("topbar-avatar"), character);
+  updateUnreadBadge(document.getElementById("leftAvatar"), character);
+
+
+  document.getElementById("leftName").textContent =
+    character.name;
+
+
+  document.getElementById("leftHandle").textContent =
+    "@" + character.username;
+
+
+  document.getElementById("actorSelect").value =
+    activeActor;
+
+}
+
+
+function setAvatar(element, character) {
+
+  element.innerHTML = "";
+
+  element.style.background =
+    character.color || "#A993D9";
+
+
+  if (character.avatar) {
+
+    const img =
+      document.createElement("img");
+
+    img.src = character.avatar;
+
+    element.appendChild(img);
+
+  } else {
+
+    element.textContent =
+      character.name.charAt(0).toUpperCase();
+
+  }
+
+}
+
+
+/* =========================================================
+   STORIES
+========================================================= */
+
+function renderStories() {
+
+  const bar =
+    document.getElementById("storyBar");
+
+  bar.innerHTML = "";
+
+
+  Object.keys(data.characters).forEach(key => {
+
+    const character =
+      data.characters[key];
+
+
+    const story =
+      document.createElement("div");
+
+    story.className = "story";
+
+
+    const avatar =
+      document.createElement("div");
+
+    avatar.className = "avatar";
+
+
+    setAvatar(avatar, character);
+
+
+    const name =
+      document.createElement("div");
+
+    name.textContent =
+      character.username;
+
+
+    story.appendChild(avatar);
+    story.appendChild(name);
+
+    bar.appendChild(story);
+
+  });
+
+}
+
+
+/* =========================================================
+   FEED
+========================================================= */
+
+function renderFeed() {
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML = "";
+
+
+  const post =
+    data.post;
+
+
+  const author =
+    data.characters[post.author];
+
+
+  const article =
+    document.createElement("article");
+
+  article.className = "post";
+
+
+  /* HEADER */
+
+  const header =
+    document.createElement("div");
+
+  header.className = "post-header";
+
+
+  const user =
+    document.createElement("div");
+
+  user.className = "post-user";
+
+
+  const avatar =
+    document.createElement("div");
+
+  avatar.className = "avatar";
+
+  setAvatar(avatar, author);
+
+
+  const userText =
+    document.createElement("div");
+
+
+  const name =
+    document.createElement("div");
+
+  name.className = "post-user-name";
+
+  name.textContent =
+    author.name;
+
+
+  const handle =
+    document.createElement("div");
+
+  handle.className = "post-user-handle";
+
+  handle.textContent =
+    "@" + author.username;
+
+
+  userText.appendChild(name);
+  userText.appendChild(handle);
+
+  user.appendChild(avatar);
+  user.appendChild(userText);
+
+
+  const menu =
+    document.createElement("button");
+
+  menu.className = "post-menu";
+
+  menu.textContent = "•••";
+
+  menu.onclick = () =>
+    openPostEditor();
+
+
+  header.appendChild(user);
+  header.appendChild(menu);
+
+
+  /* IMAGE */
+
+  let imageElement;
+
+
+  if (post.image) {
+
+    imageElement =
+      document.createElement("img");
+
+    imageElement.className =
+      "post-image";
+
+    imageElement.src =
+      post.image;
+
+  } else {
+
+    imageElement =
+      document.createElement("div");
+
+    imageElement.className =
+      "placeholder-image";
+
+    imageElement.textContent = "✦";
+
+  }
+
+
+  /* ACTIONS */
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "post-actions";
+
+
+  const likeButton =
+    document.createElement("button");
+
+  likeButton.className =
+    "icon-btn like-button";
+
+
+  likeButton.textContent =
+    "♡";
+
+
+  likeButton.onclick = function() {
+
+    post.likes++;
+
+    this.textContent = "♥";
+
+    this.classList.add("liked");
+
+    saveAll();
+    renderFeed();
+    renderPostEditor();
+
+  };
+
+
+  const commentButton =
+    document.createElement("button");
+
+  commentButton.className =
+    "icon-btn";
+
+  commentButton.textContent =
+    "💬";
+
+  commentButton.onclick =
+    openComments;
+
+
+  const editButton =
+    document.createElement("button");
+
+  editButton.className =
+    "icon-btn";
+
+  editButton.textContent =
+    "✏️";
+
+  editButton.onclick =
+    openPostEditor;
+
+
+  actions.appendChild(likeButton);
+  actions.appendChild(commentButton);
+  actions.appendChild(editButton);
+
+
+  /* BODY */
+
+  const body =
+    document.createElement("div");
+
+  body.className =
+    "post-body";
+
+
+  const likes =
+    document.createElement("div");
+
+  likes.className =
+    "likes";
+
+  likes.textContent =
+    post.likes + " likes";
+
+
+  const caption =
+    document.createElement("div");
+
+  caption.className =
+    "caption";
+
+
+  const strong =
+    document.createElement("strong");
+
+  strong.textContent =
+    author.username;
+
+
+  caption.appendChild(strong);
+
+  caption.appendChild(
+    document.createTextNode(
+      " " + post.caption
+    )
+  );
+
+
+  const commentsButton =
+    document.createElement("button");
+
+  commentsButton.className =
+    "view-comments";
+
+  commentsButton.textContent =
+    "View all " +
+    post.comments.length +
+    " comments";
+
+  commentsButton.onclick =
+    openComments;
+
+
+  const date =
+    document.createElement("div");
+
+  date.className =
+    "post-date";
+
+  date.textContent =
+    "OC SOCIAL NETWORK";
+
+
+  body.appendChild(likes);
+  body.appendChild(caption);
+  body.appendChild(commentsButton);
+  body.appendChild(date);
+
+
+  article.appendChild(header);
+  article.appendChild(imageElement);
+  article.appendChild(actions);
+  article.appendChild(body);
+
+
+  feed.appendChild(article);
+
+}
+
+
+/* =========================================================
+   POST EDITOR
+========================================================= */
+
+function renderPostEditor() {
+
+  document.getElementById("postCaption").value =
+    data.post.caption;
+
+  document.getElementById("postLikes").value =
+    data.post.likes;
+
+  if(document.getElementById("postAuthor")) document.getElementById("postAuthor").value =
+    data.post.author;
+
+}
+
+
+function openPostEditor() {
+
+  document.getElementById("postCaption").value =
+    data.post.caption;
+
+  document.getElementById("postLikes").value =
+    data.post.likes;
+
+  if(document.getElementById("postAuthor")) document.getElementById("postAuthor").value =
+    data.post.author;
+
+  document.getElementById("postCaption")
+    .focus();
+
+}
+
+
+function savePost() {
+
+  data.post.caption =
+    document.getElementById("postCaption").value;
+
+  data.post.likes =
+    Math.max(
+      0,
+      Number(
+        document.getElementById("postLikes").value
+      ) || 0
+    );
+
+  data.post.author =
+    document.getElementById("postAuthor").value;
+
+
+  saveAll();
+
+  renderFeed();
+
+  alert("Post saved!");
+
+}
+
+
+function loadPostImage(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = function(e) {
+
+    data.post.image =
+      e.target.result;
+
+    saveAll();
+
+    renderFeed();
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+function resetPost() {
+
+  if (!confirm("Reset the post to its original state?"))
+    return;
+
+
+  data.post =
+    structuredClone(defaultPost);
+
+  saveAll();
+
+  renderFeed();
+  renderPostEditor();
+
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+function openComments() {
+
+  renderComments();
+
+  openModal("commentsModal");
+
+}
+
+
+function renderComments() {
+
+  const list =
+    document.getElementById("commentList");
+
+  list.innerHTML = "";
+
+
+  if (data.post.comments.length === 0) {
+
+    list.innerHTML =
+      "<p style='color:#888;font-size:13px;'>No comments yet.</p>";
+
+    return;
+
+  }
+
+
+  data.post.comments.forEach(
+    (comment, index) => {
+
+      const author =
+        data.characters[comment.author];
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "comment";
+
+
+      const strong =
+        document.createElement("strong");
+
+      strong.textContent =
+        author
+          ? "@" + author.username
+          : "Unknown";
+
+
+      const text =
+        document.createElement("div");
+
+      text.className =
+        "comment-text";
+
+      text.textContent =
+        comment.text;
+
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "comment-actions";
+
+
+      const deleteButton =
+        document.createElement("button");
+
+      deleteButton.textContent =
+        "Delete";
+
+
+      deleteButton.onclick =
+        function() {
+
+          data.post.comments.splice(
+            index,
+            1
+          );
+
+          saveAll();
+
+          renderComments();
+          renderFeed();
+
+        };
+
+
+      const editButton =
+        document.createElement("button");
+
+      editButton.textContent =
+        "Edit";
+
+
+      editButton.onclick =
+        function() {
+
+          const replacement =
+            prompt(
+              "Edit comment:",
+              comment.text
+            );
+
+
+          if (
+            replacement !== null &&
+            replacement.trim()
+          ) {
+
+            comment.text =
+              replacement.trim();
+
+            saveAll();
+
+            renderComments();
+            renderFeed();
+
+          }
+
+        };
+
+
+      actions.appendChild(editButton);
+      actions.appendChild(deleteButton);
+
+
+      item.appendChild(strong);
+      item.appendChild(text);
+      item.appendChild(actions);
+
+
+      list.appendChild(item);
+
+    }
+  );
+
+}
+
+
+function addComment() {
+
+  const input =
+    document.getElementById("commentInput");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text)
+    return;
+
+
+  data.post.comments.push({
+
+    author: activeActor,
+
+    text: text,
+
+    likes: 0
+
+  });
+
+
+  input.value = "";
+
+
+  saveAll();
+
+  renderComments();
+  renderFeed();
+
+}
+
+
+/* =========================================================
+   DMS
+========================================================= */
+
+function changeDM() {
+
+  currentDM =
+    document.getElementById("dmRecipient").value;
+
+
+  saveAll();
+
+  renderDM();
+
+}
+
+
+function renderDM() {
+
+  const list =
+    document.getElementById("dmList");
+
+
+  list.innerHTML = "";
+
+
+  const messages =
+    data.dms[currentDM] || [];
+
+
+  messages.forEach(message => {
+
+    const bubble =
+      document.createElement("div");
+
+
+    bubble.className =
+      "message " +
+      (
+        message.from === "me"
+          ? "me"
+          : "them"
+      );
+
+
+    bubble.textContent =
+      message.text;
+
+
+    list.appendChild(bubble);
+
+  });
+
+
+  list.scrollTop =
+    list.scrollHeight;
+
+}
+
+
+function sendDM() {
+
+  const input =
+    document.getElementById("dmInput");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text)
+    return;
+
+
+  if (!data.dms[currentDM])
+    data.dms[currentDM] = [];
+
+
+  data.dms[currentDM].push({
+
+    from: "me",
+
+    text: text
+
+  });
+
+
+  input.value = "";
+
+
+  saveAll();
+
+  renderDM();
+
+}
+
+
+/* =========================================================
+   ACTOR SWITCHING
+========================================================= */
+
+function changeActor() {
+
+  activeActor =
+    document.getElementById("actorSelect").value;
+
+
+  saveAll();
+
+  renderEverything();
+
+}
+
+
+/* =========================================================
+   PROFILE EDITOR
+========================================================= */
+
+function openProfileModal() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  document.getElementById("editName").value =
+    character.name;
+
+
+  document.getElementById("editUsername").value =
+    character.username;
+
+
+  document.getElementById("editBio").value =
+    character.bio;
+
+  const profileMeta = data.settings?.profileMeta?.[activeActor] || {};
+  const relationshipSelect = document.getElementById("editRelationship");
+  if (relationshipSelect) relationshipSelect.value = profileMeta.relationship || "";
+
+
+  document.getElementById("editProfileHandle").textContent =
+    "@" + character.username;
+
+
+  setAvatar(
+    document.getElementById("editAvatar"),
+    character
+  );
+
+
+  openModal("profileModal");
+
+}
+
+
+function loadAvatar(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  openCropper(file, function(cropped){
+    data.characters[activeActor].avatar = cropped;
+    setAvatar(document.getElementById("editAvatar"), data.characters[activeActor]);
+    event.target.value = "";
+  });
+}
+
+
+function createRelationshipChangePost(actor, oldRelationship, newRelationship) {
+  if (oldRelationship === newRelationship || !newRelationship) return;
+  const character = data.characters[actor] || {};
+  if (!Array.isArray(data.posts)) data.posts = [];
+  data.posts.push({
+    id: "post_" + Date.now() + "_relationship_" + Math.random().toString(36).slice(2,8),
+    author: actor,
+    caption: (character.username || actor) + " has changed their relationship status to " + newRelationship,
+    likes: 0,
+    image: character.avatar || "",
+    comments: [],
+    createdAt: Date.now(),
+    relationshipUpdate: true
+  });
+}
+
+function saveProfile() {
+
+  const character =
+    data.characters[activeActor];
+
+
+  character.name =
+    document.getElementById("editName").value.trim()
+    || character.name;
+
+
+  character.username =
+    document.getElementById("editUsername").value.trim()
+    || character.username;
+
+
+  character.bio =
+    document.getElementById("editBio").value.trim();
+
+  if (!data.settings) data.settings = {};
+  if (!data.settings.profileMeta) data.settings.profileMeta = {};
+  const relationship = document.getElementById("editRelationship")?.value || "";
+  const existingMeta = data.settings.profileMeta[activeActor] || {};
+  const oldRelationship = existingMeta.relationship || "";
+  data.settings.profileMeta[activeActor] = { ...existingMeta, relationship };
+  createRelationshipChangePost(activeActor, oldRelationship, relationship);
+
+
+  saveExtended();
+
+  populateActorSelects();
+
+  renderEverything();
+
+  closeModal("profileModal");
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.add("open");
+
+}
+
+
+function closeModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.remove("open");
+
+}
+
+
+/* Close when clicking outside modal */
+
+document.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target.classList.contains("modal")
+    ) {
+
+      event.target.classList.remove("open");
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
+
+</script>
+<style>
+.ocx-crop-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:10000;padding:18px}
+.ocx-crop-box{width:min(92vw,560px);background:#fff;border-radius:18px;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.ocx-crop-title{font-size:18px;font-weight:800;margin-bottom:12px}
+.ocx-crop-stage{width:100%;aspect-ratio:1/1;background:#111;position:relative;overflow:hidden;border-radius:12px;touch-action:none;cursor:grab}
+.ocx-crop-stage:active{cursor:grabbing}
+.ocx-crop-stage img{position:absolute;max-width:none;user-select:none;pointer-events:none}
+.ocx-crop-guide{position:absolute;inset:0;border:2px solid rgba(255,255,255,.9);box-shadow:0 0 0 9999px rgba(0,0,0,.32);pointer-events:none}
+.ocx-crop-controls{display:flex;align-items:center;gap:10px;margin:14px 0}
+.ocx-crop-controls input{flex:1}
+.ocx-crop-actions{display:flex;gap:10px;justify-content:flex-end}
+</style>
+<div id="ocxCropOverlay" class="ocx-crop-overlay">
+  <div class="ocx-crop-box">
+    <div class="ocx-crop-title">✂️ Crop photo</div>
+    <div id="ocxCropStage" class="ocx-crop-stage"><img id="ocxCropImage" alt="Crop preview"><div class="ocx-crop-guide"></div></div>
+    <div class="ocx-crop-controls"><span>Zoom</span><input id="ocxCropZoom" type="range" min="1" max="3" step="0.01" value="1"></div>
+    <div class="ocx-crop-actions"><button class="btn" type="button" onclick="OCX.cancelCrop()">Cancel</button><button class="btn btn-purple" type="button" onclick="OCX.applyCrop()">Use crop</button></div>
+  </div>
+</div>
+
+
+
+<!-- =========================================================
+     OC SOCIAL EXTENSION
+     Added without changing the original OC Social code above.
+     - Multiple characters
+     - Multiple posts
+     - Threaded comment replies
+     - Private 1-to-1 DM threads
+     - Optional Firebase cloud sync/auth for cross-device accounts
+     ========================================================= -->
+
+<style id="oc-extension-style">
+  .ocx-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .ocx-toolbar .btn{flex:1;min-width:120px}
+  .ocx-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;background:var(--purple-light);color:var(--purple-dark);font-size:11px;font-weight:800}
+  .ocx-post-meta{display:flex;gap:8px;align-items:center;margin-top:7px}
+  .ocx-reply{margin:8px 0 0 18px;padding:8px 10px;border-left:2px solid #e6dff3;background:#fbfaff;border-radius:0 8px 8px 0}
+  .ocx-reply-box{display:flex;gap:6px;margin-top:7px}
+  .ocx-reply-box input{min-width:0;padding:7px 9px}
+  .ocx-comment-tools{display:flex;gap:9px;margin-top:5px}
+  .ocx-comment-tools button{border:0;background:none;color:#888;cursor:pointer;font-size:11px;padding:0}
+  .ocx-dm-header{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .ocx-dm-status{font-size:10px;color:#999}
+  .ocx-dm-row{display:flex;flex-direction:column;gap:3px}
+  .ocx-message-meta,.ocx-comment-meta,.ocx-reply-meta{font-size:10px;color:#aaa5ad;line-height:1.2}
+  .ocx-dm-row:has(.message.me) .ocx-message-meta{text-align:right}
+  .ocx-edited{font-style:italic}
+  .ocx-auth{background:linear-gradient(135deg,#faf7ff,#fff);border:1px solid #e7def4}
+  .ocx-auth-row{display:flex;gap:6px}
+  .ocx-auth-row input{min-width:0}
+  .ocx-cloud{font-size:10px;color:#777;margin-top:8px;line-height:1.35}
+  .ocx-online{color:#5b9b68;font-weight:800}
+  .ocx-offline{color:#a66b6b;font-weight:800}
+  .ocx-modal-wide{max-width:650px}
+  .ocx-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ocx-post-list{display:grid;gap:8px}
+  .ocx-post-item{border:1px solid #eee;border-radius:9px;padding:9px;display:flex;justify-content:space-between;gap:8px}
+  .ocx-post-item small{color:#888}
+  .ocx-empty{color:#888;font-size:13px;padding:10px 0}
+  .ocx-post-tags{font-size:12px;color:#7b63a6;margin-top:7px;font-weight:700}
+  @media(max-width:750px){
+    .ocx-grid{grid-template-columns:1fr}
+    .ocx-auth-row{flex-direction:column}
+  }
+</style>
+
+<!-- Firebase compat SDKs are loaded only for the optional cloud mode. -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+<script id="oc-extension-script">
+(function(){
+  "use strict";
+
+  /* ---------------------------------------------------------
+     CLOUD CONFIG
+     Create a Firebase project, enable Email/Password Auth and
+     Firestore, then paste your web-app config below.
+     Until configured, the site continues using localStorage.
+     --------------------------------------------------------- */
+  const OC_FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAt90JkX0O3gjTreRE2okrwYVJYv25kkyw",
+    authDomain: "oc-social-media.firebaseapp.com",
+    projectId: "oc-social-media",
+    storageBucket: "oc-social-media.firebasestorage.app",
+    messagingSenderId: "143069054681",
+    appId: "1:143069054681:web:7f93c8bade14fe91c120c8"
+  };
+
+  let cloud = { enabled:false, user:null, db:null, auth:null, unsub:null };
+  let cloudSaveTimer = null;
+  let localCloudDirty = false;
+  let cloudSyncReady = false;
+  let cloudSyncInProgress = false;
+  let selectedPostId = null;
+
+  const clone = x => JSON.parse(JSON.stringify(x));
+  const keyPair = (a,b) => [a,b].sort().join("__");
+  const safe = x => String(x ?? "").trim();
+  function formatTimestamp(ts){
+    const n=Number(ts);
+    if(!Number.isFinite(n)) return "";
+    const d=new Date(n);
+    if(Number.isNaN(d.getTime())) return "";
+    return d.toLocaleString([], {month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+  }
+
+  function toDateTimeLocal(ts){
+    const d=new Date(Number(ts)||Date.now());
+    const pad=n=>String(n).padStart(2,"0");
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function timestampFromInput(value,fallback){
+    const n=value ? new Date(value).getTime() : NaN;
+    return Number.isFinite(n) ? n : (Number(fallback)||Date.now());
+  }
+
+  function cloudConfigured(){
+    return OC_FIREBASE_CONFIG.apiKey &&
+      !OC_FIREBASE_CONFIG.apiKey.startsWith("PASTE_") &&
+      OC_FIREBASE_CONFIG.projectId &&
+      !OC_FIREBASE_CONFIG.projectId.startsWith("PASTE_");
+  }
+
+  /* New normalized data lives alongside the original data object. */
+  function ensureExtendedData(){
+    if(!Array.isArray(data.posts)){
+      data.posts = [{
+        id:"post_"+Date.now(),
+        author:data.post.author,
+        caption:data.post.caption,
+        likes:Number(data.post.likes)||0,
+        image:data.post.image||"",
+        comments:(data.post.comments||[]).map((c,i)=>({
+          id:"comment_"+i+"_"+Date.now(),
+          author:c.author,text:c.text,likes:c.likes||0,replies:c.replies||[]
+        })),
+        createdAt:Date.now()
+      }];
+    }
+    if(!data.dms2) data.dms2 = {};
+    if(!data.settings) data.settings = {};
+    if(!data.posts.length){
+      data.posts.push({
+        id:"post_"+Date.now(),author:activeActor,caption:"",likes:0,image:"",
+        comments:[],createdAt:Date.now()
+      });
+    }
+    const now=Date.now();
+    data.posts.forEach((post,pi)=>{
+      if(!post.createdAt) post.createdAt=now-(data.posts.length-1-pi)*60000;
+      if(!Array.isArray(post.comments)) post.comments=[];
+      post.comments.forEach((c,ci)=>{
+        if(!c.id) c.id="comment_"+ci+"_"+Date.now();
+        if(!c.createdAt) c.createdAt=post.createdAt || now;
+        if(!Array.isArray(c.replies)) c.replies=[];
+        c.replies.forEach((r,ri)=>{
+          if(!r.id) r.id="reply_"+ri+"_"+Date.now();
+          if(!r.createdAt) r.createdAt=c.createdAt || now;
+        });
+      });
+    });
+    Object.keys(data.dms2||{}).forEach(k=>{
+      (data.dms2[k]||[]).forEach((m,i)=>{
+        if(!m.id) m.id="msg_"+Date.now()+"_"+i;
+        if(!m.createdAt) m.createdAt=now-(data.dms2[k].length-1-i)*60000;
+        if(!Array.isArray(m.readBy)) m.readBy = m.from ? [m.from] : [];
+      });
+    });
+    syncLegacyPost();
+  }
+
+  function syncLegacyPost(){
+    const first = data.posts[0];
+    if(first){
+      data.post = {
+        author:first.author,caption:first.caption,likes:first.likes,
+        image:first.image,comments:first.comments
+      };
+    }
+  }
+
+  function renderTopLikedPosts(){
+    const list=document.getElementById("ocxTopLikedList");
+    if(!list) return;
+    const entries=(Array.isArray(data.posts)?data.posts:[])
+      .filter(p=>p && p.id)
+      .map(p=>({post:p,likes:Number(p.likes)||0}))
+      .sort((a,b)=>b.likes-a.likes || Number(b.post.createdAt||0)-Number(a.post.createdAt||0))
+      .slice(0,3);
+    list.innerHTML="";
+    if(!entries.length){list.innerHTML='<div class="ocx-empty">No posts yet.</div>';return;}
+    entries.forEach(({post,likes},i)=>{
+      const author=data.characters[post.author]||{};
+      const row=document.createElement("button");
+      row.type="button";
+      row.className="ocx-top-liked-row";
+      row.innerHTML=`<div class="ocx-top-liked-rank">${i+1}</div><div class="ocx-top-liked-info"><div class="ocx-top-liked-author">${escapeHtml(author.name||author.username||"Unknown")}</div><div class="ocx-top-liked-caption">${escapeHtml(post.caption||"Photo post")}</div></div><div class="ocx-top-liked-count">${formatCount(likes)} ❤️</div>`;
+      row.onclick=()=>openProfilePost(post.id);
+      list.appendChild(row);
+    });
+  }
+
+  function renderTopFollowers(){
+    const list=document.getElementById("ocxTopFollowersList");
+    if(!list) return;
+    const entries=Object.keys(data.characters||{}).map(k=>{
+      const c=data.characters[k];
+      ensureProfileFields(c);
+      return {key:k,character:c,followers:Number(c.followers)||0};
+    }).sort((a,b)=>b.followers-a.followers || String(a.character.name||a.key).localeCompare(String(b.character.name||b.key))).slice(0,5);
+    list.innerHTML="";
+    if(!entries.length){list.innerHTML='<div class="ocx-empty">No profiles yet.</div>';return;}
+    entries.forEach(({key,character,followers})=>{
+      const row=document.createElement("button");
+      row.type="button";
+      row.className="ocx-top-follower-row";
+      const av=document.createElement("div");
+      av.className="avatar";
+      setAvatar(av,character);
+      const info=document.createElement("div");
+      info.className="ocx-top-follower-info";
+      info.innerHTML=`<div class="ocx-top-follower-name">${escapeHtml(character.name||key)}</div><div class="ocx-top-follower-handle">@${escapeHtml(character.username||key)}</div>`;
+      const count=document.createElement("div");
+      count.className="ocx-top-follower-count";
+      count.textContent=Number(followers).toLocaleString()+" followers";
+      row.append(av,info,count);
+      row.onclick=()=>openCharacterProfile(key);
+      list.appendChild(row);
+    });
+  }
+
+  /* ---------- Dynamic UI additions ---------- */
+  function addExtensionUI(){
+    if(!document.getElementById("ocxImageLightbox")){
+      const lb=document.createElement("div");
+      lb.id="ocxImageLightbox";lb.className="ocx-image-lightbox";
+      lb.innerHTML='<button type="button" class="ocx-image-lightbox-close" aria-label="Close image">×</button><img id="ocxLightboxImage" alt="Expanded post photo">';
+      document.body.appendChild(lb);
+      lb.querySelector(".ocx-image-lightbox-close").onclick=closeImageLightbox;
+      lb.addEventListener("click",e=>{if(e.target===lb)closeImageLightbox();});
+    }
+    const right = document.querySelector(".right-column .panel");
+    if(!right || document.getElementById("ocxTools")) return;
+
+    const topFollowers = document.createElement("div");
+    topFollowers.id="ocxTopFollowers";
+    topFollowers.className="panel";
+    topFollowers.innerHTML=`<div class="panel-title">👑 Most Followed</div><div class="ocx-top-followers-list" id="ocxTopFollowersList"></div>`;
+    right.parentNode.insertBefore(topFollowers, right);
+    renderTopFollowers();
+
+    const topLiked = document.createElement("div");
+    topLiked.id="ocxTopLiked";
+    topLiked.className="panel";
+    topLiked.innerHTML=`<div class="panel-title">❤️ Top 3 Most Liked Posts</div><div class="ocx-top-liked-list" id="ocxTopLikedList"></div>`;
+    topFollowers.insertAdjacentElement("afterend", topLiked);
+    renderTopLikedPosts();
+
+    const tools = document.createElement("div");
+    tools.id="ocxTools";
+    tools.className="editor-section";
+    tools.innerHTML=`
+      <div class="panel-title">✦ OC Studio</div>
+      <div class="ocx-toolbar">
+        <button class="btn btn-purple" onclick="OCX.openCharacterCreator()">＋ Character</button>
+        <button class="btn btn-light" onclick="OCX.openPostCreator()">＋ Post</button>
+      </div>
+      <div class="ocx-toolbar">
+        <button class="btn btn-light" onclick="OCX.openPostManager()">🗂 Posts</button>
+        
+      </div>
+      <p class="small-note">Characters, posts, replies and private conversations are kept in your current data store. Cloud mode makes the same account available on other devices.</p>
+    `;
+    right.appendChild(tools);
+
+    // The only visible Cloud Login is kept at the very bottom of the right sidebar.
+    if(!document.getElementById("ocxBottomCloudLogin")){
+      const auth=document.createElement("div");
+      auth.id="ocxBottomCloudLogin";
+      auth.className="panel ocx-auth";
+      auth.innerHTML=`<div class="panel-title">☁ Cloud Login</div>
+        <div class="small-note">Sign in to sync your OCs, posts and messages across devices.</div>
+        <label>Email</label><input id="ocxBottomEmail" type="email" autocomplete="email" placeholder="you@example.com">
+        <label>Password</label><input id="ocxBottomPassword" type="password" autocomplete="current-password" placeholder="Password">
+        <div class="ocx-toolbar">
+          <button class="btn btn-purple" id="ocxBottomSignIn">Sign in</button>
+          <button class="btn btn-light" id="ocxBottomRegister">Create account</button>
+        </div>
+        <button class="btn btn-light btn-full" id="ocxBottomSignOut" style="display:none;margin-top:8px">Sign out</button>
+        <div id="ocxBottomCloudText" class="small-note" style="margin-top:8px">Local mode</div>`;
+      right.appendChild(auth);
+      document.getElementById("ocxBottomSignIn").onclick=cloudLoginBottom;
+      document.getElementById("ocxBottomRegister").onclick=cloudRegisterBottom;
+      document.getElementById("ocxBottomSignOut").onclick=cloudLogout;
+    }
+  }
+
+  function modal(id,title,content,wide){
+    let m=document.getElementById(id);
+    if(m) m.remove();
+    m=document.createElement("div");
+    m.className="modal";
+    m.id=id;
+    m.innerHTML=`<div class="modal-box ${wide?"ocx-modal-wide":""}">
+      <div class="modal-header"><div class="modal-title">${title}</div><button class="close" onclick="OCX.close('${id}')">×</button></div>
+      <div class="modal-content">${content}</div>
+    </div>`;
+    document.body.appendChild(m);
+    openModal(id);
+    return m;
+  }
+
+  function openImageLightbox(src){
+    const lb=document.getElementById("ocxImageLightbox");
+    const img=document.getElementById("ocxLightboxImage");
+    if(!lb||!img||!src)return;
+    img.src=src;
+    lb.classList.add("show");
+    document.body.style.overflow="hidden";
+  }
+
+  function closeImageLightbox(){
+    const lb=document.getElementById("ocxImageLightbox");
+    const img=document.getElementById("ocxLightboxImage");
+    if(lb)lb.classList.remove("show");
+    if(img)img.removeAttribute("src");
+    document.body.style.overflow="";
+  }
+
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeImageLightbox();});
+
+  /* ---------- Character creation ---------- */
+  function openCharacterCreator(){
+    modal("ocxCharacterModal","✦ Create Character",`
+      <label>Display name</label><input id="ocxNewName" placeholder="Your OC's name">
+      <label>Username</label><input id="ocxNewUsername" placeholder="Unique username">
+      <label>Bio</label><textarea id="ocxNewBio" placeholder="A short bio..."></textarea>
+      <label>Accent color</label><input id="ocxNewColor" type="color" value="#A993D9" style="height:42px;padding:4px">
+      <button class="btn btn-purple btn-full" onclick="OCX.createCharacter()">Create Character</button>
+    `);
+  }
+
+  function createCharacter(){
+    const name=safe(document.getElementById("ocxNewName").value);
+    let username=safe(document.getElementById("ocxNewUsername").value).replace(/^@/,"").replace(/\s+/g,"_");
+    if(!name || !username){ alert("Please add a name and username."); return; }
+    const exists=Object.keys(data.characters).some(k=>data.characters[k].username.toLowerCase()===username.toLowerCase());
+    if(exists){ alert("That username is already in use."); return; }
+    const id=username.replace(/[^\w-]/g,"_")+"_"+Date.now();
+    data.characters[id]={name,username,bio:safe(document.getElementById("ocxNewBio").value),avatar:"",color:document.getElementById("ocxNewColor").value};
+    activeActor=id;
+    currentDM=Object.keys(data.characters).find(k=>k!==id) || id;
+    if(!data.dms2[keyPair(id,currentDM)]) data.dms2[keyPair(id,currentDM)]=[];
+    saveExtended();
+    populateActorSelects();
+    renderEverything();
+    closeModal("ocxCharacterModal");
+  }
+
+  /* ---------- Multiple posts ---------- */
+  function openPostCreator(editId){
+    const p=editId ? data.posts.find(x=>x.id===editId) : null;
+    modal("ocxPostModal",p?"✏️ Edit Post":"＋ New Post",`
+      <label>Post author</label><select id="ocxPostAuthor">${Object.keys(data.characters).map(k=>`<option value="${k}" ${((p?.author||activeActor)===k)?"selected":""}>${data.characters[k].name} (@${data.characters[k].username})</option>`).join("")}</select>
+      <label>Caption</label><textarea id="ocxPostCaption" placeholder="Write your OC's caption...">${p?escapeHtml(p.caption):""}</textarea>
+      <label>Tag users</label><select id="ocxPostTags" multiple size="5">${Object.keys(data.characters).map(k=>`<option value="${k}" ${(p?.tags||[]).includes(k)?"selected":""}>@${escapeHtml(data.characters[k].username)}</option>`).join("")}<option value="__NONE__" ${!(p?.tags||[]).length?"selected":""}>Nobody</option></select>
+      <div class="small-note">Choose Nobody to leave the post untagged. Hold Ctrl (Windows) or Command (Mac) to select multiple users.</div>
+      <div class="ocx-grid">
+        <div><label>Likes</label><input id="ocxPostLikes" type="number" min="0" value="${p?Number(p.likes)||0:0}"></div>
+        <div><label>Photo URL (optional)</label><input id="ocxPostImageUrl" placeholder="https://..." value="${p?escapeAttr(p.image):""}"></div>
+      </div>
+      <label>Date &amp; time</label><input id="ocxPostDateTime" type="datetime-local" value="${toDateTimeLocal(p?.createdAt||Date.now())}">
+      <div class="small-note">You can choose any date, time, and year.</div>
+      <label>Upload photo</label><input id="ocxPostFile" class="file-input" type="file" accept="image/*">
+      <button class="btn btn-purple btn-full" onclick="OCX.savePost('${editId||""}')">${p?"Save Changes":"Publish Post"}</button>
+    `);
+    const tagSelect=document.getElementById("ocxPostTags");
+    if(tagSelect){
+      tagSelect.addEventListener("change",()=>{
+        const none=tagSelect.querySelector('option[value="__NONE__"]');
+        if(tagSelect.selectedOptions.length>1 && none?.selected) none.selected=false;
+        if(none?.selected){[...tagSelect.options].forEach(o=>{if(o.value!=="__NONE__")o.selected=false;});}
+      });
+    }
+  }
+
+  function savePostExtended(id){
+    const finish=(image)=>{
+      const author=document.getElementById("ocxPostAuthor").value;
+      const caption=safe(document.getElementById("ocxPostCaption").value);
+      const likes=Math.max(0,Number(document.getElementById("ocxPostLikes").value)||0);
+      const tags=[...document.getElementById("ocxPostTags").selectedOptions].map(o=>o.value).filter(v=>v!=="__NONE__");
+      const createdAt=timestampFromInput(document.getElementById("ocxPostDateTime")?.value,Date.now());
+      if(id){
+        const p=data.posts.find(x=>x.id===id);
+        if(p){p.author=author;p.caption=caption;p.likes=likes;p.tags=tags;p.createdAt=createdAt;if(image!==undefined)p.image=image;p.updatedAt=Date.now();}
+      }else{
+        data.posts.unshift({id:"post_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),author,caption,likes,tags,image:image||safe(document.getElementById("ocxPostImageUrl").value),comments:[],createdAt});
+      }
+      syncLegacyPost(); saveExtended(); renderFeed(); renderPostEditor(); closeModal("ocxPostModal");
+    };
+    const file=document.getElementById("ocxPostFile").files[0];
+    if(file){
+      openCropper(file, finish);
+    } else finish(undefined);
+  }
+
+  function openPostManager(){
+    modal("ocxPostsModal","🗂 Manage Posts",`
+      <button class="btn btn-purple btn-full" onclick="OCX.openPostCreator()">＋ New Post</button>
+      <div class="ocx-post-list" id="ocxPostList" style="margin-top:12px"></div>
+    `,true);
+    renderPostManager();
+  }
+
+  function renderPostManager(){
+    const list=document.getElementById("ocxPostList"); if(!list)return;
+    list.innerHTML="";
+    data.posts.forEach((p,i)=>{
+      const a=data.characters[p.author];
+      const item=document.createElement("div"); item.className="ocx-post-item";
+      item.innerHTML=`<div><strong>${escapeHtml(a?.name||"Unknown")}</strong><br><small>${escapeHtml((p.caption||"").slice(0,90))}</small></div>
+      <div style="display:flex;gap:5px"><button class="btn btn-light" onclick="OCX.editPost('${p.id}')">Edit</button><button class="btn btn-danger" onclick="OCX.deletePost('${p.id}')">Delete</button></div>`;
+      list.appendChild(item);
+    });
+    if(!data.posts.length) list.innerHTML='<div class="ocx-empty">No posts yet.</div>';
+  }
+
+  function deletePost(id){
+    if(data.posts.length<=1 && !confirm("Delete the only post?")) return;
+    if(!confirm("Delete this post and its comments?")) return;
+    data.posts=data.posts.filter(p=>p.id!==id);
+    syncLegacyPost();saveExtended();renderFeed();renderPostManager();
+  }
+
+  /* ---------- Feed with multiple posts ---------- */
+  function renderFeedExtended(){
+    ensureExtendedData();
+    const feed=document.getElementById("feed"); if(!feed)return;
+    feed.innerHTML="";
+    data.posts.forEach(post=>{
+      const author=data.characters[post.author]; if(!author)return;
+      const article=document.createElement("article");article.className="post";article.dataset.postId=post.id;
+      const header=document.createElement("div");header.className="post-header";
+      const user=document.createElement("div");user.className="post-user";
+      const av=document.createElement("div");av.className="avatar";setAvatar(av,author);
+      const txt=document.createElement("div");
+      txt.innerHTML=`<div class="post-user-name">${escapeHtml(author.name)}</div><div class="post-user-handle">@${escapeHtml(author.username)}</div>`;
+      user.append(av,txt);
+      const menu=document.createElement("button");menu.className="post-menu";menu.textContent="•••";menu.onclick=()=>OCX.openPostCreator(post.id);
+      header.append(user,menu);
+
+      let img;
+      if(post.image){img=document.createElement("img");img.className="post-image";img.src=post.image;img.alt="Post photo";img.onclick=()=>openImageLightbox(post.image);}
+      else{img=document.createElement("div");img.className="placeholder-image";img.textContent="✦";}
+
+      const actions=document.createElement("div");actions.className="post-actions";
+      const like=document.createElement("button");like.className="icon-btn like-button";like.textContent="♡";like.onclick=()=>{post.likes++;saveExtended();renderFeedExtended();};
+      const comment=document.createElement("button");comment.className="icon-btn";comment.textContent="💬";comment.onclick=()=>OCX.openComments(post.id);
+      const edit=document.createElement("button");edit.className="icon-btn";edit.textContent="✏️";edit.onclick=()=>OCX.openPostCreator(post.id);
+      actions.append(like,comment,edit);
+
+      const body=document.createElement("div");body.className="post-body";
+      body.innerHTML=`<div class="likes">${formatCount(post.likes)} likes</div>`;const cap=document.createElement('div');cap.className='caption';const strongCap=document.createElement('strong');strongCap.textContent=author.username;cap.appendChild(strongCap);cap.appendChild(document.createTextNode(' '));cap.appendChild(linkifyHashtags(post.caption||''));body.appendChild(cap);
+      if(Array.isArray(post.tags) && post.tags.length){const tags=document.createElement("div");tags.className="ocx-post-tags";tags.textContent="Tagged: "+post.tags.map(k=>"@"+(data.characters[k]?.username||k)).join(", ");body.appendChild(tags);}
+      const cb=document.createElement("button");cb.className="view-comments";cb.textContent=`View all ${formatCount(post.comments?.length||0)} comments`;cb.onclick=()=>OCX.openComments(post.id);
+      const date=document.createElement("div");date.className="post-date";
+      date.textContent=formatTimestamp(post.createdAt)+(post.updatedAt?" · edited":"");
+      body.append(cb,date);
+      article.append(header,img,actions,body);feed.appendChild(article);
+    });
+  }
+
+  /* ---------- Threaded comments ---------- */
+  function openCommentsExtended(postId){
+    selectedPostId=postId || data.posts[0]?.id;
+    modal("ocxCommentsModal","💬 Comments",`
+      <div class="comment-list" id="ocxCommentList"></div>
+      <label>Add comment as @${escapeHtml(data.characters[activeActor]?.username||"")}</label>
+      <input id="ocxCommentInput" placeholder="Write a comment..." onkeydown="if(event.key==='Enter') OCX.addComment()">
+      <button class="btn btn-purple btn-full" onclick="OCX.addComment()">Post Comment</button>
+    `,true);
+    renderCommentsExtended();
+  }
+
+  function renderCommentsExtended(){
+    const list=document.getElementById("ocxCommentList");if(!list)return;
+    const p=data.posts.find(x=>x.id===selectedPostId);if(!p)return;
+    list.innerHTML="";
+    (p.comments||[]).forEach((c,idx)=>{
+      const wrap=document.createElement("div");wrap.className="comment";
+      const a=data.characters[c.author];
+      const ctime=formatTimestamp(c.createdAt);
+      const cmeta=ctime+(c.updatedAt?" · edited":"");
+      wrap.innerHTML=`<strong>@${escapeHtml(a?.username||"unknown")}</strong><div class="comment-text">${escapeHtml(c.text)}</div><div class="ocx-comment-meta">${escapeHtml(cmeta)}</div>`;
+      const tools=document.createElement("div");tools.className="ocx-comment-tools";
+      const reply=document.createElement("button");reply.textContent="Reply";reply.onclick=()=>showReplyBox(wrap,c.id);
+      const edit=document.createElement("button");edit.textContent="Edit";edit.onclick=()=>{const n=prompt("Edit comment:",c.text);if(n?.trim()){c.text=n.trim();c.updatedAt=Date.now();saveExtended();renderCommentsExtended();renderFeedExtended();}};
+      const del=document.createElement("button");del.textContent="Delete";del.onclick=()=>{p.comments.splice(idx,1);saveExtended();renderCommentsExtended();renderFeedExtended();};
+      tools.append(reply,edit,del);wrap.appendChild(tools);
+
+      (c.replies||[]).forEach(r=>{
+        const rr=document.createElement("div");rr.className="ocx-reply";
+        const rtime=formatTimestamp(r.createdAt);
+        rr.innerHTML=`<strong>@${escapeHtml(data.characters[r.author]?.username||"unknown")}</strong><div class="comment-text">${escapeHtml(r.text)}</div><div class="ocx-reply-meta">${escapeHtml(rtime)}</div>`;
+        wrap.appendChild(rr);
+      });
+      list.appendChild(wrap);
+    });
+    if(!p.comments.length)list.innerHTML='<div class="ocx-empty">No comments yet. Start the conversation.</div>';
+  }
+
+  function showReplyBox(parent,commentId){
+    document.querySelectorAll(".ocx-reply-box").forEach(x=>x.remove());
+    const box=document.createElement("div");box.className="ocx-reply-box";
+    box.innerHTML=`<input placeholder="Write a reply..." onkeydown="if(event.key==='Enter') OCX.addReply('${commentId}',this)"><button class="btn btn-purple">Reply</button>`;
+    box.querySelector("button").onclick=()=>OCX.addReply(commentId,box.querySelector("input"));
+    parent.appendChild(box);box.querySelector("input").focus();
+  }
+
+  function addReply(commentId,input){
+    const p=data.posts.find(x=>x.id===selectedPostId);if(!p)return;
+    const c=p.comments.find(x=>x.id===commentId);if(!c)return;
+    const text=safe(input.value);if(!text)return;
+    if(!c.replies)c.replies=[];
+    c.replies.push({id:"reply_"+Date.now(),author:activeActor,text,createdAt:Date.now()});
+    input.value="";saveExtended();renderCommentsExtended();renderFeedExtended();
+  }
+
+  function addCommentExtended(){
+    const input=document.getElementById("ocxCommentInput");const text=safe(input.value);if(!text)return;
+    const p=data.posts.find(x=>x.id===selectedPostId);if(!p)return;
+    if(!p.comments)p.comments=[];
+    p.comments.push({id:"comment_"+Date.now(),author:activeActor,text,likes:0,replies:[],createdAt:Date.now()});
+    input.value="";saveExtended();renderCommentsExtended();renderFeedExtended();
+  }
+
+  /* ---------- Proper 1-to-1 DMs ---------- */
+  function getUnreadDMCount(actor){
+    if(!actor) return 0;
+    let count=0;
+    Object.keys(data.dms2||{}).forEach(k=>{
+      (data.dms2[k]||[]).forEach(m=>{
+        if(m && m.from && m.from!==actor && !(Array.isArray(m.readBy)&&m.readBy.includes(actor))){
+          const parts=String(k).split("__");
+          if(parts.includes(actor)) count++;
+        }
+      });
+    });
+    return count;
+  }
+
+  function updateUnreadBadge(element, character){
+    if(!element || !character) return;
+    const actor=Object.keys(data.characters||{}).find(k=>data.characters[k]===character);
+    if(!actor) return;
+    const count=getUnreadDMCount(actor);
+    element.classList.toggle("ocx-has-unread", count>0);
+    let badge=element.querySelector(".ocx-unread-badge");
+    if(count>0){
+      if(!badge){badge=document.createElement("span");badge.className="ocx-unread-badge";element.appendChild(badge);}
+      badge.textContent=formatCount(count);
+      badge.title=`${count} unread message${count===1?"":"s"}`;
+    }else if(badge) badge.remove();
+  }
+
+  function markDMThreadRead(actor, other){
+    if(!actor || !other) return false;
+    const thread=data.dms2[keyPair(actor,other)] || [];
+    let changed=false;
+    thread.forEach(m=>{
+      if(m && m.from===other && !(Array.isArray(m.readBy)&&m.readBy.includes(actor))){
+        if(!Array.isArray(m.readBy)) m.readBy=[];
+        m.readBy.push(actor);
+        changed=true;
+      }
+    });
+    if(changed){ saveExtended(); renderAccount(); if(viewedProfileActor===activeActor) renderProfileMessages(activeActor); }
+    return changed;
+  }
+
+  function renderDMExtended(){
+    const list=document.getElementById("dmList");if(!list)return;
+    const other=data.characters[currentDM];
+    const thread=data.dms2[keyPair(activeActor,currentDM)] || [];
+    list.innerHTML="";
+    if(other){
+      const header=document.createElement("div");header.className="ocx-dm-header";
+      const av=document.createElement("div");av.className="avatar";setAvatar(av,other);
+      header.append(av);
+      const t=document.createElement("div");t.innerHTML=`<strong>${escapeHtml(other.name)}</strong><div class="ocx-dm-status">@${escapeHtml(other.username)} · private chat</div>`;
+      header.appendChild(t);list.appendChild(header);
+    }
+    thread.forEach(m=>{
+      const row=document.createElement("div");
+      row.className="ocx-dm-row";
+      row.dataset.messageId=m.id;
+
+      const bubble=document.createElement("div");
+      bubble.className="message "+(m.from===activeActor?"me":"them");
+      if(m.image){
+        bubble.classList.add("ocx-dm-photo-wrap");
+        const img=document.createElement("img");
+        img.className="ocx-dm-photo";
+        img.src=m.image;
+        img.alt="Photo message";
+        img.loading="lazy";
+        img.onclick=()=>openImageLightbox(m.image);
+        bubble.appendChild(img);
+        if(m.text){
+          const caption=document.createElement("div");
+          caption.textContent=m.text;
+          caption.style.marginTop="6px";
+          bubble.appendChild(caption);
+        }
+      }else{
+        bubble.textContent=m.text;
+      }
+      row.appendChild(bubble);
+
+      const meta=document.createElement("div");
+      meta.className="ocx-message-meta";
+      meta.textContent=formatTimestamp(m.createdAt)+(m.edited?" · edited":"");
+      row.appendChild(meta);
+
+      // Text messages can still be edited. Photo messages can be deleted by their sender.
+      if(m.from===activeActor && !m.deleted){
+        const tools=document.createElement("div");
+        tools.className="ocx-dm-tools";
+
+        if(!m.image){
+          const edit=document.createElement("button");
+          edit.type="button";
+          edit.textContent="Edit";
+          edit.onclick=()=>editDM(m.id);
+          tools.append(edit);
+        }
+
+        const del=document.createElement("button");
+        del.type="button";
+        del.textContent=m.image ? "Delete photo" : "Delete";
+        del.onclick=()=>deleteDMMessage(m.id);
+        tools.append(del);
+
+        if(tools.children.length) row.appendChild(tools);
+      }
+
+      list.appendChild(row);
+    });
+    list.scrollTop=list.scrollHeight;
+  }
+
+  function editDM(messageId){
+    const k=keyPair(activeActor,currentDM);
+    const thread=data.dms2[k] || [];
+    const message=thread.find(m=>m.id===messageId && m.from===activeActor);
+    if(!message)return;
+
+    const row=document.querySelector(`.ocx-dm-row[data-message-id="${CSS.escape(messageId)}"]`);
+    if(!row)return;
+
+    const bubble=row.querySelector(".message");
+    const tools=row.querySelector(".ocx-dm-tools");
+    const input=document.createElement("input");
+    input.type="text";
+    input.value=message.text;
+    input.className="ocx-dm-edit-input";
+
+    const save=document.createElement("button");
+    save.type="button";
+    save.textContent="Save";
+    save.onclick=()=>{
+      const text=safe(input.value);
+      if(!text){input.focus();return;}
+      message.text=text;
+      message.edited=true;
+      saveExtended();
+      renderDMExtended();
+    };
+
+    const cancel=document.createElement("button");
+    cancel.type="button";
+    cancel.textContent="Cancel";
+    cancel.onclick=()=>renderDMExtended();
+
+    bubble.replaceWith(input);
+    tools.innerHTML="";
+    tools.append(save,cancel);
+    input.focus();
+    input.select();
+    input.onkeydown=e=>{
+      if(e.key==="Enter")save.click();
+      if(e.key==="Escape")cancel.click();
+    };
+  }
+
+  async function sendDMPhoto(file){
+    if(!file || !file.type.startsWith("image/")) return;
+    if(activeActor===currentDM) return;
+    try{
+      const reader=new FileReader();
+      reader.onload=async e=>{
+        const image=await window.ocCompressDataUrl(e.target.result);
+        const k=keyPair(activeActor,currentDM);
+        if(!data.dms2[k]) data.dms2[k]=[];
+        data.dms2[k].push({id:"msg_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),from:activeActor,text:"",image,createdAt:Date.now(),readBy:[activeActor]});
+        const input=document.getElementById("dmPhotoInput"); if(input) input.value="";
+        saveExtended();renderDMExtended();
+      };
+      reader.readAsDataURL(file);
+    }catch(e){
+      console.error(e);
+      alert("The photo could not be sent.");
+    }
+  }
+
+  function deleteDMMessage(messageId){
+    const k=keyPair(activeActor,currentDM);
+    const thread=data.dms2[k] || [];
+    const message=thread.find(m=>m.id===messageId && m.from===activeActor);
+    if(!message) return;
+    const label=message.image ? "photo" : "message";
+    if(!confirm(`Delete this ${label} from the DM?`)) return;
+    data.dms2[k]=thread.filter(m=>m.id!==messageId);
+    saveExtended();renderDMExtended();
+  }
+
+  function deleteDMPhoto(messageId){
+    // Kept as a compatibility alias for older buttons/data.
+    deleteDMMessage(messageId);
+  }
+
+  function sendDMExtended(){
+    const input=document.getElementById("dmInput");const text=safe(input.value);if(!text||activeActor===currentDM)return;
+    const k=keyPair(activeActor,currentDM);if(!data.dms2[k])data.dms2[k]=[];
+    data.dms2[k].push({id:"msg_"+Date.now(),from:activeActor,text,createdAt:Date.now(),readBy:[activeActor]});
+    input.value="";saveExtended();renderDMExtended();
+  }
+
+  function changeDMExtended(){
+    currentDM=document.getElementById("dmRecipient").value;saveExtended();renderDMExtended();
+  }
+
+  /* ---------- Cloud ---------- */
+  async function initCloud(){
+    if(cloud.auth) return true;
+    if(!cloudConfigured()){setCloudText("Local mode · cloud not configured",false);return false;}
+    try{
+      if(typeof firebase === "undefined") throw new Error("Firebase SDK did not load. Check that the Firebase script files are reachable.");
+      if(!firebase.apps.length)firebase.initializeApp(OC_FIREBASE_CONFIG);
+      cloud.auth=firebase.auth();
+      cloud.db=firebase.firestore();
+      cloud.enabled=true;
+
+      // Keep the same Firebase login alive when moving between pages/devices.
+      try{await cloud.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);}catch(e){console.warn("Firebase auth persistence could not be enabled:",e);}
+
+      cloud.auth.onAuthStateChanged(async user=>{
+        cloud.user=user;
+        cloudSyncReady=false;
+        if(user){
+          setCloudText("Signed in · syncing…",true);
+          await pullCloud();
+        }else{
+          setCloudText("Cloud ready · not signed in",false);
+        }
+      });
+      return true;
+    }catch(e){
+      console.error("Cloud initialization failed:",e);
+      cloud.auth=null; cloud.db=null; cloud.enabled=false; cloudSyncReady=false;
+      setCloudText("Cloud unavailable · local mode",false);
+      return false;
+    }
+  }
+
+  function setCloudText(text,online){
+    const html=`<span class="${online?"ocx-online":"ocx-offline"}">${escapeHtml(text)}</span>`;
+    const el=document.getElementById("ocxCloudText");if(el)el.innerHTML=html;
+    const bottom=document.getElementById("ocxBottomCloudText");if(bottom)bottom.innerHTML=html;
+    const out=document.getElementById("ocxBottomSignOut");if(out)out.style.display=cloud.user?"block":"none";
+  }
+
+  function mergeCloudData(remote, local){
+    const r=clone(remote||{}), l=clone(local||{});
+    const merged={...r, ...l};
+
+    // Characters: keep remote profiles, but preserve local fields changed
+    // while the cloud read was in progress.
+    merged.characters={...clone(r.characters||{}), ...clone(l.characters||{})};
+
+    // Posts: never let a stale device replace a newer cloud post collection.
+    // Merge by post id and keep the local copy when both sides have the same id.
+    const postMap=new Map();
+    [...(Array.isArray(r.posts)?r.posts:[]), ...(Array.isArray(l.posts)?l.posts:[])].forEach(post=>{
+      if(post&&post.id) postMap.set(String(post.id),clone(post));
+    });
+    merged.posts=[...postMap.values()].sort((a,b)=>Number(a.createdAt||0)-Number(b.createdAt||0));
+
+    // Merge private message threads by message id so a stale device cannot
+    // erase messages received on another device.
+    merged.dms2={};
+    const keys=new Set([...Object.keys(r.dms2||{}),...Object.keys(l.dms2||{})]);
+    keys.forEach(k=>{
+      const map=new Map();
+      [...(r.dms2?.[k]||[]), ...(l.dms2?.[k]||[])].forEach(m=>{
+        if(m&&m.id) map.set(String(m.id),clone(m));
+      });
+      merged.dms2[k]=[...map.values()].sort((a,b)=>Number(a.createdAt||0)-Number(b.createdAt||0));
+    });
+
+    if(r.post||l.post) merged.post=clone(l.post||r.post);
+    if(r.dms||l.dms) merged.dms={...clone(r.dms||{}),...clone(l.dms||{})};
+    return merged;
+  }
+
+  async function pullCloud(){
+    if(!cloud.user||!cloud.db)return;
+    cloudSyncInProgress=true;
+    cloudSyncReady=false;
+    try{
+      const userRef=cloud.db.collection("ocSocialUsers").doc(cloud.user.uid);
+      let rootSnap=null;
+      try{ rootSnap=await userRef.get(); }catch(rootErr){
+        console.error("Cloud account read failed:",rootErr);
+        throw rootErr;
+      }
+
+      // v2 stores large collections in subcollections instead of one giant
+      // Firestore document. This prevents the 1 MiB document limit from
+      // deleting/losing posts as the site grows.
+      let meta=rootSnap.exists ? (rootSnap.data()||{}) : null;
+      let remote=null;
+      if(meta && meta.cloudFormat===2){
+        const [charSnap,postSnap,dmSnap,notifSnap,activitySnap]=await Promise.all([
+          userRef.collection("characters").get(),
+          userRef.collection("posts").get(),
+          userRef.collection("dms2").get(),
+          userRef.collection("notifications").get(),
+          userRef.collection("activities").get()
+        ]);
+        const characters={};
+        charSnap.forEach(doc=>{characters[doc.id]=doc.data().character||doc.data();});
+        const posts=[];
+        postSnap.forEach(doc=>{const x=doc.data().post||doc.data();if(x&&x.id)posts.push(x);});
+        const dms2={};
+        dmSnap.forEach(doc=>{const x=doc.data();if(x.threadKey)dms2[x.threadKey]=Array.isArray(x.messages)?x.messages:[];});
+        const notifications={};
+        notifSnap.forEach(doc=>{notifications[doc.id]=Array.isArray(doc.data().items)?doc.data().items:[];});
+        const activityDoc=activitySnap.docs[0];
+        remote={
+          characters,
+          posts,
+          dms2,
+          notifications,
+          activities:activityDoc?.data()?.items||[],
+          dms:meta.dms||{},
+          post:meta.post||null,
+          settings:meta.settings||{}
+        };
+      }else if(rootSnap.exists){
+        // Legacy one-document format. Read it once, then upgrade it to v2.
+        remote=meta.data||meta;
+      }
+
+      if(remote && remote.characters){
+        // A successful read is required before touching cloud state. If any
+        // required subcollection read failed, execution goes to catch above.
+        // Never replace a populated local feed with a stale/empty cloud feed.
+        // Merge posts on every successful read so a temporary cloud mismatch cannot
+        // make posts disappear from the page.
+        data=mergeCloudData(remote,data);
+        ensureExtendedData();
+        populateActorSelects();
+        renderEverything();
+        renderDMExtended();
+        saveAll();
+        cloudSyncReady=true;
+        cloudSyncInProgress=false;
+        // Always upgrade/save through the safe chunked format.
+        await saveCloudNow(true);
+      }else if(!rootSnap.exists){
+        ensureExtendedData();
+        cloudSyncReady=true;
+        cloudSyncInProgress=false;
+        await saveCloudNow(true);
+      }else{
+        throw new Error("Cloud account exists but contains no character data.");
+      }
+      setCloudText("Synced to cloud ✓",true);
+    }catch(e){
+      console.error("Cloud read failed:",e);
+      cloudSyncReady=false;
+      cloudSyncInProgress=false;
+      // Never replace a user's local data with an empty/default cloud result.
+      // Keep the current page intact until the cloud can be read successfully.
+      setCloudText("Cloud read failed · local copy kept",false);
+    }
+  }
+
+  async function saveCloudNow(force=false){
+    if(!cloud.user||!cloud.db||(!cloudSyncReady&&!force))return;
+    if(window.ocCompressAllImages) data=await window.ocCompressAllImages(data);
+    try{
+      ensureExtendedData();
+      const userRef=cloud.db.collection("ocSocialUsers").doc(cloud.user.uid);
+
+      // Firestore batches are limited to 500 writes. Large OC accounts can
+      // easily exceed that, so write in small chunks instead of one huge batch.
+      const ops=[];
+      ops.push({
+        ref:userRef,
+        value:{
+          cloudFormat:2,
+          settings:clone(data.settings||{}),
+          dms:clone(data.dms||{}),
+          post:clone(data.post||{}),
+          updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+        }
+      });
+
+      for(const [key,character] of Object.entries(data.characters||{})){
+        ops.push({ref:userRef.collection("characters").doc(String(key)),value:{character:clone(character)}});
+      }
+      for(const post of (data.posts||[])){
+        if(post?.id) ops.push({ref:userRef.collection("posts").doc(String(post.id)),value:{post:clone(post)}});
+      }
+      for(const [threadKey,messages] of Object.entries(data.dms2||{})){
+        const safeId=encodeURIComponent(String(threadKey)).slice(0,1500);
+        ops.push({ref:userRef.collection("dms2").doc(safeId),value:{threadKey:String(threadKey),messages:clone(messages||[])}});
+      }
+      for(const [actor,items] of Object.entries(data.notifications||{})){
+        ops.push({ref:userRef.collection("notifications").doc(String(actor)),value:{items:clone((items||[]).slice(-100))}});
+      }
+      ops.push({
+        ref:userRef.collection("activities").doc("feed"),
+        value:{items:clone((data.activities||[]).slice(-100))}
+      });
+
+      for(let i=0;i<ops.length;i+=400){
+        const batch=cloud.db.batch();
+        ops.slice(i,i+400).forEach(op=>batch.set(op.ref,op.value,{merge:true}));
+        await batch.commit();
+      }
+
+      localCloudDirty=false;
+      setCloudText("Synced to cloud ✓",true);
+    }catch(e){
+      console.error("Cloud save failed:",e);
+      setCloudText("Cloud save failed · local copy kept",false);
+      // Keep local data and the dirty flag. A temporary cloud error must never
+      // cause another device to overwrite the user's local copy with blanks.
+    }
+  }
+
+  function saveExtended(){
+    localCloudDirty=true;
+    syncLegacyPost();
+    saveAll();
+    if(cloud.user && cloudSyncReady){
+      clearTimeout(cloudSaveTimer);
+      cloudSaveTimer=setTimeout(saveCloudNow,250);
+    }
+  }
+
+  async function cloudRegister(){
+    const email=safe(document.getElementById("ocxEmail").value), pass=document.getElementById("ocxPassword").value;
+    if(!email||pass.length<6){alert("Use an email and a password with at least 6 characters.");return;}
+    if(!(await initCloud())){alert("Cloud login is not available right now. Please refresh the page and try again.");return;}
+    try{await cloud.auth.createUserWithEmailAndPassword(email,pass);}catch(e){alert(e.message);}
+  }
+  async function cloudLogin(){
+    const email=safe(document.getElementById("ocxEmail").value), pass=document.getElementById("ocxPassword").value;
+    if(!email||!pass){alert("Enter your email and password.");return;}
+    if(!(await initCloud())){alert("Cloud login could not start. Please refresh the page and try again.");return;}
+    try{
+      await cloud.auth.signInWithEmailAndPassword(email,pass);
+      closeModal("ocxCloudModal");
+    }catch(e){
+      alert("whoops. try again?");
+    }
+  }
+  async function cloudLoginBottom(){
+    const email=safe(document.getElementById("ocxBottomEmail")?.value), pass=document.getElementById("ocxBottomPassword")?.value||"";
+    if(!email||!pass){alert("Enter your email and password.");return;}
+    if(!(await initCloud())){alert("Firebase could not start. Check your Firebase setup and refresh.");return;}
+    const btn=document.getElementById("ocxBottomSignIn"); if(btn) btn.disabled=true;
+    try{
+      for(let attempt=0;attempt<3;attempt++){
+        try{ await cloud.auth.signInWithEmailAndPassword(email,pass); break; }
+        catch(e){ if(e?.code!=="auth/network-request-failed"||attempt===2) throw e; await new Promise(r=>setTimeout(r,700*(attempt+1))); }
+      }
+      closeModal("ocxCloudModal");
+    }catch(e){
+      console.error("Firebase sign-in failed:",e);
+      alert(e?.code ? "Login failed: "+e.code : "Login failed. Check your email, password, and Firebase connection.");
+    }finally{ if(btn) btn.disabled=false; }
+  }
+
+  async function cloudRegisterBottom(){
+    const email=safe(document.getElementById("ocxBottomEmail")?.value), pass=document.getElementById("ocxBottomPassword")?.value||"";
+    if(!email||pass.length<6){alert("Use an email and a password with at least 6 characters.");return;}
+    if(!(await initCloud())){alert("Firebase could not start. Check your Firebase setup and refresh.");return;}
+    try{ await cloud.auth.createUserWithEmailAndPassword(email,pass); }
+    catch(e){ console.error("Firebase registration failed:",e); alert(e?.code ? "Account creation failed: "+e.code : "Account creation failed."); }
+  }
+  async function cloudLogout(){if(cloud.auth)await cloud.auth.signOut();}
+
+
+  function openCloud(){
+    modal("ocxCloudModal","☁ Cloud Account",`
+      <p class="small-note">Use the same email/password on every device. Your characters, posts, comments, replies and private OC-to-OC DMs will sync through your Firebase project.</p>
+      <label>Email</label><input id="ocxEmail" type="email" placeholder="you@example.com">
+      <label>Password</label><input id="ocxPassword" type="password" placeholder="At least 6 characters">
+      <div class="ocx-toolbar">
+        <button class="btn btn-purple" onclick="OCX.login()">Sign in</button>
+        <button class="btn btn-light" onclick="OCX.register()">Create account</button>
+      </div>
+      <button class="btn btn-danger btn-full" onclick="OCX.logout()">Sign out</button>
+      <p class="ocx-cloud">Firebase setup is required for true cross-device/account syncing. If it is not configured, the original local browser storage remains available.</p>
+    `);
+  }
+
+  function escapeHtml(s){
+    return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  }
+  function escapeAttr(s){return escapeHtml(s).replace(/`/g,"&#96;");}
+  function formatCount(value){
+    const n=Number(value);
+    if(!Number.isFinite(n)) return "0";
+    const abs=Math.abs(n);
+    if(abs >= 1000000) return (n/1000000).toFixed(abs >= 10000000 ? 0 : 1).replace(/\.0$/,'')+"m";
+    if(abs >= 1000) return (n/1000).toFixed(abs >= 10000 ? 0 : 1).replace(/\.0$/,'')+"k";
+    return Math.max(0, Math.trunc(n)).toLocaleString();
+  }
+
+
+  /* ---------- Clickable profiles ---------- */
+  let viewedProfileActor = null;
+
+  function ensureProfileFields(character){
+    if(!character) return;
+    if(!Number.isFinite(Number(character.followers))) character.followers = 0;
+    if(!Number.isFinite(Number(character.following))) character.following = 0;
+    if(!Array.isArray(character.followingActors)) character.followingActors = [];
+  }
+
+  function isFollowing(actor){
+    const me=data.characters[activeActor];
+    if(!me || actor===activeActor) return false;
+    ensureProfileFields(me);
+    return me.followingActors.includes(actor);
+  }
+
+  function followActor(actor){
+    if(!data.characters[actor] || actor===activeActor) return;
+    const me=data.characters[activeActor];
+    const target=data.characters[actor];
+    ensureProfileFields(me);
+    ensureProfileFields(target);
+
+    if(me.followingActors.includes(actor)) return;
+
+    me.followingActors.push(actor);
+    me.following = me.followingActors.length;
+    target.followers = Math.max(0, Number(target.followers)||0) + 1;
+
+    saveExtended();
+    renderTopFollowers();
+    openCharacterProfile(actor);
+  }
+
+  function unfollowActor(actor){
+    if(!data.characters[actor] || actor===activeActor) return;
+    const me=data.characters[activeActor];
+    const target=data.characters[actor];
+    ensureProfileFields(me);
+    ensureProfileFields(target);
+
+    me.followingActors = me.followingActors.filter(a=>a!==actor);
+    me.following = me.followingActors.length;
+    target.followers = Math.max(0, (Number(target.followers)||0) - 1);
+
+    saveExtended();
+    renderTopFollowers();
+    openCharacterProfile(actor);
+  }
+
+  function toggleFollowActor(actor){
+    if(isFollowing(actor)) unfollowActor(actor);
+    else followActor(actor);
+  }
+
+  function getCharacterPosts(actor){
+    const posts=[];
+    const seen=new Set();
+    const signature=p=>{
+      if(!p) return '';
+      return String(p.id||'')+'|'+String(p.author||'')+'|'+String(p.caption||'')+'|'+String(p.image||'')+'|'+String(p.createdAt||'');
+    };
+
+    // data.posts is the current source of truth. Do not also append data.post
+    // when the normalized posts array already exists, because data.post is the
+    // legacy mirror of the first post and would show it twice on profiles.
+    if(Array.isArray(data.posts)){
+      data.posts.forEach(post=>{
+        if(!post || post.author!==actor) return;
+        const key=signature(post);
+        if(!seen.has(key)){
+          seen.add(key);
+          posts.push(post);
+        }
+      });
+    }else if(data.post && data.post.author===actor){
+      posts.push(data.post);
+    }
+    return posts;
+  }
+
+  function openProfilePost(postId){
+    const post = (data.posts || []).find(p => p && p.id === postId);
+    if(!post) return;
+    closeCharacterProfile();
+    renderFeedExtended();
+    requestAnimationFrame(()=>{
+      const article = document.querySelector('.post[data-post-id="' + CSS.escape(String(postId)) + '"]');
+      if(article){
+        article.scrollIntoView({behavior:"smooth", block:"center"});
+        article.classList.add("ocx-search-hit");
+        setTimeout(()=>article.classList.remove("ocx-search-hit"),1800);
+      }
+    });
+  }
+
+  function renderProfileMessages(actor){
+    const box=document.getElementById("ocxProfileMessages");
+    if(!box) return;
+    if(actor!==activeActor){ box.style.display="none"; box.innerHTML=""; return; }
+
+    const unread=[];
+    Object.keys(data.dms2||{}).forEach(k=>{
+      const parts=String(k).split("__");
+      if(!parts.includes(actor)) return;
+      const other=parts.find(x=>x!==actor);
+      if(!other || !data.characters[other]) return;
+      (data.dms2[k]||[]).forEach(m=>{
+        if(m && m.from===other && !(Array.isArray(m.readBy)&&m.readBy.includes(actor))){
+          unread.push({message:m,other});
+        }
+      });
+    });
+
+    unread.sort((a,b)=>Number(b.message.createdAt||0)-Number(a.message.createdAt||0));
+    if(!unread.length){
+      box.style.display="none";
+      box.innerHTML="";
+      return;
+    }
+
+    box.style.display="block";
+    box.innerHTML=`<div class="ocx-profile-messages-head"><div class="ocx-profile-messages-title">💬 Messages</div><div class="ocx-profile-messages-count">${unread.length}</div></div><div class="ocx-profile-message-list" id="ocxProfileMessageList"></div>`;
+    const list=document.getElementById("ocxProfileMessageList");
+    unread.forEach(({message,other})=>{
+      const c=data.characters[other]||{};
+      const item=document.createElement("button");
+      item.type="button";
+      item.className="ocx-profile-message-item";
+      const av=document.createElement("div");
+      av.className="avatar";
+      setAvatar(av,c);
+      const copy=document.createElement("div");
+      copy.className="ocx-profile-message-copy";
+      const sender=document.createElement("div");
+      sender.className="ocx-profile-message-sender";
+      sender.textContent=c.name||c.username||other;
+      const preview=document.createElement("div");
+      preview.className="ocx-profile-message-preview";
+      preview.textContent=message.image ? (message.text ? "📷 "+message.text : "📷 Photo message") : (message.text||"Message");
+      copy.append(sender,preview);
+      const time=document.createElement("div");
+      time.className="ocx-profile-message-time";
+      time.textContent=formatTimestamp(message.createdAt);
+      item.append(av,copy,time);
+      item.onclick=()=>{ markDMThreadRead(activeActor,other); openDMFromProfile(other); };
+      list.appendChild(item);
+    });
+  }
+
+  function openCharacterProfile(actor){
+    const character=data.characters[actor];
+    if(!character) return;
+    ensureProfileFields(character);
+    viewedProfileActor=actor;
+
+    const screen=document.getElementById('ocxProfileScreen');
+    const av=document.getElementById('ocxProfileAvatar');
+    setAvatar(av,character);
+    av.onclick=null;
+    av.style.cursor='default';
+    document.getElementById('ocxProfileName').textContent=character.name||character.username||actor;
+    document.getElementById('ocxProfileHandle').textContent='@'+(character.username||actor);
+    document.getElementById('ocxProfileBio').textContent=character.bio||'';
+    document.getElementById('ocxProfileFollowers').textContent=formatCount(character.followers);
+    document.getElementById('ocxProfileFollowing').textContent=formatCount(character.following);
+
+    const posts=getCharacterPosts(actor);
+    document.getElementById('ocxProfilePostCount').textContent=formatCount(posts.length);
+    const grid=document.getElementById('ocxProfilePosts');
+    grid.innerHTML='';
+    if(!posts.length){
+      grid.innerHTML='<div class="ocx-profile-empty" style="grid-column:1/-1">No posts yet.</div>';
+    }else{
+      posts.forEach(post=>{
+        const card=document.createElement('div');
+        card.className='ocx-profile-post';
+        // Profile previews should be visual thumbnails, not text previews.
+        if(post.image){
+          const img=document.createElement('img');
+          img.src=post.image;
+          img.alt='Post photo';
+          img.loading='lazy';
+          card.appendChild(img);
+        }else{
+          const placeholder=document.createElement('div');
+          placeholder.className='ocx-profile-post-placeholder';
+          placeholder.textContent='✦';
+          card.appendChild(placeholder);
+        }
+
+        // Clicking a post photo/thumbnail takes you to the full post in the feed.
+        card.style.cursor='pointer';
+        card.title='View post';
+        card.onclick=()=>openProfilePost(post.id);
+
+        grid.appendChild(card);
+      });
+    }
+
+    const actions=document.getElementById('ocxProfileActions');
+    actions.innerHTML='';
+    if(actor===activeActor){
+      const edit=document.createElement('button');
+      edit.className='ocx-profile-edit';
+      edit.textContent='✏️ Edit profile';
+      edit.onclick=()=>{ closeCharacterProfile(); openProfileModal(); };
+      actions.appendChild(edit);
+    }else{
+      const follow=document.createElement('button');
+      follow.className='ocx-profile-edit';
+      follow.textContent=isFollowing(actor) ? '✓ Following' : '+ Follow';
+      follow.onclick=()=>toggleFollowActor(actor);
+      actions.appendChild(follow);
+
+      const message=document.createElement('button');
+      message.type='button';
+      message.className='ocx-profile-message-icon';
+      message.textContent='💬';
+      message.title='Message @'+(character.username||actor);
+      message.setAttribute('aria-label','Message @'+(character.username||actor));
+      message.onclick=()=>openDMFromProfile(actor);
+      actions.appendChild(message);
+    }
+
+    const editBox=document.getElementById('ocxProfileEditBox');
+    editBox.style.display='none';
+    editBox.innerHTML='';
+    if(actor===activeActor){
+      editBox.style.display='block';
+      editBox.innerHTML=`
+        <div class="ocx-profile-section-title">Profile numbers</div>
+        <div class="ocx-profile-edit-grid">
+          <div><label>Followers</label><input id="ocxFollowersInput" type="number" min="0" value="${Number(character.followers)||0}"></div>
+          <div><label>Following</label><input id="ocxFollowingInput" type="number" min="0" value="${Number(character.following)||0}"></div>
+        </div>
+        <button class="btn btn-purple btn-full" style="margin-top:12px" onclick="OCX.saveProfileNumbers()">💾 Save numbers</button>`;
+    }
+
+    renderProfileMessages(actor);
+    screen.classList.add('show');
+    screen.setAttribute('aria-hidden','false');
+  }
+
+  function closeCharacterProfile(){
+    const screen=document.getElementById('ocxProfileScreen');
+    if(screen){screen.classList.remove('show');screen.setAttribute('aria-hidden','true');}
+    viewedProfileActor=null;
+  }
+
+  function openDMFromProfile(actor){
+    if(!actor || actor===activeActor || !data.characters[actor]) return;
+    currentDM=actor;
+    saveExtended();
+    const select=document.getElementById("dmRecipient");
+    if(select) select.value=actor;
+    openDMModal(actor);
+  }
+
+  function openDMModal(actor){
+    actor=actor||currentDM;
+    if(!actor || actor===activeActor || !data.characters[actor]) return;
+    currentDM=actor;
+    markDMThreadRead(activeActor,currentDM);
+    let m=document.getElementById("ocxDMModal");
+    if(m) m.remove();
+    m=document.createElement("div");
+    m.className="modal";
+    m.id="ocxDMModal";
+    const c=data.characters[actor];
+    m.innerHTML=`<div class="modal-box ocx-dm-modal-box">
+      <div class="modal-header"><div class="modal-title">💬 Message @${escapeHtml(c.username||actor)}</div><button class="close" type="button" aria-label="Close" onclick="OCX.closeDM()">×</button></div>
+      <div class="modal-content ocx-dm-modal-content">
+        <div class="dm-list" id="ocxDMModalList"></div>
+        <label>Date &amp; time for new message</label>
+        <input id="ocxDMDateTime" class="ocx-dm-date" type="datetime-local" value="${toDateTimeLocal(Date.now())}">
+        <div class="small-note">You can choose any date, time, and year.</div>
+        <div class="ocx-dm-compose">
+          <input id="ocxDMInput" type="text" placeholder="Write a message..." onkeydown="if(event.key==='Enter') OCX.sendDMFromModal()">
+          <button type="button" class="btn btn-light ocx-dm-photo-btn" onclick="document.getElementById('ocxDMPhotoInput').click()" title="Send photo">📷</button>
+          <input id="ocxDMPhotoInput" class="file-input" type="file" accept="image/*" style="display:none" onchange="OCX.sendDMPhotoFromModal(this.files[0])">
+          <button type="button" class="btn btn-purple" onclick="OCX.sendDMFromModal()">➤</button>
+        </div>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+    openModal("ocxDMModal");
+    renderDMModal();
+  }
+
+  function closeDMModal(){
+    const m=document.getElementById("ocxDMModal");
+    if(m) m.remove();
+  }
+
+  function renderDMModal(){
+    const list=document.getElementById("ocxDMModalList");
+    if(!list)return;
+    const thread=data.dms2[keyPair(activeActor,currentDM)]||[];
+    list.innerHTML="";
+    const other=data.characters[currentDM];
+    if(other){
+      const header=document.createElement("div");header.className="ocx-dm-header";
+      const av=document.createElement("div");av.className="avatar";setAvatar(av,other);header.append(av);
+      const t=document.createElement("div");t.innerHTML=`<strong>${escapeHtml(other.name)}</strong><div class="ocx-dm-status">@${escapeHtml(other.username)} · private chat</div>`;header.appendChild(t);list.appendChild(header);
+    }
+    thread.forEach(m=>{
+      const row=document.createElement("div");row.className="ocx-dm-row";row.dataset.messageId=m.id;
+      const bubble=document.createElement("div");bubble.className="message "+(m.from===activeActor?"me":"them");
+      if(m.image){
+        bubble.classList.add("ocx-dm-photo-wrap");
+        const img=document.createElement("img");img.className="ocx-dm-photo";img.src=m.image;img.alt="Photo message";img.onclick=()=>openImageLightbox(m.image);bubble.appendChild(img);
+        if(m.text){const cap=document.createElement("div");cap.textContent=m.text;cap.style.marginTop="6px";bubble.appendChild(cap);}
+      }else bubble.textContent=m.text||"";
+      row.appendChild(bubble);
+      const meta=document.createElement("div");meta.className="ocx-message-meta";meta.textContent=formatTimestamp(m.createdAt)+(m.edited?" · edited":"");row.appendChild(meta);
+      if(m.from===activeActor&&!m.deleted){
+        const tools=document.createElement("div");tools.className="ocx-dm-tools";
+        if(!m.image){const edit=document.createElement("button");edit.type="button";edit.textContent="Edit";edit.onclick=()=>editDMModal(m.id);tools.append(edit);}
+        const del=document.createElement("button");del.type="button";del.textContent=m.image?"Delete photo":"Delete";del.onclick=()=>deleteDMMessageModal(m.id);tools.append(del);row.appendChild(tools);
+      }
+      list.appendChild(row);
+    });
+    list.scrollTop=list.scrollHeight;
+  }
+
+  function editDMModal(messageId){
+    const thread=data.dms2[keyPair(activeActor,currentDM)]||[];
+    const message=thread.find(m=>m.id===messageId&&m.from===activeActor);if(!message)return;
+    const n=prompt("Edit message:",message.text);
+    if(n?.trim()){message.text=n.trim();message.edited=true;saveExtended();renderDMModal();}
+  }
+
+  function deleteDMMessageModal(messageId){
+    const thread=data.dms2[keyPair(activeActor,currentDM)]||[];
+    const message=thread.find(m=>m.id===messageId&&m.from===activeActor);if(!message)return;
+    const label=message.image?"photo":"message";
+    if(!confirm(`Delete this ${label} from the DM?`))return;
+    data.dms2[keyPair(activeActor,currentDM)]=thread.filter(m=>m.id!==messageId);
+    saveExtended();renderDMModal();
+  }
+
+  async function sendDMFromModal(){
+    const input=document.getElementById("ocxDMInput");const text=safe(input?.value);if(!text||activeActor===currentDM)return;
+    const k=keyPair(activeActor,currentDM);if(!data.dms2[k])data.dms2[k]=[];
+    const dt=document.getElementById("ocxDMDateTime")?.value;
+    data.dms2[k].push({id:"msg_"+Date.now(),from:activeActor,text,createdAt:timestampFromInput(dt,Date.now()),readBy:[activeActor]});
+    input.value="";saveExtended();renderDMModal();
+  }
+
+  async function sendDMPhotoFromModal(file){
+    if(!file||!file.type.startsWith("image/")||activeActor===currentDM)return;
+    try{
+      const reader=new FileReader();
+      reader.onload=async e=>{
+        const image=await window.ocCompressDataUrl(e.target.result);
+        const k=keyPair(activeActor,currentDM);if(!data.dms2[k])data.dms2[k]=[];
+        const dt=document.getElementById("ocxDMDateTime")?.value;
+        data.dms2[k].push({id:"msg_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),from:activeActor,text:"",image,createdAt:timestampFromInput(dt,Date.now()),readBy:[activeActor]});
+        const f=document.getElementById("ocxDMPhotoInput");if(f)f.value="";saveExtended();renderDMModal();
+      };
+      reader.readAsDataURL(file);
+    }catch(e){console.error(e);alert("The photo could not be sent.");}
+  }
+
+  function getFollowers(actor){
+    return Object.keys(data.characters||{}).filter(k=>{
+      const c=data.characters[k];
+      return Array.isArray(c?.followingActors) && c.followingActors.includes(actor);
+    });
+  }
+
+  function getFollowing(actor){
+    const c=data.characters?.[actor];
+    return Array.isArray(c?.followingActors) ? c.followingActors.filter(k=>data.characters[k]) : [];
+  }
+
+  function showConnections(type){
+    const actor=viewedProfileActor;
+    if(!actor || !data.characters[actor]) return;
+    const people=type==='followers' ? getFollowers(actor) : getFollowing(actor);
+    const title=type==='followers' ? 'Followers' : 'Following';
+    const m=modal("ocxConnectionsModal",title,`<div class="ocx-connections-list" id="ocxConnectionsList"></div>`,true);
+    const list=m.querySelector("#ocxConnectionsList");
+    if(!people.length){
+      list.innerHTML=`<div class="ocx-empty">No ${type} yet.</div>`;
+      return;
+    }
+    people.forEach(k=>{
+      const c=data.characters[k];
+      const row=document.createElement("button");
+      row.type="button";
+      row.className="ocx-connection-row";
+      const av=document.createElement("div");
+      av.className="avatar";
+      setAvatar(av,c);
+      const text=document.createElement("div");
+      text.innerHTML=`<div class="ocx-connection-name">${escapeHtml(c.name||k)}</div><div class="ocx-connection-handle">@${escapeHtml(c.username||k)}</div>`;
+      row.append(av,text);
+      row.onclick=()=>{closeModal("ocxConnectionsModal");openCharacterProfile(k);};
+      list.appendChild(row);
+    });
+  }
+
+  function saveProfileNumbers(){
+    if(viewedProfileActor!==activeActor) return;
+    const character=data.characters[activeActor];
+    character.followers=Math.max(0,parseInt(document.getElementById('ocxFollowersInput')?.value||0,10)||0);
+    character.following=Math.max(0,parseInt(document.getElementById('ocxFollowingInput')?.value||0,10)||0);
+    saveExtended();
+    renderTopFollowers();
+    openCharacterProfile(activeActor);
+  }
+
+  // Make every normal PFP clickable, while leaving the profile editor's PFP alone.
+  const baseSetAvatar=window.setAvatar;
+  window.setAvatar=function(element,character){
+    baseSetAvatar(element,character);
+    if(element && element.id!=='editAvatar' && element.id!=='ocxProfileAvatar'){
+      const actor=Object.keys(data.characters||{}).find(k=>data.characters[k]===character);
+      if(actor){
+        element.style.cursor='pointer';
+        element.onclick=(event)=>{event.stopPropagation();openCharacterProfile(actor);};
+        element.title='Open profile';
+      }
+    }
+    if(element && (element.id==='topbar-avatar' || element.id==='leftAvatar')){
+      updateUnreadBadge(element, character);
+    }
+  };
+
+  /* ---------- Global search ---------- */
+  function searchSite(query){
+    const box=document.getElementById("ocxSearchResults");
+    if(!box)return;
+    const raw=String(query??"").trim();
+    const q=raw.toLowerCase();
+    box.innerHTML="";
+    if(!q){box.style.display="none";return;}
+
+    const chars=data.characters||{};
+    const posts=Array.isArray(data.posts)?data.posts:[];
+
+    const users=Object.keys(chars).filter(k=>{
+      const c=chars[k]||{};
+      return [k,c.name,c.username,c.bio].some(v=>String(v??"").toLowerCase().includes(q));
+    });
+
+    const matchingPosts=posts.filter(p=>{
+      const author=chars[p.author]||{};
+      const caption=String(p.caption??"").toLowerCase();
+      const hashtagText=(caption.match(/#[\p{L}\p{N}_-]+/gu)||[]).join(" ").toLowerCase();
+      const tags=Array.isArray(p.tags)?p.tags.map(k=>String(chars[k]?.username||k)).join(" ").toLowerCase():"";
+      const authorText=[p.author,author.name,author.username].map(v=>String(v??"")).join(" ").toLowerCase();
+      return caption.includes(q)||hashtagText.includes(q)||tags.includes(q)||authorText.includes(q);
+    });
+
+    if(!users.length&&!matchingPosts.length){
+      const empty=document.createElement("div");
+      empty.className="ocx-search-empty";
+      empty.textContent=`No results for "${raw}"`;
+      box.appendChild(empty);
+      box.style.display="block";
+      return;
+    }
+
+    const makeResult=(title,sub,actor,post)=>{
+      const btn=document.createElement("button");
+      btn.type="button";
+      btn.className="ocx-search-result";
+      const c=actor?chars[actor]:chars[post?.author];
+      const av=document.createElement("div");
+      av.className="avatar";
+      if(c) setAvatar(av,c);
+      const main=document.createElement("div");main.className="ocx-search-result-main";
+      const t=document.createElement("div");t.className="ocx-search-result-title";t.textContent=title;
+      const st=document.createElement("div");st.className="ocx-search-result-sub";st.textContent=sub;
+      main.append(t,st);btn.append(av,main);
+      btn.addEventListener("click",()=>{
+        closeSearch();
+        if(actor){
+          openCharacterProfile(actor);
+          return;
+        }
+        if(post){
+          // Find the exact rendered post. Fall back to a fresh render if needed.
+          let article=[...document.querySelectorAll(".post")].find(el=>el.dataset.postId===String(post.id));
+          if(!article){
+            renderFeedExtended();
+            article=[...document.querySelectorAll(".post")].find(el=>el.dataset.postId===String(post.id));
+          }
+          if(article){
+            article.scrollIntoView({behavior:"smooth",block:"center"});
+            article.classList.remove("ocx-search-hit");
+            void article.offsetWidth;
+            article.classList.add("ocx-search-hit");
+            setTimeout(()=>article.classList.remove("ocx-search-hit"),1800);
+          }
+        }
+      });
+      return btn;
+    };
+
+    if(users.length){
+      const heading=document.createElement("div");heading.className="ocx-search-section";
+      heading.textContent=`Users · ${users.length}`;box.appendChild(heading);
+      users.forEach(k=>{
+        const c=chars[k]||{};
+        box.appendChild(makeResult(c.name||c.username||k,"@"+(c.username||k),k,null));
+      });
+    }
+
+    if(matchingPosts.length){
+      const heading=document.createElement("div");heading.className="ocx-search-section";
+      heading.textContent=`Posts · ${formatCount(matchingPosts.length)}`;box.appendChild(heading);
+      matchingPosts.forEach(p=>{
+        const author=chars[p.author];
+        const caption=String(p.caption||"Post");
+        const preview=caption.length>90?caption.slice(0,90)+"…":caption;
+        box.appendChild(makeResult(author?(author.name||author.username):"Post",
+          "@"+(author?.username||p.author||"")+" · "+preview,
+          null,p));
+      });
+    }
+
+    box.style.display="block";
+  }
+
+  function closeSearch(){
+    const box=document.getElementById("ocxSearchResults");if(box)box.style.display="none";
+  }
+
+  document.addEventListener("click",e=>{
+    if(!e.target.closest(".ocx-search-wrap"))closeSearch();
+  });
+
+  window.OCX={
+    openCharacterCreator,createCharacter,
+    openPostCreator:openPostCreator,
+    savePost:savePostExtended,
+    openPostManager,renderPostManager,
+    editPost:id=>openPostCreator(id),
+    deletePost,
+    openComments:openCommentsExtended,
+    addComment:addCommentExtended,
+    addReply,
+    changeDM:changeDMExtended,
+    sendDM:sendDMExtended,
+    openCloud,login:cloudLoginBottom,register:cloudRegisterBottom,loginRight:cloudLoginBottom,registerRight:cloudRegisterBottom,logout:cloudLogout,
+    openProfile:openCharacterProfile,closeProfile:closeCharacterProfile,openDMFromProfile,openDMModal,closeDM:closeDMModal,sendDMFromModal,sendDMPhotoFromModal,saveProfileNumbers,showConnections,
+    sendDMPhoto,deleteDMPhoto,deleteDMMessage,
+    follow:followActor,unfollow:unfollowActor,toggleFollow:toggleFollowActor,
+    searchSite,
+    openImageLightbox,closeImageLightbox,
+    close:closeModal
+  };
+
+  /* Replace only the relevant render/actions with extended versions. */
+  const originalRenderEverything=window.renderEverything;
+  window.renderFeed=renderFeedExtended;
+  window.renderDM=renderDMExtended;
+  window.changeDM=changeDMExtended;
+  window.sendDM=sendDMExtended;
+  window.openComments=openCommentsExtended;
+  window.addComment=addCommentExtended;
+
+  /* Make original UI use the new DM model. */
+  function migrateLegacyDMs(){
+    if(!data.dms2 || Object.keys(data.dms2).length===0){
+      data.dms2={};
+      Object.keys(data.dms||{}).forEach(recipient=>{
+        if(data.characters[recipient]){
+          const k=keyPair(activeActor,recipient);
+          data.dms2[k]=(data.dms[recipient]||[]).map(m=>({
+            id:"legacy_"+Math.random().toString(36).slice(2),
+            from:m.from==="me"?activeActor:recipient,text:m.text,createdAt:m.createdAt||Date.now(),edited:!!m.edited,readBy:m.from==="me"?[activeActor]:[]
+          }));
+        }
+      });
+    }
+  }
+
+  function bootExtension(){
+    ensureExtendedData();
+    Object.values(data.characters||{}).forEach(ensureProfileFields);
+    migrateLegacyDMs();addExtensionUI();
+    populateActorSelects();renderEverything();
+    renderFeedExtended();renderDMExtended();
+    initCloud();
+  }
+
+  /* Original script already called init(); run the extension after it. */
+  setTimeout(bootExtension,0);
+
+})();
+</script>
+
+
+<script>
+/* OC Social: keep Firestore documents small by compressing uploaded images. */
+function openCropper(file, done){
+  const overlay=document.getElementById('ocxCropOverlay');
+  const stage=document.getElementById('ocxCropStage');
+  const img=document.getElementById('ocxCropImage');
+  const zoom=document.getElementById('ocxCropZoom');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const source=new Image();
+    source.onload=()=>{
+      window.__ocxCrop={source,done,zoom:1,x:0,y:0,drag:false,lastX:0,lastY:0,fit:1,renderedW:0,renderedH:0};
+      img.src=e.target.result;
+      overlay.style.display='flex';
+      zoom.value='1';
+      requestAnimationFrame(()=>{
+        const size=stage.clientWidth;
+        const fit=Math.max(size/source.naturalWidth,size/source.naturalHeight);
+        window.__ocxCrop.fit=fit;
+        window.__ocxCrop.x=(size-source.naturalWidth*fit)/2;
+        window.__ocxCrop.y=(size-source.naturalHeight*fit)/2;
+        drawCrop();
+      });
+    };
+    source.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function drawCrop(){
+  const c=window.__ocxCrop;if(!c)return;
+  const stage=document.getElementById('ocxCropStage');
+  const img=document.getElementById('ocxCropImage');
+  const size=stage.clientWidth;
+  const scale=c.fit*c.zoom;
+  const w=c.source.naturalWidth*scale, h=c.source.naturalHeight*scale;
+  c.renderedW=w;c.renderedH=h;
+  img.style.width=w+'px'; img.style.height=h+'px'; img.style.left=c.x+'px'; img.style.top=c.y+'px';
+}
+function cropPointerStart(e){const c=window.__ocxCrop;if(!c)return;c.drag=true;c.lastX=e.clientX;c.lastY=e.clientY;document.getElementById('ocxCropStage').setPointerCapture?.(e.pointerId)}
+function cropPointerMove(e){const c=window.__ocxCrop;if(!c||!c.drag)return;c.x+=e.clientX-c.lastX;c.y+=e.clientY-c.lastY;c.lastX=e.clientX;c.lastY=e.clientY;drawCrop()}
+function cropPointerEnd(){if(window.__ocxCrop)window.__ocxCrop.drag=false}
+function cropZoomChanged(){
+  const c=window.__ocxCrop;if(!c)return;
+  const stage=document.getElementById('ocxCropStage'),size=stage.clientWidth;
+  const oldScale=c.fit*c.zoom, oldW=c.source.naturalWidth*oldScale, oldH=c.source.naturalHeight*oldScale;
+  const cx=size/2,cy=size/2;
+  const relX=(cx-c.x)/oldW, relY=(cy-c.y)/oldH;
+  c.zoom=Number(document.getElementById('ocxCropZoom').value);
+  const newW=c.source.naturalWidth*c.fit*c.zoom,newH=c.source.naturalHeight*c.fit*c.zoom;
+  c.x=cx-relX*newW;c.y=cy-relY*newH;drawCrop();
+}
+function cancelCrop(){const c=window.__ocxCrop;document.getElementById('ocxCropOverlay').style.display='none';window.__ocxCrop=null}
+function applyCrop(){
+  const c=window.__ocxCrop;if(!c)return;
+  const stage=document.getElementById('ocxCropStage'),size=stage.clientWidth;
+  const canvas=document.createElement('canvas');canvas.width=900;canvas.height=900;
+  const ctx=canvas.getContext('2d');
+  const scale=900/size;
+  ctx.drawImage(c.source,(c.x*scale), (c.y*scale), c.source.naturalWidth*c.fit*c.zoom*scale, c.source.naturalHeight*c.fit*c.zoom*scale);
+  const result=canvas.toDataURL('image/jpeg',.86);
+  const done=c.done;document.getElementById('ocxCropOverlay').style.display='none';window.__ocxCrop=null;done(result);
+}
+window.OCX=window.OCX||{};
+window.OCX.cancelCrop=cancelCrop;window.OCX.applyCrop=applyCrop;
+document.addEventListener('DOMContentLoaded',()=>{
+  const stage=document.getElementById('ocxCropStage'),zoom=document.getElementById('ocxCropZoom');
+  stage.addEventListener('pointerdown',cropPointerStart);stage.addEventListener('pointermove',cropPointerMove);stage.addEventListener('pointerup',cropPointerEnd);stage.addEventListener('pointercancel',cropPointerEnd);zoom.addEventListener('input',cropZoomChanged);
+});
+
+(function(){
+  const OC_MAX_IMAGE_BYTES = 220000; // target well below Firestore's 1 MB document limit
+  const OC_MAX_IMAGE_DIM = 900;
+
+  function ocDataUrlBytes(dataUrl){
+    const comma = dataUrl.indexOf(',');
+    if(comma < 0) return 0;
+    const b64 = dataUrl.slice(comma + 1);
+    return Math.floor(b64.length * 3 / 4);
+  }
+
+  function ocCompressDataUrl(dataUrl){
+    return new Promise((resolve) => {
+      if(typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')){
+        resolve(dataUrl);
+        return;
+      }
+
+      const img = new Image();
+      img.onload = () => {
+        let scale = Math.min(1, OC_MAX_IMAGE_DIM / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+        let w = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
+        let h = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d', {alpha:false});
+        if(!ctx){ resolve(dataUrl); return; }
+
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(img, 0, 0, w, h);
+
+        let quality = 0.78;
+        let result = canvas.toDataURL('image/jpeg', quality);
+
+        // Reduce quality/dimensions until comfortably small.
+        for(let i=0; i<8 && ocDataUrlBytes(result) > OC_MAX_IMAGE_BYTES; i++){
+          quality *= 0.78;
+          if(quality < 0.35){
+            w = Math.max(120, Math.round(w * 0.82));
+            h = Math.max(120, Math.round(h * 0.82));
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(img, 0, 0, w, h);
+            quality = 0.62;
+          }
+          result = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        resolve(result);
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  }
+
+  window.ocCompressDataUrl = ocCompressDataUrl;
+
+  window.ocCompressAllImages = async function(obj){
+    async function walk(value){
+      if(Array.isArray(value)){
+        const out = [];
+        for(const item of value) out.push(await walk(item));
+        return out;
+      }
+      if(value && typeof value === 'object'){
+        const out = {};
+        for(const [key, val] of Object.entries(value)) out[key] = await walk(val);
+        return out;
+      }
+      if(typeof value === 'string' && value.startsWith('data:image/')){
+        return await ocCompressDataUrl(value);
+      }
+      return value;
+    }
+    return await walk(obj);
+  };
+})();
+</script>
+
+
+<style id="ocx-funpack-style">
+.ocx-fun-grid{display:grid;gap:10px}.ocx-activity-row,.ocx-notif-row,.ocx-suggest-row,.ocx-trend-row,.ocx-story-row{display:flex;gap:10px;align-items:center;padding:9px;border:1px solid #eee5f2;border-radius:12px;background:#fff}.ocx-activity-copy,.ocx-notif-copy,.ocx-suggest-copy{min-width:0;flex:1}.ocx-activity-time,.ocx-notif-time{font-size:10px;color:#9a8ca1}.ocx-notif-unread{background:#f0fbfd;border-color:#40a0b8}.ocx-small-btn{padding:5px 8px;border:1px solid #e5d9eb;border-radius:9px;background:#fff;cursor:pointer}.ocx-online-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#40a0b8;margin-right:5px}.ocx-status-line{font-size:11px;color:#8b7a95;margin-top:4px}.ocx-profile-status{margin:8px 0;padding:8px 10px;border-radius:10px;background:#faf6fc;font-size:12px}.ocx-profile-extra{display:grid;gap:5px;margin:8px 0;color:#7f7189;font-size:11px}.ocx-badges{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.ocx-badge{padding:4px 7px;border-radius:999px;background:#f4edf8;font-size:10px;font-weight:800}.ocx-story-circle{width:54px;height:54px;border-radius:50%;border:2px solid #a6285a;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff}.ocx-story-circle img{width:100%;height:100%;object-fit:cover}.ocx-story-name{font-size:10px;text-align:center;margin-top:3px;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ocx-stories-strip{display:flex;gap:10px;overflow:auto;padding:4px 0}.ocx-story-add{border:0;background:none;cursor:pointer}.ocx-story-view{max-height:65vh;max-width:100%;object-fit:contain;border-radius:14px}.ocx-reaction-row{display:flex;gap:4px;margin-top:5px}.ocx-reaction-row button{border:1px solid #eee5f2;background:#fff;border-radius:999px;padding:3px 7px;cursor:pointer;font-size:11px}.ocx-repost{font-size:11px;color:#8066b5;margin-bottom:4px}.ocx-trend-tag{font-weight:800;color:#a6285a}.ocx-blocked-note{font-size:11px;color:#9a8ca1;padding:8px}.ocx-weekly-rank{font-weight:900;width:22px;color:#40a0b8}.ocx-settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}.ocx-color-input{width:48px;height:30px;padding:0;border:0;background:none}.ocx-notif-count{background:#40a0b8;color:#fff;border-radius:999px;padding:2px 6px;font-size:10px;font-weight:900;margin-left:5px}.ocx-pin{font-size:10px;color:#40a0b8;font-weight:800}.ocx-post-actions-extra{display:flex;gap:5px;margin-top:5px}.ocx-read-receipt{font-size:10px;color:#40a0b8;margin-left:6px}
+</style>
+<script id="ocx-funpack">
+(function(){
+  const oldRenderEverything=window.renderEverything;
+  const oldOpenCharacterProfile=window.openCharacterProfile;
+  const oldRenderFeedExtended=window.renderFeedExtended;
+  const oldSendDMFromModal=window.sendDMFromModal;
+  const oldToggleFollowActor=window.toggleFollowActor;
+  const oldAddCommentExtended=window.addCommentExtended;
+  const oldAddReply=window.addReply;
+  const oldSavePostExtended=window.savePostExtended;
+
+  function funInit(){
+    if(!data.settings) data.settings={};
+    if(!data.notifications) data.notifications={};
+    if(!data.stories) data.stories=[];
+    if(!data.activities) data.activities=[];
+    if(!data.blocked) data.blocked={};
+    if(!data.muted) data.muted={};
+    if(!data.settings.profileMeta) data.settings.profileMeta={};
+    Object.keys(data.characters||{}).forEach(k=>{data.characters[k].lastActive=data.characters[k].lastActive||0;});
+  }
+  function addActivity(type,actor,target,text){
+    funInit();
+    data.activities.unshift({id:'act_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),type,actor,target,text,createdAt:Date.now()});
+    data.activities=data.activities.slice(0,150);
+  }
+  function notify(actor,type,from,text,target){
+    if(!actor || actor===from)return;
+    funInit();
+    if(!data.notifications[actor])data.notifications[actor]=[];
+    data.notifications[actor].unshift({id:'n_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),type,from,text,target,createdAt:Date.now(),read:false});
+    data.notifications[actor]=data.notifications[actor].slice(0,100);
+  }
+  function notifCount(actor){return (data.notifications?.[actor]||[]).filter(n=>!n.read).length;}
+  function markNotificationsRead(actor){funInit();(data.notifications[actor]||[]).forEach(n=>n.read=true);saveExtended();renderFunPanels();}
+  function renderFunPanels(){
+    funInit(); renderNotificationsPanel(); renderActivityPanel(); renderSuggestionsPanel(); renderTrendingPanel(); renderWeeklyPanel(); renderStoriesPanel();
+    if(typeof renderTopFollowers==='function')renderTopFollowers(); if(typeof renderTopLikedPosts==='function')renderTopLikedPosts();
+    const c=data.characters?.[activeActor]; if(c){c.lastActive=Date.now();}
+    updateUnreadBadge(document.getElementById('topbar-avatar'),c); updateUnreadBadge(document.getElementById('leftAvatar'),c);
+  }
+  function renderNotificationsPanel(){
+    const box=document.getElementById('ocxNotificationsList'); if(!box)return;
+    const badge=document.getElementById('ocxNotifCount'); if(badge){const n=notifCount(activeActor); badge.textContent=n?('('+n+')'):'';}
+    const ns=(data.notifications?.[activeActor]||[]).slice().sort((a,b)=>b.createdAt-a.createdAt).slice(0,30);
+    box.innerHTML='';
+    if(!ns.length){box.innerHTML='<div class="ocx-empty">No notifications yet.</div>';return;}
+    ns.forEach(n=>{const row=document.createElement('button');row.type='button';row.className='ocx-notif-row '+(n.read?'':'ocx-notif-unread');row.innerHTML='<div class="ocx-notif-copy"><strong>'+escapeHtml(n.text||'Notification')+'</strong><div class="ocx-notif-time">'+escapeHtml(formatTimestamp(n.createdAt))+'</div></div>'+(n.read?'':'<span class="ocx-notif-count">new</span>');row.onclick=()=>{n.read=true;saveExtended();if(n.target&&data.posts?.some(p=>p.id===n.target)){openProfilePost(n.target)}else if(n.from&&data.characters[n.from]&&n.type==='follow'){openCharacterProfile(n.from)}renderFunPanels();};box.appendChild(row);});
+  }
+  function renderActivityPanel(){
+    const box=document.getElementById('ocxActivityList');if(!box)return;
+    const acts=(data.activities||[]).filter(a=>a.actor&&data.characters[a.actor]).slice(0,15);box.innerHTML='';
+    if(!acts.length){box.innerHTML='<div class="ocx-empty">What is happening will appear here.</div>';return;}
+    acts.forEach(a=>{const row=document.createElement('div');row.className='ocx-activity-row';const c=data.characters[a.actor];const av=document.createElement('div');av.className='avatar';setAvatar(av,c);const copy=document.createElement('div');copy.className='ocx-activity-copy';copy.innerHTML='<strong>'+escapeHtml(c.name||c.username||a.actor)+'</strong> '+escapeHtml(a.text||'did something')+'<div class="ocx-activity-time">'+escapeHtml(formatTimestamp(a.createdAt))+'</div>';row.append(av,copy);box.appendChild(row);});
+  }
+  function renderSuggestionsPanel(){
+    const box=document.getElementById('ocxSuggestionsList');if(!box)return;box.innerHTML='';
+    const follows=new Set(data.characters?.[activeActor]?.followingActors||[]);
+    const arr=Object.keys(data.characters||{}).filter(k=>k!==activeActor&&!follows.has(k)&&!isBlocked(activeActor,k)).map(k=>({k,c:data.characters[k],score:Number(data.characters[k].followers)||0})).sort((a,b)=>b.score-a.score).slice(0,4);
+    if(!arr.length){box.innerHTML='<div class="ocx-empty">No suggestions right now.</div>';return;}
+    arr.forEach(x=>{const row=document.createElement('div');row.className='ocx-suggest-row';const av=document.createElement('div');av.className='avatar';setAvatar(av,x.c);const copy=document.createElement('div');copy.className='ocx-suggest-copy';copy.innerHTML='<strong>'+escapeHtml(x.c.name||x.k)+'</strong><div class="small-note">@'+escapeHtml(x.c.username||x.k)+'</div>';const b=document.createElement('button');b.className='ocx-small-btn';b.textContent='+ Follow';b.onclick=()=>{toggleFollowActor(x.k);};row.append(av,copy,b);box.appendChild(row);});
+  }
+  function openHashtagPage(tag){const clean=String(tag||'').replace(/^#/,'').toLowerCase();if(!clean)return;const posts=(data.posts||[]).filter(p=>((String(p.caption||'').match(/#[\p{L}\p{N}_-]+/gu)||[]).some(x=>x.slice(1).toLowerCase()===clean)));modal('ocxHashtagModal','#'+clean+' · Hashtag Page','<div id="ocxHashtagPosts"></div>');const box=document.getElementById('ocxHashtagPosts');if(!box)return;if(!posts.length){box.innerHTML='<div class="ocx-empty">No posts use this hashtag yet.</div>';return;}posts.forEach(p=>{const c=data.characters[p.author]||{};const b=document.createElement('button');b.type='button';b.className='ocx-hashtag-post';b.innerHTML='<strong>@'+escapeHtml(c.username||p.author)+'</strong><div>'+escapeHtml(p.caption||'')+'</div><div class="small-note">'+formatCount(p.likes||0)+' likes · '+escapeHtml(formatTimestamp(p.createdAt))+'</div>';b.onclick=()=>{closeModal('ocxHashtagModal');openProfilePost(p.id);};box.appendChild(b);});}
+  function linkifyHashtags(text){const frag=document.createDocumentFragment();const parts=String(text||'').split(/(#[\p{L}\p{N}_-]+)/gu);parts.forEach(part=>{if(/^#[\p{L}\p{N}_-]+$/u.test(part)){const b=document.createElement('button');b.type='button';b.className='ocx-hashtag-link';b.textContent=part;b.onclick=()=>openHashtagPage(part);frag.appendChild(b);}else frag.appendChild(document.createTextNode(part));});return frag;}
+
+  function renderTrendingPanel(){
+    const box=document.getElementById('ocxTrendingList');if(!box)return;box.innerHTML='';
+    const counts={};(data.posts||[]).forEach(p=>{const tags=p.tags||[];tags.forEach(t=>{if(t!=='__NONE__')counts[t]=(counts[t]||0)+1;});const words=String(p.caption||'').match(/#[A-Za-z0-9_]+/g)||[];words.forEach(t=>counts[t.toLowerCase()]=(counts[t.toLowerCase()]||0)+1);});
+    const arr=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);if(!arr.length){box.innerHTML='<div class="ocx-empty">Add hashtags to make trends.</div>';return;}
+    arr.forEach(([t,n])=>{const row=document.createElement('button');row.className='ocx-trend-row';row.type='button';row.innerHTML='<span class="ocx-trend-tag">#'+escapeHtml(t.replace(/^#/,'').replace(/^@/,''))+'</span><span class="small-note">'+n+' post'+(n===1?'':'s')+'</span>';row.onclick=()=>openHashtagPage(t);box.appendChild(row);});
+  }
+  function renderWeeklyPanel(){
+    const box=document.getElementById('ocxWeeklyList');if(!box)return;box.innerHTML='';const week=Date.now()-7*864e5;const scores={};
+    (data.posts||[]).filter(p=>Number(p.createdAt||0)>=week).forEach(p=>scores[p.author]=(scores[p.author]||0)+(Number(p.likes)||0));
+    const arr=Object.entries(scores).sort((a,b)=>b[1]-a[1]).slice(0,5);if(!arr.length){box.innerHTML='<div class="ocx-empty">No posts this week.</div>';return;}
+    arr.forEach(([k,n],i)=>{const c=data.characters[k]||{};const row=document.createElement('button');row.className='ocx-trend-row';row.type='button';row.innerHTML='<span class="ocx-weekly-rank">'+(i+1)+'</span><span style="flex:1"><strong>'+escapeHtml(c.name||k)+'</strong><div class="small-note">'+formatCount(n)+' likes this week</div></span>';row.onclick=()=>openCharacterProfile(k);box.appendChild(row);});
+  }
+  function renderStoriesPanel(){
+    const box=document.getElementById('ocxStoriesPanel');if(!box)return;box.innerHTML='';const now=Date.now();data.stories=(data.stories||[]).filter(s=>Number(s.expiresAt||0)>now);
+    const strip=document.createElement('div');strip.className='ocx-stories-strip';
+    const add=document.createElement('button');add.className='ocx-story-add';add.innerHTML='<div class="ocx-story-circle">＋</div><div class="ocx-story-name">Your story</div>';add.onclick=()=>openStoryCreator();strip.appendChild(add);
+    Object.keys(data.characters||{}).forEach(k=>{const s=data.stories.find(x=>x.author===k);if(!s)return;const c=data.characters[k];const wrap=document.createElement('button');wrap.className='ocx-story-add';wrap.innerHTML='<div class="ocx-story-circle"></div><div class="ocx-story-name">'+escapeHtml(c.username||k)+'</div>';setAvatar(wrap.querySelector('.ocx-story-circle'),c);wrap.onclick=()=>viewStory(s);strip.appendChild(wrap);});
+    box.appendChild(strip);
+  }
+  function openStoryCreator(){modal('ocxStoryModal','📸 Add Story','<label>Story text</label><textarea id="ocxStoryText" rows="4" placeholder="What is happening?"></textarea><label>Photo (optional)</label><input id="ocxStoryFile" type="file" accept="image/*"><label>Expires</label><input id="ocxStoryHours" type="number" min="1" max="72" value="24"><button class="btn btn-purple btn-full" onclick="OCX.saveStory()">Post Story</button>');}
+  async function saveStory(){const text=safe(document.getElementById('ocxStoryText')?.value);const file=document.getElementById('ocxStoryFile')?.files?.[0];if(!text&&!file)return;funInit();let image='';if(file){image=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(file);});if(window.ocCompressDataUrl)image=await window.ocCompressDataUrl(image);}data.stories.unshift({id:'story_'+Date.now(),author:activeActor,text,image,createdAt:Date.now(),expiresAt:Date.now()+(Number(document.getElementById('ocxStoryHours')?.value)||24)*3600000});addActivity('story',activeActor,null,'posted a new story');saveExtended();closeModal('ocxStoryModal');renderFunPanels();}
+  function viewStory(s){const c=data.characters[s.author]||{};const media=s.image?'<img class="ocx-story-view" src="'+s.image+'" alt="Story photo">':'';modal('ocxStoryViewModal','✨ @'+escapeHtml(c.username||s.author),media+'<div style="margin-top:10px">'+escapeHtml(s.text||'')+'</div><div class="small-note" style="margin-top:10px">Expires '+escapeHtml(formatTimestamp(s.expiresAt))+'</div>');}
+  function isBlocked(a,b){return !!data.blocked?.[a]?.includes(b);}
+  function isMuted(a,b){return !!data.muted?.[a]?.includes(b);}
+  function toggleBlock(actor){funInit();if(!data.blocked[activeActor])data.blocked[activeActor]=[];const i=data.blocked[activeActor].indexOf(actor);if(i>=0)data.blocked[activeActor].splice(i,1);else data.blocked[activeActor].push(actor);saveExtended();openCharacterProfile(actor);}
+  function toggleMute(actor){funInit();if(!data.muted[activeActor])data.muted[activeActor]=[];const i=data.muted[activeActor].indexOf(actor);if(i>=0)data.muted[activeActor].splice(i,1);else data.muted[activeActor].push(actor);saveExtended();openCharacterProfile(actor);}
+  function applyProfileMeta(actor){const m=data.settings?.profileMeta?.[actor]||{};const screen=document.getElementById('ocxProfileScreen');if(!screen)return;screen.style.setProperty('--ocx-profile-accent',m.theme||'#a6285a');const extra=document.getElementById('ocxProfileExtra');if(extra)extra.innerHTML=[m.relationship?'💕 Relationship: '+escapeHtml(m.relationship):'',m.status?'💭 '+escapeHtml(m.status):'',m.location?'📍 '+escapeHtml(m.location):'',m.listening?'🎵 '+escapeHtml(m.listening):'',m.birthday?'🎂 '+escapeHtml(m.birthday):''].filter(Boolean).join('<br>');}
+  function openProfileMetaEditor(){const m=data.settings?.profileMeta?.[activeActor]||{};const html=`<label>Mood / status</label><input id="ocxMetaStatus" value="${escapeAttr(m.status||'')}" placeholder="☕ At the café"><label>Currently listening to</label><input id="ocxMetaListening" value="${escapeAttr(m.listening||'')}"><label>Birthday</label><input id="ocxMetaBirthday" value="${escapeAttr(m.birthday||'')}" placeholder="June 12"><label>Location</label><input id="ocxMetaLocation" value="${escapeAttr(m.location||'')}"><label>Relationship status</label><select id="ocxMetaRelationship"><option value="">Choose relationship status</option><option>Single</option><option>Divorced</option><option>Married</option><option>It's complicated</option><option>Taken</option></select><label>Profile accent</label><input id="ocxMetaTheme" class="ocx-color-input" type="color" value="${m.theme||'#a6285a'}"><button class="btn btn-purple btn-full" onclick="OCX.saveProfileMeta()">Save</button>`;modal('ocxMetaModal','🎭 Edit Profile',html);const sel=document.getElementById('ocxMetaRelationship');if(sel)sel.value=m.relationship||'';}
+  function saveProfileMeta(){funInit();const rel=document.getElementById('ocxMetaRelationship')?.value||'';const existing=data.settings.profileMeta[activeActor]||{};const oldRel=existing.relationship||'';data.settings.profileMeta[activeActor]={status:safe(document.getElementById('ocxMetaStatus')?.value),listening:safe(document.getElementById('ocxMetaListening')?.value),birthday:safe(document.getElementById('ocxMetaBirthday')?.value),location:safe(document.getElementById('ocxMetaLocation')?.value),relationship:rel,theme:document.getElementById('ocxMetaTheme')?.value||'#a6285a'};createRelationshipChangePost(activeActor,oldRel,rel);saveExtended();closeModal('ocxMetaModal');openCharacterProfile(activeActor);}
+  function createRepost(post){if(!post)return;openQuoteComposer(post,false);}
+  async function saveQuotePost(postId){const post=data.posts.find(p=>p.id===postId);if(!post)return;const caption=safe(document.getElementById('ocxQuoteCaption')?.value||'');const file=document.getElementById('ocxQuoteFile')?.files?.[0];let image='';if(file){image=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(file);});if(window.ocCompressDataUrl)image=await window.ocCompressDataUrl(image);}const copy=clone(post);copy.id='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);copy.author=activeActor;copy.repostOf=post.id;copy.createdAt=Date.now();copy.likes=0;copy.comments=[];copy.caption=caption || '';if(image)copy.image=image;copy.quoteCaption=caption;copy.originalPost={id:post.id,author:post.author,caption:post.caption||'',image:post.image||''};data.posts.unshift(copy);addActivity('repost',activeActor,post.id,'reposted a post');notify(post.author,'repost',activeActor,'reposted your post',post.id);saveExtended();closeModal('ocxQuoteModal');renderEverything();renderFunPanels();}
+  function openQuoteComposer(post,quick){if(!post)return;const author=data.characters[post.author]?.username||post.author;const name=data.characters[post.author]?.name||post.author;const html=`<div class="small-note" style="margin-bottom:10px">Reposting @${escapeHtml(author)}'s post.</div><div style="padding:10px;border:1px solid #eee5f2;border-radius:12px;margin-bottom:12px"><strong>${escapeHtml(name)}</strong><div style="margin-top:5px">${escapeHtml(post.caption||'')}</div></div><label>Your caption (optional)</label><textarea id="ocxQuoteCaption" placeholder="Add your own caption..."></textarea><label>Your photo (optional)</label><input id="ocxQuoteFile" class="file-input" type="file" accept="image/*"><button class="btn btn-purple btn-full" onclick="OCX.saveQuotePost('${String(post.id).replace(/'/g,"\'")}')">↻ Repost</button>`;modal('ocxQuoteModal','↻ Repost / Quote Post',html);}
+  function addReaction(postId,emoji){const p=data.posts.find(x=>x.id===postId);if(!p)return;if(!p.reactions)p.reactions={};if(!p.reactions[activeActor])p.reactions[activeActor]=emoji;else delete p.reactions[activeActor];saveExtended();renderFeedExtended();}
+  function reactionSummary(p){const r=p.reactions||{};const counts={};Object.values(r).forEach(e=>counts[e]=(counts[e]||0)+1);return Object.entries(counts).map(([e,n])=>e+' '+n).join('  ');}
+
+  function buildFunUI(){
+    if(document.getElementById('ocxFunPanels'))return;
+    const right=document.querySelector('.right-column');if(!right)return;
+    const wrap=document.createElement('div');wrap.id='ocxFunPanels';wrap.className='ocx-fun-grid';
+    wrap.innerHTML='<div class="panel"><div class="panel-title">🔔 Notifications <span id="ocxNotifCount"></span></div><div id="ocxNotificationsList"></div><button class="btn btn-light btn-full" style="margin-top:8px" onclick="OCX.markNotificationsRead()">Mark all read</button></div><div class="panel"><div class="panel-title">✨ What\'s Happening?</div><div id="ocxActivityList"></div></div><div class="panel"><div class="panel-title">📸 Stories</div><div id="ocxStoriesPanel"></div></div><div class="panel"><div class="panel-title">🔥 Trending</div><div id="ocxTrendingList"></div></div><div class="panel"><div class="panel-title">🏆 This Week</div><div id="ocxWeeklyList"></div></div><div class="panel"><div class="panel-title">👥 Who to Follow</div><div id="ocxSuggestionsList"></div></div>';
+    const tools=document.getElementById('ocxTools');if(tools)right.insertBefore(wrap,tools);else right.appendChild(wrap);
+    renderFunPanels();
+  }
+  window.OCX=window.OCX||{};
+  Object.assign(window.OCX,{saveStory,markNotificationsRead:()=>markNotificationsRead(activeActor),openProfileMetaEditor,saveProfileMeta,toggleBlock,toggleMute,createRepost,openQuoteComposer,saveQuotePost,addReaction});
+  window.addActivity=addActivity;window.notify=notify;
+
+  // Enhance existing profile rendering without removing the site's current UI.
+  if(oldOpenCharacterProfile){window.openCharacterProfile=function(actor){oldOpenCharacterProfile(actor);funInit();applyProfileMeta(actor);const actions=document.getElementById('ocxProfileActions');if(actions&&actor===activeActor&&!document.getElementById('ocxMetaEditBtn')){const b=document.createElement('button');b.id='ocxMetaEditBtn';b.className='ocx-profile-edit';b.textContent='🎭 Customize';b.onclick=openProfileMetaEditor;actions.appendChild(b);} if(actions&&actor!==activeActor){const b=document.createElement('button');b.className='ocx-profile-edit';b.textContent=isBlocked(activeActor,actor)?'🚫 Unblock':'🚫 Block';b.onclick=()=>toggleBlock(actor);const m=document.createElement('button');m.className='ocx-profile-edit';m.textContent=isMuted(activeActor,actor)?'🔇 Unmute':'🔇 Mute';m.onclick=()=>toggleMute(actor);actions.append(b,m);} const status=document.getElementById('ocxProfileStatus');if(status){const c=data.characters[actor]||{};const online=Date.now()-(Number(c.lastActive)||0)<300000;status.innerHTML='<span class="ocx-online-dot" style="background:'+(online?'#40a0b8':'#bbb')+'"></span>'+(online?'Online':'Last active '+formatTimestamp(c.lastActive));}};}
+  if(oldRenderEverything){window.renderEverything=function(){oldRenderEverything();funInit();buildFunUI();renderFunPanels();};}
+  if(oldRenderFeedExtended){window.renderFeedExtended=function(){oldRenderFeedExtended();document.querySelectorAll('.post').forEach(article=>{const id=article.dataset.postId;const p=data.posts.find(x=>x.id===id);if(!p)return;if(p.repostOf&&!article.querySelector('.ocx-repost')){const n=document.createElement('div');n.className='ocx-repost';n.textContent='↻ Reposted';article.querySelector('.post-body')?.prepend(n);}const body=article.querySelector('.post-body');if(body&&!article.querySelector('.ocx-reaction-row')){const rr=document.createElement('div');rr.className='ocx-reaction-row';['❤️','😂','😭','👍','🔥'].forEach(e=>{const b=document.createElement('button');b.textContent=e+(Object.values(p.reactions||{}).filter(x=>x===e).length||'');b.onclick=()=>addReaction(id,e);rr.appendChild(b);});const rb=document.createElement('button');rb.textContent='↻ Repost / Quote';rb.onclick=()=>openQuoteComposer(p,false);rr.appendChild(rb);if(p.author===activeActor){const pb=document.createElement('button');pb.textContent=p.pinned?'📌 Unpin':'📌 Pin';pb.onclick=()=>togglePin(id);rr.appendChild(pb);}const sum=document.createElement('span');sum.className='ocx-read-receipt';sum.textContent=reactionSummary(p);rr.appendChild(sum);body.appendChild(rr);}});};}
+  if(oldSendDMFromModal){window.sendDMFromModal=async function(){const before=data.dms2[keyPair(activeActor,currentDM)]?.length||0;const r=oldSendDMFromModal.apply(this,arguments);notify(currentDM,'message',activeActor,'sent you a message');addActivity('message',activeActor,currentDM,'sent a message');saveExtended();renderFunPanels();return r;};}
+  if(oldToggleFollowActor){window.toggleFollowActor=function(actor){const before=isFollowing(actor);const r=oldToggleFollowActor.apply(this,arguments);if(!before){notify(actor,'follow',activeActor,'started following you');addActivity('follow',activeActor,actor,'followed '+(data.characters[actor]?.name||actor));}saveExtended();renderFunPanels();return r;};}
+  if(oldAddCommentExtended){window.addCommentExtended=function(){const p=data.posts.find(x=>x.id===selectedPostId);const r=oldAddCommentExtended.apply(this,arguments);if(p){notify(p.author,'comment',activeActor,'commented on your post',p.id);addActivity('comment',activeActor,p.id,'commented on a post');}renderFunPanels();return r;};}
+  if(oldAddReply){window.addReply=function(){const p=data.posts.find(x=>x.id===selectedPostId);const r=oldAddReply.apply(this,arguments);if(p){notify(p.author,'reply',activeActor,'replied to a comment on your post',p.id);}renderFunPanels();return r;};}
+  if(oldSavePostExtended){window.savePostExtended=function(){const r=oldSavePostExtended.apply(this,arguments);return r;};}
+
+  function achievementList(actor){
+    const c=data.characters?.[actor]||{};const posts=(data.posts||[]).filter(p=>p.author===actor);const likes=posts.reduce((n,p)=>n+(Number(p.likes)||0),0);const msgs=Object.values(data.dms2||{}).flat().filter(m=>m.from===actor).length;const out=[];
+    if(posts.length>=1)out.push('🏆 First Post'); if(likes>=100)out.push('❤️ 100 Likes'); if(likes>=1000)out.push('💖 1K Likes'); if(msgs>=100)out.push('💬 100 Messages'); if(Number(c.followers)||0>=10)out.push('👑 10 Followers'); return out;
+  }
+  function renderBadges(actor){const box=document.getElementById('ocxProfileBadges');if(!box)return;box.innerHTML=achievementList(actor).map(x=>'<span class="ocx-badge">'+escapeHtml(x)+'</span>').join('');}
+  function decorateProfile(actor){
+    funInit();const screen=document.getElementById('ocxProfileScreen');if(!screen)return;const m=data.settings?.profileMeta?.[actor]||{};const c=data.characters?.[actor]||{};const online=Date.now()-(Number(c.lastActive)||0)<300000;const status=document.getElementById('ocxProfileStatus');if(status)status.innerHTML='<span class="ocx-online-dot" style="background:'+(online?'#40a0b8':'#bbb')+'"></span>'+(online?'Online':'Last active '+(c.lastActive?escapeHtml(formatTimestamp(c.lastActive)):'unknown'));applyProfileMeta(actor);renderBadges(actor);
+  }
+  function togglePin(postId){const p=data.posts.find(x=>x.id===postId);if(!p||p.author!==activeActor)return;if(p.pinned){delete p.pinned;}else{data.posts.filter(x=>x.author===activeActor).forEach(x=>{delete x.pinned;});p.pinned=true;}saveExtended();renderEverything();}
+  function addCommentLike(postId,commentId){const p=data.posts.find(x=>x.id===postId);const c=p?.comments?.find(x=>x.id===commentId);if(!c)return;if(!c.reactionBy)c.reactionBy={};if(c.reactionBy[activeActor])delete c.reactionBy[activeActor];else c.reactionBy[activeActor]='❤️';c.likes=Object.keys(c.reactionBy).length;saveExtended();renderCommentsExtended();}
+  function decorateReadReceipts(){const list=document.getElementById('ocxDMModalList');if(!list)return;list.querySelectorAll('[data-message-id]').forEach(row=>{const id=row.getAttribute('data-message-id');const m=(data.dms2[keyPair(activeActor,currentDM)]||[]).find(x=>x.id===id);if(m&&m.from===activeActor){let r=row.querySelector('.ocx-read-receipt');if(!r){r=document.createElement('span');r.className='ocx-read-receipt';row.appendChild(r);}r.textContent=(m.readBy||[]).includes(currentDM)?' · Read':' · Sent';}});}
+  function openNotifications(){modal('ocxNotificationsModal','🔔 Notifications','<div id="ocxNotificationsFull"></div><button class="btn btn-light btn-full" style="margin-top:10px" onclick="OCX.markNotificationsRead()">Mark all as read</button>',true);const box=document.getElementById('ocxNotificationsFull');const ns=(data.notifications?.[activeActor]||[]).slice().sort((a,b)=>b.createdAt-a.createdAt);if(!ns.length){box.innerHTML='<div class="ocx-empty">No notifications yet.</div>';return;}ns.forEach(n=>{const r=document.createElement('button');r.className='ocx-notif-row '+(n.read?'':'ocx-notif-unread');r.type='button';r.innerHTML='<div class="ocx-notif-copy"><strong>'+escapeHtml(n.text||'Notification')+'</strong><div class="ocx-notif-time">'+escapeHtml(formatTimestamp(n.createdAt))+'</div></div>';r.onclick=()=>{n.read=true;saveExtended();if(n.target&&data.posts?.some(p=>p.id===n.target))openProfilePost(n.target);else if(n.from&&data.characters[n.from])openCharacterProfile(n.from);renderFunPanels();};box.appendChild(r);});}
+  window.OCX.openNotifications=openNotifications;window.OCX.togglePin=togglePin;window.OCX.addCommentLike=addCommentLike;
+  if(oldOpenCharacterProfile){
+    const wrapped=window.openCharacterProfile;
+    window.openCharacterProfile=function(actor){wrapped(actor);decorateProfile(actor);const body=document.querySelector('#ocxProfilePosts');if(body&&actor===activeActor){body.querySelectorAll('.ocx-profile-post').forEach(card=>{const id=card.dataset.postId;if(!id)return;});}}
+  }
+  if(oldRenderFeedExtended){
+    const wrappedFeed=window.renderFeedExtended;
+    window.renderFeedExtended=function(){wrappedFeed();document.querySelectorAll('.post').forEach(article=>{const id=article.dataset.postId;const p=data.posts.find(x=>x.id===id);if(!p)return;article.querySelector('.post-body')?.classList.toggle('ocx-is-pinned',!!p.pinned);const rr=article.querySelector('.ocx-reaction-row');if(rr){rr.querySelectorAll('button').forEach((b,i)=>{if(i<5){const e=['❤️','😂','😭','👍','🔥'][i];b.textContent=e+(Object.values(p.reactions||{}).filter(x=>x===e).length||'');}});const sum=rr.querySelector('.ocx-read-receipt');if(sum)sum.textContent=reactionSummary(p);}});document.querySelectorAll('.post').forEach(article=>{const id=article.dataset.postId;const p=data.posts.find(x=>x.id===id);if(!p)return;article.querySelector('.post-body')?.classList.toggle('ocx-is-pinned',!!p.pinned);if(p.pinned&&article.querySelector('.post-user-name')&&!article.querySelector('.ocx-pin')){const pin=document.createElement('div');pin.className='ocx-pin';pin.textContent='📌 Pinned';article.querySelector('.post-user-name').parentElement?.appendChild(pin);} });};
+  }
+  const oldBuild=buildFunUI;
+  buildFunUI=function(){oldBuild();const right=document.querySelector('.right-column');if(right&&!document.getElementById('ocxNotificationsButton')){const b=document.createElement('button');b.id='ocxNotificationsButton';b.className='btn btn-light btn-full';b.textContent='🔔 Open all notifications';b.onclick=openNotifications;const panel=document.getElementById('ocxFunPanels');panel?.prepend(b);} }
+  function enhanceMetaEditor(){const m=data.settings?.profileMeta?.[activeActor]||{};const oldOpen=window.OCX.openProfileMetaEditor;}
+  // Extend the existing profile extras editor with relationship status.
+  const originalMeta=window.OCX.openProfileMetaEditor;
+  window.OCX.openProfileMetaEditor=function(){const m=data.settings?.profileMeta?.[activeActor]||{};modal('ocxMetaModal','🎭 Character Extras','<label>Mood / status</label><input id="ocxMetaStatus" value="'+escapeHtml(m.status||'')+'" placeholder="☕ At the café"><label>Currently listening to</label><input id="ocxMetaListening" value="'+escapeHtml(m.listening||'')+'"><label>Birthday</label><input id="ocxMetaBirthday" value="'+escapeHtml(m.birthday||'')+'" placeholder="June 12"><label>Location</label><input id="ocxMetaLocation" value="'+escapeHtml(m.location||'')+'"><label>Relationship status</label><input id="ocxMetaRelationship" value="'+escapeHtml(m.relationship||'')+'" placeholder="Single / Dating / ..."><label>Profile accent</label><input id="ocxMetaTheme" class="ocx-color-input" type="color" value="'+(m.theme||'#a6285a')+'"><button class="btn btn-purple btn-full" onclick="OCX.saveProfileMeta()">Save</button>');};
+  const originalSaveMeta=window.OCX.saveProfileMeta;
+  window.OCX.saveProfileMeta=function(){funInit();const rel=safe(document.getElementById('ocxMetaRelationship')?.value);const existing=data.settings.profileMeta[activeActor]||{};const oldRel=existing.relationship||'';data.settings.profileMeta[activeActor]={status:safe(document.getElementById('ocxMetaStatus')?.value),listening:safe(document.getElementById('ocxMetaListening')?.value),birthday:safe(document.getElementById('ocxMetaBirthday')?.value),location:safe(document.getElementById('ocxMetaLocation')?.value),relationship:rel,theme:document.getElementById('ocxMetaTheme')?.value||'#a6285a'};createRelationshipChangePost(activeActor,oldRel,rel);saveExtended();closeModal('ocxMetaModal');openCharacterProfile(activeActor);};
+  window.setInterval(()=>{if(typeof activeActor!=='undefined'&&data.characters?.[activeActor]){data.characters[activeActor].lastActive=Date.now();if(Date.now()%5<2)saveExtended();renderFunPanels();}},60000);
+  document.addEventListener('DOMContentLoaded',()=>{funInit();buildFunUI();renderFunPanels();});
+  setTimeout(()=>{try{funInit();buildFunUI();renderFunPanels();}catch(e){console.warn('Fun pack init',e);}},500);
+})();
+</script>
+
+
+<style>
+.ocx-hashtag-link{border:0;background:none;padding:0;color:#4d8fdc;font:inherit;font-weight:700;cursor:pointer}.ocx-hashtag-link:hover{text-decoration:underline}.ocx-hashtag-post{display:block;width:100%;text-align:left;border:1px solid #eee5f2;background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer}.ocx-hashtag-post:hover{background:#faf6fc}
+</style>
+</body>
+</html>
