@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OC Social Network</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --purple: #a993d9;
+  --purple-dark: #8066b5;
+  --purple-light: #eee8fa;
+  --pink: #f3d7e8;
+  --blue: #4d8fdc;
+  --bg: #f7f5f9;
+  --border: #dedbe3;
+  --text: #26232a;
+  --muted: #77727c;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* HEADER */
+
+.topbar {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  color: var(--purple-dark);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* LAYOUT */
+
+.app {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: minmax(210px,260px) minmax(0,1fr) minmax(220px,270px);
+  gap: 25px;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* PANELS */
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.panel-title {
+  color: var(--purple-dark);
+  font-weight: 800;
+  font-size: 14px;
+  padding-bottom: 11px;
+  margin-bottom: 13px;
+  border-bottom: 1px solid #eee;
+}
+
+/* AVATARS */
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-weight: 800;
+}
+
+.avatar.large {
+  width: 72px;
+  height: 72px;
+  font-size: 23px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* INPUTS */
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #d8d4dc;
+  background: #fff;
+  border-radius: 7px;
+  padding: 10px;
+  font: inherit;
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 2px rgba(169,147,217,.15);
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 10px 0 5px;
+}
+
+/* BUTTONS */
+
+button {
+  font: inherit;
+}
+
+.btn {
+  border: none;
+  border-radius: 7px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-purple {
+  background: var(--purple);
+  color: white;
+}
+
+.btn-purple:hover {
+  background: var(--purple-dark);
+}
+
+.btn-light {
+  background: var(--purple-light);
+  color: var(--purple-dark);
+}
+
+.btn-danger {
+  background: #f5dddd;
+  color: #a64040;
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 9px;
+}
+
+/* PROFILE MINI */
+
+.profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-name {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.profile-handle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* DMS */
+
+.dm-list {
+  height: 280px;
+  overflow-y: auto;
+  background: #faf9fb;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message {
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.message.them {
+  align-self: flex-start;
+  background: #eceaed;
+  border-bottom-left-radius: 3px;
+}
+
+.message.me {
+  align-self: flex-end;
+  background: var(--purple);
+  color: white;
+  border-bottom-right-radius: 3px;
+}
+
+.dm-compose {
+  display: flex;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.dm-compose input {
+  min-width: 0;
+}
+
+/* FEED */
+
+.feed {
+  min-width: 0;
+}
+
+.story-bar {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+}
+
+.story {
+  min-width: 65px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.story .avatar {
+  margin: auto auto 5px;
+  border: 3px solid #e7c8e5;
+}
+
+.post {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+}
+
+.post-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.post-user-name {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.post-user-handle {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.post-menu {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.post-image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  background: var(--purple-light);
+  display: block;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 420px;
+  background: linear-gradient(135deg, #e6def6, #f4dce8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--purple-dark);
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.post-actions {
+  display: flex;
+  gap: 17px;
+  padding: 11px 14px 4px;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 22px;
+}
+
+.like-button.liked {
+  color: #df4771;
+}
+
+.post-body {
+  padding: 4px 14px 15px;
+}
+
+.likes {
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.caption strong {
+  margin-right: 5px;
+}
+
+.view-comments {
+  border: none;
+  background: none;
+  color: #8b858f;
+  padding: 8px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.post-date {
+  color: #aaa5ad;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+/* RIGHT SIDE */
+
+.editor-section {
+  border-top: 1px solid #eee;
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 20, 30, .55);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.25);
+}
+
+.modal-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  color: var(--purple-dark);
+  font-weight: 800;
+}
+
+.close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 23px;
+  color: #888;
+}
+
+.modal-content {
+  padding: 18px;
+}
+
+/* COMMENTS */
+
+.comment-list {
+  max-height: 330px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.comment {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comment strong {
+  font-size: 13px;
+}
+
+.comment-text {
+  font-size: 13px;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.comment-actions {
+  margin-top: 5px;
+  display: flex;
+  gap: 10px;
+}
+
+.comment-actions button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #888;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* PROFILE */
+
+.profile-edit-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* CROP WORKSPACE INTERFACE */
+.crop-preview-workspace {
+  margin-top: 12px;
+  border: 1px dashed var(--border);
+  padding: 12px;
+  border-radius: 8px;
+  background: #faf9fb;
+}
+
+.crop-frame-box {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background: #25202a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+#cropFrameImage {
+  max-width: 100%;
+  max-height: 100%;
+  transform: scale(1);
+  transition: transform 0.05s linear;
+}
+
+.crop-circular-mask {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgba(25, 20, 30, 0.6);
+  pointer-events: none;
+}
+
+.crop-slider-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.crop-slider-bar input[type="range"] {
+  flex-grow: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* FILE INPUT */
+
+.file-input {
+  font-size: 12px;
+  padding: 7px;
+}
+
+/* MOBILE */
+
+@media (max-width: 1050px) {
+  .app {
+    grid-template-columns: 240px minmax(350px, 1fr);
+  }
+
+  .right-column {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 750px) {
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .app {
+    display: block;
+    padding: 12px;
+  }
+
+  .left-column,
+  .right-column {
+    margin-bottom: 15px;
+  }
+
+  .right-column {
+    display: block;
+  }
+
+  .post-image,
+  .placeholder-image {
+    height: 330px;
+  }
+
+  .left-column {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+  <!-- TOP BAR NAVIGATION -->
+  <div class="topbar">
+    <div class="logo">✦ OC Social</div>
+    <div class="topbar-user">
+      <div class="avatar" id="topbarAvatar"><img src="https://unsplash.com" alt="Pfp"></div>
+      <span id="topbarUsername">@Barista_Arin</span>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- LEFT PANEL: ACCOUNT DASHBOARD -->
+    <div class="left-column">
+      <div class="panel">
+        <div class="panel-title">👤 Your Account</div>
+        <div class="profile-mini">
+          <div class="avatar large" id="mainCardAvatar">
+            <img src="https://unsplash.com" alt="Avatar">
+          </div>
+          <div>
+            <div class="profile-name" id="mainCardDisplayName">Arin</div>
+            <div class="profile-handle" id="mainCardHandle">@Barista_Arin</div>
+            <div class="profile-handle" style="font-weight: 700; color: var(--purple-dark); margin-top: 4px;">
+              Status: <span id="mainCardStatus">Single</span>
